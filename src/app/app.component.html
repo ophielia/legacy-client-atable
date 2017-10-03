@@ -1,4 +1,20 @@
-<h1>
-  {{title}}
-</h1>
-<at-tag-list></at-tag-list>
+<h1>{{title}}</h1>
+<!--<router-outlet></router-outlet>-->
+
+<div class="container-fluid">
+  <h1>Tag Playground</h1>
+  <div [ngSwitch]="currentView">
+    <at-tag-list *ngSwitchDefault
+                    (onAdd)="navigateTo('add')"
+                    (onEdit)="tagId=$event; navigateTo('edit')"
+                    (onDelete)="tagId=$event; navigateTo('delete')">
+    </at-tag-list>
+    <at-add-tag *ngSwitchCase="'add'" (onClosed)="navigateTo('list')">
+    </at-add-tag>
+     <at-edit-tag *ngSwitchCase="'edit'"   [tagId]="tagId"
+                  (onClosed)="navigateTo('list')">>
+     </at-edit-tag>
+    <!--   <delete-tag-view *ngSwitchCase="'delete'">
+       </delete-tag-view>-->
+  </div>
+</div>

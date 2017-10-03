@@ -1,0 +1,22 @@
+<h3>Specify the name of the tag:</h3>
+<div class="row">
+  <div class="col-sm-6">
+    <input #tagNameBox class="form-control input-lg" type="text"
+           placeholder="tag name"
+           (keyup)="tagName=tagNameBox.value"
+           (keyup.enter)="add()" />
+  </div>
+</div>
+<div class="row" style="margin-top: 12px;">
+  <div class="col-sm-6">
+    <button class="btn btn-success btn"
+            (click)="add()"
+            [disabled]="!tagName">
+      Add
+    </button>
+    <button class="btn btn-warning btn"
+            routerLink="/list">
+      Cancel
+    </button>
+  </div>
+</div>
