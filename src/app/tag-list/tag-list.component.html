@@ -7,13 +7,16 @@
   </div>
 </div>
 <h2>List of Tags</h2>
+<section *ngIf="errorMessage">
+  {{errorMessage}}
+</section>
 <div class="row" *ngFor="let tag of tags; let e=even; let f=first; let l=last"
      ywActionable="#aaaaaa" (onAction)="edit(tag.tag_id)"
      [ngClass]="{ evenRow: e }"
      [class.topRow]="f"
      [class.bottomRow]="l">
   <div class="col-sm-8">
-    <h4>{{tag.tag_id}}: {{tag.name}}</h4>
+    <h4>{{tag.tag_id}}: {{tag.name}}: {{tag.description}}</h4>
   </div>
   <div class="col-sm-4" style="margin-top: 5px;">
     <div class="pull-right">

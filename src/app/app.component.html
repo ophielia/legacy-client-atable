@@ -1,6 +1,9 @@
 <h1>{{title}}</h1>
 <!--<router-outlet></router-outlet>-->
-
+<nav>
+  <a routerLink="/home" routerLinkActive="active">HomePP</a>
+  <a routerLink="/login" routerLinkActive="active">LoginLL</a>
+</nav>
 <div class="container-fluid">
   <h1>Tag Playground</h1>
   <div [ngSwitch]="currentView">

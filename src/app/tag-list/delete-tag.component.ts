@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
-import {TagsService} from '../tags.service';
+import {MockTagsService} from '../mock-tags.service';
 
 @Component({
   selector: 'delete-site-view',
@@ -13,7 +13,7 @@ export class DeleteTagComponent {
   private parSub: any;
 
   constructor(
-    private tagService: TagsService,
+    private tagService: MockTagsService,
     private route: ActivatedRoute,
     private router: Router
   ) {

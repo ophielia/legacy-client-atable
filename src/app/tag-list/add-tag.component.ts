@@ -1,6 +1,6 @@
 import {Component, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
-import {TagsService} from "../tags.service";
+import {MockTagsService} from "../mock-tags.service";
 
 
 @Component({
@@ -11,7 +11,7 @@ export class AddTagComponent {
   tagName: string;
 
   constructor(
-    private tagService: TagsService,
+    private tagService: MockTagsService,
     private router: Router) { }
 
   add() {

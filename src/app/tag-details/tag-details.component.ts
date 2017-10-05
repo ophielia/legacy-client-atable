@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from "@angular/core";
 import {Tag} from "../tag";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TagsService} from "../tags.service";
+import {MockTagsService} from "../mock-tags.service";
 
 @Component({
   selector: 'at-tag-details',
@@ -24,7 +24,7 @@ import {TagsService} from "../tags.service";
 export class TagDetailsComponent implements OnInit , OnDestroy {
   @Input() tag : Tag;
 sub: any;
-  constructor(private tagService: TagsService,
+  constructor(private tagService: MockTagsService,
   private route:ActivatedRoute,
   private router : Router) {
   }

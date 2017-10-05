@@ -1,7 +1,7 @@
 import {Component, OnInit, Output, EventEmitter} from "@angular/core";
 import {Tag} from "../tag";
-import {TagsService} from "../tags.service";
 import {Router} from "@angular/router";
+import {TagsService} from "../tags.service";
 
 @Component({
   selector: 'at-tag-list',
@@ -12,8 +12,9 @@ export class TagListComponent implements OnInit {
 
   private tagService: TagsService;
   tags: Tag[] = [];
+  errorMessage: string;
 
-  constructor(tagService: TagsService,private router: Router) {
+  constructor(tagService: TagsService, private router: Router) {
     this.tagService = tagService;
   }
 
@@ -23,7 +24,10 @@ export class TagListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.tags = this.tagService.getAllTags();
+      this.tagService
+        .getAll()
+        .subscribe(p => this.tags = p,
+          e => this.errorMessage = e);
   }
 
 }

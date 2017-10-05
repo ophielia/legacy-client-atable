@@ -5,12 +5,16 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { TagListComponent } from './tag-list/tag-list.component';
-import {TagsService} from "./tags.service";
+import {MockTagsService} from "./mock-tags.service";
 import { TagDetailsComponent } from './tag-details/tag-details.component';
 import {routing} from "./app.routes";
 import {AddTagComponent} from "./tag-list/add-tag.component";
 import { EditTagComponent } from './tag-list/edit-tag.component';
 import {DeleteTagComponent} from "./tag-list/delete-tag.component";
+import {HomeComponent} from "./home.component";
+import {AuthenticationService} from "./authentication.service";
+import {LoginComponent} from "./login.component";
+import {TagsService} from "./tags.service";
 
 @NgModule({
   declarations: [
@@ -19,7 +23,9 @@ import {DeleteTagComponent} from "./tag-list/delete-tag.component";
     AddTagComponent,
     TagDetailsComponent,
     EditTagComponent,
-    DeleteTagComponent
+    DeleteTagComponent,
+    HomeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +33,7 @@ import {DeleteTagComponent} from "./tag-list/delete-tag.component";
     HttpModule,
     routing
   ],
-  providers: [TagsService],
+  providers: [MockTagsService, TagsService,AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

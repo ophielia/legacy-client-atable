@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TagsService} from "../tags.service";
+import {MockTagsService} from "../mock-tags.service";
 
 
 @Component({
@@ -12,7 +12,7 @@ export class EditTagComponent {
   tagName: string;
 
   constructor(
-    private tagService: TagsService,
+    private tagService: MockTagsService,
     private route: ActivatedRoute,
     private router: Router
   ) {
