@@ -5,8 +5,19 @@ import {TagsService} from "../tags.service";
 
 @Component({
   selector: 'at-tag-list',
-  templateUrl: './tag-list.component.html',
-  styleUrls: ['./tag-list.component.css']
+  template: `<div>
+    <h2>Tag Drilldown</h2>
+
+    <div class="row card-group">
+      <div class="col-4 tagboxContainer" *ngFor="let tag of tags">
+        <div class="card tagbox">
+          <div><a href="#">{{tag.name}}</a></div>
+          <at-tag-drilldown [node]="tag"></at-tag-drilldown>
+        </div>
+      </div>
+    </div>
+  </div>`,
+  styleUrls: ['./tag-list.component.css','../shared.styles.css']
 })
 export class TagListComponent implements OnInit {
 
@@ -14,20 +25,33 @@ export class TagListComponent implements OnInit {
   tags: Tag[] = [];
   errorMessage: string;
 
+  node = {name: 'root', children: [
+    {name: 'a', children: []},
+    {name: 'b', children: []},
+    {name: 'c', children: [
+      {name: 'd', children: []},
+      {name: 'e', children: []},
+      {name: 'f', children: []},
+    ]},
+  ]};
+
   constructor(tagService: TagsService, private router: Router) {
     this.tagService = tagService;
   }
 
+
+
   edit(tagId : string) {
-    alert('list' + tagId);
     this.router.navigate(['/edit', tagId]);
   }
 
   ngOnInit() {
-      this.tagService
-        .getAll()
+    var beep = this.tagService.getTagDrilldownList();
+    this.tags = beep;
+    /*this.tagService
+        .getBaseTags()
         .subscribe(p => this.tags = p,
-          e => this.errorMessage = e);
+          e => this.errorMessage = e);*/
   }
 
 }

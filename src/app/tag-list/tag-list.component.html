@@ -1,33 +1,13 @@
-<div class="row">
-  <div class="col-sm-12">
-    <a class="btn btn-primary btn-lg"
-       routerLink="/add">
-      Add new site
-    </a>
-  </div>
-</div>
-<h2>List of Tags</h2>
-<section *ngIf="errorMessage">
-  {{errorMessage}}
-</section>
-<div class="row" *ngFor="let tag of tags; let e=even; let f=first; let l=last"
-     ywActionable="#aaaaaa" (onAction)="edit(tag.tag_id)"
-     [ngClass]="{ evenRow: e }"
-     [class.topRow]="f"
-     [class.bottomRow]="l">
-  <div class="col-sm-8">
-    <h4>{{tag.tag_id}}: {{tag.name}}: {{tag.description}}</h4>
-  </div>
-  <div class="col-sm-4" style="margin-top: 5px;">
-    <div class="pull-right">
-      <a class="btn btn-warning btn-sm"
-         [routerLink]="['/edit', tag.tag_id]">
-        Edit
-      </a>
-      <a class="btn btn-danger btn-sm"
-         [routerLink]="['/delete', tag.tag_id]">
-        Delete
-      </a>
+
+<div>
+  <h2>Tag Drilldown</h2>
+
+  <div class="row card-group">
+    <div class="col-4 tagboxContainer" *ngFor="let tag of tags">
+      <div class="card tagbox">
+        <div><a href="#">{{tag.name}}</a></div>
+        <at-tag-drilldown [node]="node"></at-tag-drilldown>
+      </div>
     </div>
   </div>
 </div>

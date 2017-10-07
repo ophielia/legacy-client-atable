@@ -4,28 +4,32 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { TagListComponent } from './tag-list/tag-list.component';
+import { PocTagListComponent } from './poc-tag-list/tag-list.component';
 import {MockTagsService} from "./mock-tags.service";
 import { TagDetailsComponent } from './tag-details/tag-details.component';
 import {routing} from "./app.routes";
-import {AddTagComponent} from "./tag-list/add-tag.component";
-import { EditTagComponent } from './tag-list/edit-tag.component';
-import {DeleteTagComponent} from "./tag-list/delete-tag.component";
+import {PocAddTagComponent} from "./poc-tag-list/add-tag.component";
+import { PocEditTagComponent } from './poc-tag-list/edit-tag.component';
+import {PocDeleteTagComponent} from "./poc-tag-list/delete-tag.component";
 import {HomeComponent} from "./home.component";
 import {AuthenticationService} from "./authentication.service";
 import {LoginComponent} from "./login.component";
 import {TagsService} from "./tags.service";
+import {TagListComponent} from "./tag-list/tag-list.component";
+import { TagDrilldownComponent } from './tag-list/tag-drilldown.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TagListComponent,
-    AddTagComponent,
+    PocTagListComponent,
+    PocAddTagComponent,
     TagDetailsComponent,
-    EditTagComponent,
-    DeleteTagComponent,
+    PocEditTagComponent,
+    PocDeleteTagComponent,
     HomeComponent,
-    LoginComponent
+    TagListComponent,
+    LoginComponent,
+    TagDrilldownComponent
   ],
   imports: [
     BrowserModule,

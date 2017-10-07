@@ -5,9 +5,9 @@ import {MockTagsService} from "../mock-tags.service";
 
 @Component({
   selector: 'add-tag-view',
-  templateUrl: 'add-tag.component.html'
+  templateUrl: './add-tag.component.html'
 })
-export class AddTagComponent {
+export class PocAddTagComponent {
   tagName: string;
 
   constructor(

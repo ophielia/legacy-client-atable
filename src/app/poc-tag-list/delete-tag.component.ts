@@ -7,7 +7,7 @@ import {MockTagsService} from '../mock-tags.service';
   selector: 'delete-site-view',
   templateUrl: './delete-tag.template.html'
 })
-export class DeleteTagComponent {
+export class PocDeleteTagComponent {
   tagId: string;
   tagName: string;
   private parSub: any;
