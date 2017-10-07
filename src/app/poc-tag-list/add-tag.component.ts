@@ -1,6 +1,6 @@
 import {Component, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
-import {MockTagsService} from "../mock-tags.service";
+import {TagsService} from "../tags.service";
 
 
 @Component({
@@ -11,11 +11,12 @@ export class PocAddTagComponent {
   tagName: string;
 
   constructor(
-    private tagService: MockTagsService,
+    private tagService: TagsService,
     private router: Router) { }
 
   add() {
-    this.tagService.addTag({tag_id: "", name:this.tagName, description: ""});
+    this.tagService.addTag(this.tagName)
+      .subscribe(r => console.log(`added!!! this.tagName`));;
     this.router.navigate(['/list']);
   }
 }

@@ -39,7 +39,9 @@ export class PocEditTagComponent  implements OnInit, OnDestroy {
 
   save() {
     this.tagService.saveTag(this.tag)
-      .subscribe(r => console.log(`saved!!! ${JSON.stringify(this.tag)}`));
+      .subscribe(r => {
+        console.log(`saved!!! ${JSON.stringify(this.tag)}`);
+      });
     this.router.navigate(['/list']);
   }
 }

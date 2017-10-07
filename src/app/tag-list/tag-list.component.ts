@@ -11,7 +11,6 @@ import {TagsService} from "../tags.service";
     <div class="row card-group">
       <div class="col-4 tagboxContainer" *ngFor="let tag of tags">
         <div class="card tagbox">
-          <div><a href="#">{{tag.name}}</a></div>
           <at-tag-drilldown [node]="tag"></at-tag-drilldown>
         </div>
       </div>

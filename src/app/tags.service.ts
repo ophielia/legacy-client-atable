@@ -12,84 +12,11 @@ const TAGS: Tag[] = [
   {tag_id: "3", name: 'cheap', description: 'not expensive'}
 ];
 
-const TESTDRILLDOWN = {
-  "tagInfo": {
-    "baseIds": [2, 4, 6, 17, 18, 19],
-    "tagList": [{
-      "name": "main1",
-      "description": null,
-      "parentId": "0",
-      "childrenIds": ["8", "10", "12"],
-      "tag_id": "2"
-    }, {
-      "name": "main2",
-      "description": null,
-      "parentId": "0",
-      "childrenIds": ["14", "16"],
-      "tag_id": "4"
-    }, {"name": "main3", "description": null, "parentId": "0", "childrenIds": [], "tag_id": "6"}, {
-      "name": "sub1_1",
-      "description": null,
-      "parentId": "2",
-      "childrenIds": [],
-      "tag_id": "8"
-    }, {
-      "name": "sub1_2",
-      "description": null,
-      "parentId": "2",
-      "childrenIds": [],
-      "tag_id": "10"
-    }, {
-      "name": "sub1_3",
-      "description": null,
-      "parentId": "2",
-      "childrenIds": [],
-      "tag_id": "12"
-    }, {
-      "name": "sub2_1",
-      "description": null,
-      "parentId": "4",
-      "childrenIds": [],
-      "tag_id": "14"
-    }, {
-      "name": "sub2_2",
-      "description": null,
-      "parentId": "4",
-      "childrenIds": [],
-      "tag_id": "16"
-    }, {
-      "name": "main 4",
-      "description": "new description",
-      "parentId": "0",
-      "childrenIds": [],
-      "tag_id": "17"
-    }, {
-      "name": "main 5",
-      "description": "new description",
-      "parentId": "0",
-      "childrenIds": [],
-      "tag_id": "18"
-    }, {"name": "main 6", "description": "new description", "parentId": "0", "childrenIds": [], "tag_id": "19"}]
-  }, "_links": {"self": {"href": "http://localhost:8181/taginfo?filter=none"}}
-};
-
+const TESTDRILLDOWN = {"tagInfo":{"baseIds":[2,4,8,6],"tagList":[{"name":"Dish Type","description":null,"parentId":"0","childrenIds":["5","9","7"],"tag_id":"2"},{"name":"Ingredients","description":null,"parentId":"0","childrenIds":["14","16","12"],"tag_id":"4"},{"name":"Main Dish","description":null,"parentId":"2","childrenIds":[],"tag_id":"5"},{"name":"Side Dish","description":null,"parentId":"2","childrenIds":[],"tag_id":"7"},{"name":"Dessert","description":null,"parentId":"2","childrenIds":[],"tag_id":"9"},{"name":"Meat","description":null,"parentId":"4","childrenIds":["21","23"],"tag_id":"16"},{"name":"Dairy","description":null,"parentId":"4","childrenIds":[],"tag_id":"14"},{"name":"Dry","description":null,"parentId":"4","childrenIds":[],"tag_id":"12"},{"name":"Cheap","description":null,"parentId":"6","childrenIds":[],"tag_id":"10"},{"name":"Yummy","description":null,"parentId":"6","childrenIds":["29","31","33","35","37"],"tag_id":"11"},{"name":"Quick","description":null,"parentId":"6","childrenIds":[],"tag_id":"13"},{"name":"T Type Tag","description":null,"parentId":"0","childrenIds":["15","17","19"],"tag_id":"8"},{"name":"Rating","description":null,"parentId":"0","childrenIds":["11","10","13"],"tag_id":"6"},{"name":"healthy","description":null,"parentId":"8","childrenIds":[],"tag_id":"15"},{"name":"crockpot","description":null,"parentId":"8","childrenIds":[],"tag_id":"17"},{"name":"pasta","description":null,"parentId":"8","childrenIds":[],"tag_id":"19"},{"name":"Red Meat","description":null,"parentId":"16","childrenIds":[],"tag_id":"21"},{"name":"Poultry","description":null,"parentId":"16","childrenIds":["25","27"],"tag_id":"23"},{"name":"chicken","description":null,"parentId":"23","childrenIds":[],"tag_id":"25"},{"name":"duck","description":null,"parentId":"23","childrenIds":[],"tag_id":"27"},{"name":"Yummy 1","description":null,"parentId":"11","childrenIds":[],"tag_id":"29"},{"name":"Yummy 2","description":null,"parentId":"11","childrenIds":[],"tag_id":"31"},{"name":"Yummy 3","description":null,"parentId":"11","childrenIds":[],"tag_id":"33"},{"name":"Yummy 4","description":null,"parentId":"11","childrenIds":[],"tag_id":"35"},{"name":"Yummy 5","description":null,"parentId":"11","childrenIds":[],"tag_id":"37"}]},"_links":{"self":{"href":"http://localhost:8181/taginfo?filter=none"}}};
 @Injectable()
 export class TagsService {
 
   private tagUrl = 'http://localhost:8181';
-
-  private headers = new Headers({
-      'Content-Type': 'application/json'
-      ,
-      'Authorization': 'Bearer '
-      +
-      this
-        .authenticationService
-        .getToken()
-    }
-  )
-  ;
-
 
   private tags = TAGS.slice(0);
 
@@ -106,11 +33,6 @@ export class TagsService {
     headers.append('Authorization', 'Bearer ' + this.authenticationService.getToken());
     return headers;
   }
-
-  getAllTags(): Tag[] {
-    return this.tags;
-  }
-
 
   getAll(): Observable<Tag[]> {
     let tags$ = this.http
@@ -133,7 +55,7 @@ export class TagsService {
     let baseList: string[] = taginfo.baseIds.map(x => x+"");
 
     // convert all tagList to TagDrilldown objects
-    //  (which will have their children filled with fillDrilldown
+    //  (which will have their children filled with populateChildren
     let drilldownMaster: TagDrilldown[] = tagList.map(toTagDrilldown);
     this.populateChildren(baseList,drilldownMaster);
 
@@ -157,17 +79,20 @@ export class TagsService {
     }
     // if doesn't contain ids to fill, return
     if (toFill.children_ids.length == 0) {
+      toFill.children=[];
       return toFill;
-    }
-    // get children list
-    //    for each child, fillchildren
-    for (var i = 0; i < toFill.children_ids.length; i++) {
-      let child: TagDrilldown = this.fillChildren(toFill.children_ids[i], master);
-      //    put drilldown in children lst
-      toFill.children.push(child);
+    } else {
+      // get children list
+      //    for each child, fillchildren
+      for (var i = 0; i < toFill.children_ids.length; i++) {
+        let child: TagDrilldown = this.fillChildren(toFill.children_ids[i], master);
+        //    put drilldown in children lst
+        toFill.children.push(child);
+      }
     }
     // put drilldown in master
     master[drilldownIndex] = toFill;
+    return toFill;
   }
 
   getById(tag_id: string): Observable<Tag> {
@@ -179,13 +104,17 @@ export class TagsService {
   }
 
 
-  addTag(newTag: Tag) {
-    alert(newTag.name);
-    // just for now
-    newTag.tag_id = this.tags.length > 0 ?
-      this.tags.map(s => s.tag_id)
-        .reduce((p, c) => p < c ? c : p) + 1 + "" : "1";
-    this.tags.push(newTag);
+  addTag(newTagName: string): Observable<Response>  {
+    var newTag: Tag = <Tag>({
+      name: newTagName,
+    });
+
+    return this
+      .http
+      .post(`${this.tagUrl}/tag`,
+        JSON.stringify(newTag),
+        {headers: this.getHeaders()});
+
   }
 
   saveTag(tag: Tag): Observable<Response> {
@@ -195,17 +124,6 @@ export class TagsService {
         JSON.stringify(tag),
         {headers: this.getHeaders()});
   }
-
-  deleteTag(id: string) {
-    let oldTag = this.tags.filter(s => s.tag_id == id)[0];
-    if (oldTag) {
-      let tagIndex = this.tags.indexOf(oldTag);
-      if (tagIndex >= 0) {
-        this.tags.splice(tagIndex, 1);
-      }
-    }
-  }
-
 }
 
 function mapTags(response: Response): Tag[] {
@@ -247,7 +165,7 @@ function toTagDrilldown(r: any) {
 // this could also be a private method of the component class
 function handleError(error: any) {
   // log error
-  // could be something more sofisticated
+  // could be something more sophisticated
   let errorMsg = error.message || `Yikes! There was a problem with our hyperdrive device and we couldn't retrieve your data!`
   console.error(errorMsg);
 
