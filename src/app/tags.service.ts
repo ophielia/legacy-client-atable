@@ -6,19 +6,11 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {TagDrilldown} from "./tag-drilldown";
 
-const TAGS: Tag[] = [
-  {tag_id: "1", name: 'carrot', description: 'orange'},
-  {tag_id: "2", name: 'easy', description: 'easy to make'},
-  {tag_id: "3", name: 'cheap', description: 'not expensive'}
-];
 
-const TESTDRILLDOWN = {"tagInfo":{"baseIds":[2,4,8,6],"tagList":[{"name":"Dish Type","description":null,"parentId":"0","childrenIds":["5","9","7"],"tag_id":"2"},{"name":"Ingredients","description":null,"parentId":"0","childrenIds":["14","16","12"],"tag_id":"4"},{"name":"Main Dish","description":null,"parentId":"2","childrenIds":[],"tag_id":"5"},{"name":"Side Dish","description":null,"parentId":"2","childrenIds":[],"tag_id":"7"},{"name":"Dessert","description":null,"parentId":"2","childrenIds":[],"tag_id":"9"},{"name":"Meat","description":null,"parentId":"4","childrenIds":["21","23"],"tag_id":"16"},{"name":"Dairy","description":null,"parentId":"4","childrenIds":[],"tag_id":"14"},{"name":"Dry","description":null,"parentId":"4","childrenIds":[],"tag_id":"12"},{"name":"Cheap","description":null,"parentId":"6","childrenIds":[],"tag_id":"10"},{"name":"Yummy","description":null,"parentId":"6","childrenIds":["29","31","33","35","37"],"tag_id":"11"},{"name":"Quick","description":null,"parentId":"6","childrenIds":[],"tag_id":"13"},{"name":"T Type Tag","description":null,"parentId":"0","childrenIds":["15","17","19"],"tag_id":"8"},{"name":"Rating","description":null,"parentId":"0","childrenIds":["11","10","13"],"tag_id":"6"},{"name":"healthy","description":null,"parentId":"8","childrenIds":[],"tag_id":"15"},{"name":"crockpot","description":null,"parentId":"8","childrenIds":[],"tag_id":"17"},{"name":"pasta","description":null,"parentId":"8","childrenIds":[],"tag_id":"19"},{"name":"Red Meat","description":null,"parentId":"16","childrenIds":[],"tag_id":"21"},{"name":"Poultry","description":null,"parentId":"16","childrenIds":["25","27"],"tag_id":"23"},{"name":"chicken","description":null,"parentId":"23","childrenIds":[],"tag_id":"25"},{"name":"duck","description":null,"parentId":"23","childrenIds":[],"tag_id":"27"},{"name":"Yummy 1","description":null,"parentId":"11","childrenIds":[],"tag_id":"29"},{"name":"Yummy 2","description":null,"parentId":"11","childrenIds":[],"tag_id":"31"},{"name":"Yummy 3","description":null,"parentId":"11","childrenIds":[],"tag_id":"33"},{"name":"Yummy 4","description":null,"parentId":"11","childrenIds":[],"tag_id":"35"},{"name":"Yummy 5","description":null,"parentId":"11","childrenIds":[],"tag_id":"37"}]},"_links":{"self":{"href":"http://localhost:8181/taginfo?filter=none"}}};
 @Injectable()
 export class TagsService {
 
   private tagUrl = 'http://localhost:8181';
-
-  private tags = TAGS.slice(0);
 
   constructor(private http: Http,
               private authenticationService: AuthenticationService) {
@@ -41,18 +33,9 @@ export class TagsService {
     return tags$;
   }
 
-  getBaseTags(): Observable<Tag[]> {
-    let tags$ = this.http
-      .get(`${this.tagUrl}/tag?filter=BaseTags`, {headers: this.getHeaders()})
-      .map(mapTags).catch(handleError);  // HERE: This is new!
-    return tags$;
-  }
-
-  getTagDrilldownList(): TagDrilldown[] {
-
-    let taginfo = TESTDRILLDOWN.tagInfo;
-    let tagList: Object[] = taginfo.tagList;
-    let baseList: string[] = taginfo.baseIds.map(x => x+"");
+  processTagDrilldownList(response: Response): TagDrilldown[] {
+    let tagList: Object[] = response.json().tagInfo.tagList;
+    let baseList: string[] = response.json().tagInfo.baseIds.map(x => x+"");
 
     // convert all tagList to TagDrilldown objects
     //  (which will have their children filled with populateChildren
@@ -60,6 +43,14 @@ export class TagsService {
     this.populateChildren(baseList,drilldownMaster);
 
     return baseList.map(x => drilldownMaster.find(y => y.tag_id == x));
+  }
+
+  getTagDrilldownList(): Observable<TagDrilldown[]> {
+    let tags$ = this.http
+      .get(`${this.tagUrl}/taginfo`, {headers: this.getHeaders()})
+      .map(r => this.processTagDrilldownList(r)).catch(handleError);  // HERE: This is new!
+    return tags$;
+
   }
 
   private populateChildren(tagList:string[], drilldownMaster: TagDrilldown[]) {

@@ -17,6 +17,7 @@ import {LoginComponent} from "./login.component";
 import {TagsService} from "./tags.service";
 import {TagListComponent} from "./tag-list/tag-list.component";
 import { TagDrilldownComponent } from './tag-list/tag-drilldown.component';
+import {DrilldownCommunicationService} from "./tag-list/tag-drilldown-select.service";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import { TagDrilldownComponent } from './tag-list/tag-drilldown.component';
     HttpModule,
     routing
   ],
-  providers: [MockTagsService, TagsService,AuthenticationService],
+  providers: [MockTagsService, TagsService,AuthenticationService, DrilldownCommunicationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

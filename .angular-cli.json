@@ -20,6 +20,7 @@
       "prefix": "at",
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../node_modules/octicons/build/octicons.css",
         "styles.css"
       ],
       "scripts": [

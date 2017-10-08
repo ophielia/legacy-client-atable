@@ -13,6 +13,7 @@ export class PocEditTagComponent  implements OnInit, OnDestroy {
   tagName: string;
   tag: Tag = {tag_id:"",name:"",description:""};
   sub: any;
+  private errorMessage: string;
 
   constructor(
     private tagService: TagsService,
@@ -40,8 +41,13 @@ export class PocEditTagComponent  implements OnInit, OnDestroy {
   save() {
     this.tagService.saveTag(this.tag)
       .subscribe(r => {
-        console.log(`saved!!! ${JSON.stringify(this.tag)}`);
+        console.log(`saved!!! ${JSON.stringify(this.tag)}`,
+        e=> this.errorMessage = e,
+          this.goToList());
       });
+  }
+
+  goToList() {
     this.router.navigate(['/list']);
   }
 }

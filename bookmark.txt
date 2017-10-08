@@ -1,0 +1,5 @@
+drag and drop - npm2-dnd module
+make icons smaller and not grey (transparent? or just darker?)
+sort tags in poc tag list in alphabetical order (server)
+
+

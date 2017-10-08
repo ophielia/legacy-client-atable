@@ -1,17 +1,17 @@
-import {Component, OnInit, Output, EventEmitter} from "@angular/core";
-import {Tag} from "../tag";
+import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {TagsService} from "../tags.service";
+import {TagDrilldown} from "app/tag-drilldown";
+import {DrilldownCommunicationService} from "./tag-drilldown-select.service";
 
 @Component({
   selector: 'at-tag-list',
   template: `<div>
-    <h2>Tag Drilldown</h2>
-
-    <div class="row card-group">
+    <h2>Tag Drilldown <span *ngIf="selectedTag">Selected: {{selectedTag.name}}</span></h2>
+    <div *ngIf="this.isComplete" class="row card-group">
       <div class="col-4 tagboxContainer" *ngFor="let tag of tags">
-        <div class="card tagbox">
-          <at-tag-drilldown [node]="tag"></at-tag-drilldown>
+        <div class="card tagbox" (selectEvent)="onNotify($event)">
+          <at-tag-drilldown [node]="tag" ></at-tag-drilldown>
         </div>
       </div>
     </div>
@@ -21,36 +21,31 @@ import {TagsService} from "../tags.service";
 export class TagListComponent implements OnInit {
 
   private tagService: TagsService;
-  tags: Tag[] = [];
+  selectedTag: TagDrilldown;
+  tags: TagDrilldown[] = [];
   errorMessage: string;
+  private isComplete: boolean = false;
 
-  node = {name: 'root', children: [
-    {name: 'a', children: []},
-    {name: 'b', children: []},
-    {name: 'c', children: [
-      {name: 'd', children: []},
-      {name: 'e', children: []},
-      {name: 'f', children: []},
-    ]},
-  ]};
-
-  constructor(tagService: TagsService, private router: Router) {
+  constructor(tagService: TagsService, private router: Router,
+  private tagCommunicationService: DrilldownCommunicationService) {
     this.tagService = tagService;
+
+    this.tagCommunicationService.selectEvent.subscribe(e => {
+      this.onSelect(e);
+    });
   }
 
-
-
-  edit(tagId : string) {
-    this.router.navigate(['/edit', tagId]);
-  }
 
   ngOnInit() {
-    var beep = this.tagService.getTagDrilldownList();
-    this.tags = beep;
-    /*this.tagService
-        .getBaseTags()
+    this.tagService
+        .getTagDrilldownList()
         .subscribe(p => this.tags = p,
-          e => this.errorMessage = e);*/
+          e => this.errorMessage = e,
+          () => this.isComplete = true);
+  }
+
+  onSelect(tag: TagDrilldown) {
+    this.selectedTag = tag;
   }
 
 }
