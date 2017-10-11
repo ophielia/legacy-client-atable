@@ -6,5 +6,6 @@ export interface TagDrilldown {
   children_ids: string[];
   children: TagDrilldown[];
   expanded: boolean;
+  level: number;
 }
 

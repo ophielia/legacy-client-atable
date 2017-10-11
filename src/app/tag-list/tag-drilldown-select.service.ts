@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {TagDrilldown} from "../tag-drilldown";
+import {TagDrilldown} from "../model/tag-drilldown";
 
 @Injectable()
 export class DrilldownCommunicationService {

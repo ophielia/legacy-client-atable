@@ -1,34 +1,49 @@
 <h3>Edit the name of the tag:</h3>
-<div class="row">
+<div *ngIf="tag">
+  <div class="row">
+    <div class="col-sm-6">
+      <input #tagNameBox class="form-control input-lg" type="text"
+             [value]="tag.name"
+             placeholder="site name"
+             (keyup)="tag.name=tagNameBox.value"
+             (keyup.enter)="save()"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <input #tagDescriptionBox class="form-control input-lg" type="text"
+             [value]="tag.description"
+             placeholder="site name"
+             (keyup)="tag.description=tagDescriptionBox.value"
+             (keyup.enter)="save()"/>
+      <input type="hidden" value="{{tag.tag_id}}"/>
+    </div>
+  </div>
+
+  <div class="row" >
   <div class="col-sm-6">
-    <input #tagNameBox class="form-control input-lg" type="text"
-      [value]="tag.name"
-      placeholder="site name"
-      (keyup)="tag.name=tagNameBox.value"
-      (keyup.enter)="save()" />
+    <div>
+      <select name="tag_type" [(ngModel)]="tag.tag_type">
+        <option *ngFor="let tt of tagType" [value]="tt">{{tt}}</option>
+      </select>
+    </div>
   </div>
 </div>
-<div class="row">
-  <div class="col-sm-6">
-    <input #tagDescriptionBox class="form-control input-lg" type="text"
-           [value]="tag.description"
-           placeholder="site name"
-           (keyup)="tag.description=tagDescriptionBox.value"
-           (keyup.enter)="save()" />
-    <input type="hidden" value="{{tag.tag_id}}" />
-  </div>
-</div>
+
 
 <div class="row" style="margin-top: 12px;">
   <div class="col-sm-6">
     <button class="btn btn-success btn"
-      (click)="save()"
-      [disabled]="!tag.name">
+            (click)="save()"
+            [disabled]="!tag.name">
       Save
     </button>
     <a class="btn btn-warning btn"
-      routerLink="/list">
+       routerLink="/list">
       Cancel
     </a>
   </div>
+</div>
+
+
 </div>

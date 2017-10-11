@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormBuilder, FormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
@@ -30,7 +30,7 @@ import {DrilldownCommunicationService} from "./tag-list/tag-drilldown-select.ser
     HomeComponent,
     TagListComponent,
     LoginComponent,
-    TagDrilldownComponent
+    TagDrilldownComponent,
   ],
   imports: [
     BrowserModule,

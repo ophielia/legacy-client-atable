@@ -2,4 +2,26 @@
   list-style: none;
   list-style-position: outside;
   padding-left: 0px;
+  margin-bottom:0px;
 }
+
+
+.drilldown-level-1 {
+  background-color: #0000e6;
+}
+
+.drilldown-level-2 {
+  background-color: #6666ff;
+}
+
+.drilldown-level-3 {
+  background-color: #9999ff;
+}
+
+.drilldown-level-4 {
+  background-color: #ccccff;
+  color:darkgray;
+}
+
+
+

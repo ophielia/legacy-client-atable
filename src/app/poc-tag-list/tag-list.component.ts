@@ -1,5 +1,5 @@
 import {Component, OnInit, Output, EventEmitter} from "@angular/core";
-import {Tag} from "../tag";
+import {Tag} from "../model/tag";
 import {Router} from "@angular/router";
 import {TagsService} from "../tags.service";
 

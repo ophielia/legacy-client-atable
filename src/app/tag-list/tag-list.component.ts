@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {TagsService} from "../tags.service";
-import {TagDrilldown} from "app/tag-drilldown";
+import {TagDrilldown} from "app/model/tag-drilldown";
 import {DrilldownCommunicationService} from "./tag-drilldown-select.service";
 
 @Component({

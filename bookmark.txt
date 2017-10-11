@@ -1,5 +1,16 @@
 drag and drop - npm2-dnd module
 make icons smaller and not grey (transparent? or just darker?)
 sort tags in poc tag list in alphabetical order (server)
+on expand/fold - undo select.
 
+
+clean up
+enum  or constant for tagtype
+
+
+
+#6534ff
+#62bcfa
+#fccdd3
+#bbc4ef
 

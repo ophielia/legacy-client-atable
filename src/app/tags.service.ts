@@ -1,11 +1,13 @@
 import {Injectable} from "@angular/core";
 import {Headers, Http, Response} from "@angular/http";
-import {Tag} from "./tag";
+import {Tag} from "./model/tag";
 import {AuthenticationService} from "./authentication.service";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
-import {TagDrilldown} from "./tag-drilldown";
+import {TagDrilldown} from "./model/tag-drilldown";
 
+
+  const tagType: string[]  = ["TagType","Ingredient","Rating", "DishType"];
 
 @Injectable()
 export class TagsService {
@@ -33,14 +35,18 @@ export class TagsService {
     return tags$;
   }
 
+  getTagTypes(): string[] {
+    return tagType;
+  }
+
   processTagDrilldownList(response: Response): TagDrilldown[] {
     let tagList: Object[] = response.json().tagInfo.tagList;
-    let baseList: string[] = response.json().tagInfo.baseIds.map(x => x+"");
+    let baseList: string[] = response.json().tagInfo.baseIds.map(x => x + "");
 
     // convert all tagList to TagDrilldown objects
     //  (which will have their children filled with populateChildren
     let drilldownMaster: TagDrilldown[] = tagList.map(toTagDrilldown);
-    this.populateChildren(baseList,drilldownMaster);
+    this.populateChildren(baseList, drilldownMaster);
 
     return baseList.map(x => drilldownMaster.find(y => y.tag_id == x));
   }
@@ -53,14 +59,22 @@ export class TagsService {
 
   }
 
-  private populateChildren(tagList:string[], drilldownMaster: TagDrilldown[]) {
+  private populateChildren(tagList: string[], drilldownMaster: TagDrilldown[]) {
     // loop through all elements
-    tagList.forEach(x=> {this.fillChildren(x,drilldownMaster);})
+    tagList.forEach(x => {
+      this.fillChildren(x, 1, drilldownMaster);
+    })
   }
 
-  private fillChildren(drilldown_id: string, master: TagDrilldown[]): TagDrilldown {
+  private fillChildren(drilldown_id: string, level: number, master: TagDrilldown[]): TagDrilldown {
     // get index for drilldown
     var drilldownIndex = master.findIndex(x => x.tag_id == drilldown_id);
+
+    // may not be found (in tagtype case) - so return directly if not found
+    if (drilldownIndex == -1) {
+      return null;
+    }
+
     // get drilldown from master
     let toFill: TagDrilldown = master[drilldownIndex];
 
@@ -68,17 +82,23 @@ export class TagsService {
     if (toFill.children.length > 0) {
       return toFill;
     }
+    toFill.level = level;
     // if doesn't contain ids to fill, return
     if (toFill.children_ids.length == 0) {
-      toFill.children=[];
+      toFill.children = [];
       return toFill;
     } else {
       // get children list
       //    for each child, fillchildren
       for (var i = 0; i < toFill.children_ids.length; i++) {
-        let child: TagDrilldown = this.fillChildren(toFill.children_ids[i], master);
+        let child: TagDrilldown = this.fillChildren(toFill.children_ids[i], level + 1, master);
+        //child.level = toFill.level+1;
         //    put drilldown in children lst
-        toFill.children.push(child);
+        if (child) {
+        // fill parent id
+    //    child.parent_id = toFill.tag_id;
+          toFill.children.push(child);
+        }
       }
     }
     // put drilldown in master
@@ -95,7 +115,7 @@ export class TagsService {
   }
 
 
-  addTag(newTagName: string): Observable<Response>  {
+  addTag(newTagName: string): Observable<Response> {
     var newTag: Tag = <Tag>({
       name: newTagName,
     });
@@ -131,7 +151,8 @@ function toTag(r: any): Tag {
   let tag = <Tag>({
     tag_id: r.tag.tag_id,
     name: r.tag.name,
-    description: r.tag.description
+    description: r.tag.description,
+    tag_type: r.tag.tag_type
   });
 
   console.log('Parsed tag:', tag);
@@ -144,8 +165,11 @@ function toTagDrilldown(r: any) {
     "tag_id": r.tag_id,
     "name": r.name,
     "description": r.description,
+    "tag_type": r.tag_type,
     "parent_id": r.parent_id,
-    "children_ids": r.childrenIds,
+    "children_ids": r.children_ids,
+    "expanded": false,
+    "level": 1,
     "children": []
   });
 

@@ -1,10 +1,10 @@
 import {Injectable} from "@angular/core";
-import {Tag} from "./tag";
+import {Tag} from "./model/tag";
 
 const TAGS: Tag[] = [
-  {tag_id: "1", name: 'carrot', description: 'orange'},
-  {tag_id: "2", name: 'easy', description: 'easy to make'},
-  {tag_id: "3", name: 'cheap', description: 'not expensive'}
+  {tag_id: "1", name: 'carrot', description: 'orange', tag_type:"TagType"},
+  {tag_id: "2", name: 'easy', description: 'easy to make',tag_type:"TagType"},
+  {tag_id: "3", name: 'cheap', description: 'not expensive',tag_type:"TagType"}
 ];
 
 @Injectable()

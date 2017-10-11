@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from "@angular/core";
-import {Tag} from "../tag";
+import {Tag} from "../model/tag";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MockTagsService} from "../mock-tags.service";
 

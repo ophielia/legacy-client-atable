@@ -1,5 +1,5 @@
 import {Component,  Input, OnInit} from "@angular/core";
-import {TagDrilldown} from "../tag-drilldown";
+import {TagDrilldown} from "../model/tag-drilldown";
 import {dash, plus} from "octicons";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {DrilldownCommunicationService} from "./tag-drilldown-select.service";
@@ -7,11 +7,11 @@ import {DrilldownCommunicationService} from "./tag-drilldown-select.service";
 @Component({
   selector: 'at-tag-drilldown',
   template: `
-    <div (click)="testNotify(node)">{{node.name}} 
-      <button *ngIf="node.children.length > 0" (click)="showHideChildren(node)" type="button"
-              class="btn btn-default btn-sm">
-        <span *ngIf="!node.expanded" class="octicon" [innerHTML]="plusIcon"></span>
-        <span *ngIf="node.expanded" class="octicon" [innerHTML]="minusIcon"></span>
+    <div class="drilldown-level-{{node.level}}" (click)="testNotify(node)">{{node.name}} ({{node.level}})
+      <button *ngIf="node.children.length > 0" (click)="showHideChildren(node)" type="button" 
+              class="btn btn-sm ">
+        <span *ngIf="!node.expanded" class="octicon "  [innerHTML]="plusIcon"></span>
+        <span *ngIf="node.expanded" class="octicon " [innerHTML]="minusIcon"></span>
       </button>
 
     </div>
