@@ -19,7 +19,7 @@ export class PocTagListComponent implements OnInit {
   }
 
   edit(tagId : string) {
-    this.router.navigate(['/edit', tagId]);
+    this.router.navigate(['/dish/edit', tagId]);
   }
 
   ngOnInit() {

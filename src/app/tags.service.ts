@@ -5,9 +5,10 @@ import {AuthenticationService} from "./authentication.service";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {TagDrilldown} from "./model/tag-drilldown";
+import MappingUtils from "./mapping-utils";
 
 
-  const tagType: string[]  = ["TagType","Ingredient","Rating", "DishType"];
+const tagType: string[] = ["TagType", "Ingredient", "Rating", "DishType"];
 
 @Injectable()
 export class TagsService {
@@ -31,7 +32,7 @@ export class TagsService {
   getAll(): Observable<Tag[]> {
     let tags$ = this.http
       .get(`${this.tagUrl}/tag`, {headers: this.getHeaders()})
-      .map(mapTags).catch(handleError);  // HERE: This is new!
+      .map(this.mapTags).catch(handleError);  // HERE: This is new!
     return tags$;
   }
 
@@ -45,7 +46,7 @@ export class TagsService {
 
     // convert all tagList to TagDrilldown objects
     //  (which will have their children filled with populateChildren
-    let drilldownMaster: TagDrilldown[] = tagList.map(toTagDrilldown);
+    let drilldownMaster: TagDrilldown[] = tagList.map(MappingUtils.toTagDrilldown);
     this.populateChildren(baseList, drilldownMaster);
 
     return baseList.map(x => drilldownMaster.find(y => y.tag_id == x));
@@ -95,8 +96,8 @@ export class TagsService {
         //child.level = toFill.level+1;
         //    put drilldown in children lst
         if (child) {
-        // fill parent id
-    //    child.parent_id = toFill.tag_id;
+          // fill parent id
+          //    child.parent_id = toFill.tag_id;
           toFill.children.push(child);
         }
       }
@@ -109,7 +110,7 @@ export class TagsService {
   getById(tag_id: string): Observable<Tag> {
     let tag$ = this.http
       .get(`${this.tagUrl}/tag/${tag_id}`, {headers: this.getHeaders()})
-      .map(mapTag)
+      .map(this.mapTag)
       .catch(handleError);
     return tag$;
   }
@@ -135,47 +136,18 @@ export class TagsService {
         JSON.stringify(tag),
         {headers: this.getHeaders()});
   }
+
+  mapTags(response: Response): Tag[] {
+    // The response of the API has a results
+    // property with the actual results
+    return response.json()._embedded.tagResourceList.map(MappingUtils.toTag);
+  }
+
+  mapTag(response: Response): Tag {
+    return MappingUtils.toTag(response.json());
+  }
 }
 
-function mapTags(response: Response): Tag[] {
-  // The response of the API has a results
-  // property with the actual results
-  return response.json()._embedded.tagResourceList.map(toTag);
-}
-
-function mapTag(response: Response): Tag {
-  return toTag(response.json());
-}
-
-function toTag(r: any): Tag {
-  let tag = <Tag>({
-    tag_id: r.tag.tag_id,
-    name: r.tag.name,
-    description: r.tag.description,
-    tag_type: r.tag.tag_type
-  });
-
-  console.log('Parsed tag:', tag);
-  return tag;
-}
-
-function toTagDrilldown(r: any) {
-  console.log('in map drilldown');
-  let drilldown = <TagDrilldown>({
-    "tag_id": r.tag_id,
-    "name": r.name,
-    "description": r.description,
-    "tag_type": r.tag_type,
-    "parent_id": r.parent_id,
-    "children_ids": r.children_ids,
-    "expanded": false,
-    "level": 1,
-    "children": []
-  });
-
-  console.log('Parsed drilldown:', drilldown);
-  return drilldown;
-}
 
 // this could also be a private method of the component class
 function handleError(error: any) {
