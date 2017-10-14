@@ -1,3 +1,31 @@
-<p>
-  edit-dish works!
-</p>
+<div class="row">
+  <div class="col-md-8">
+    <!-- dish to edit here -->
+    <div class="col-sm-7">
+      <div class="input-group">
+        <input #dishNameBox class="form-control input-lg" type="text"
+               [value]="dish.name"
+               placeholder="site name"
+               (keyup)="dish.name=dishNameBox.value"
+               (keyup.enter)="save()"/>
+        <span class="input-group-btn"><button class="btn btn-success btn"
+                                              (click)="save()"
+                                              [disabled]="!dish.name">
+          Save
+        </button></span>
+      </div>
+      <div *ngIf="selectedTag">{{selectedTag.name}}</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <!-- tags to add here-->
+    <div class="row">
+      <div class="col-md-10">
+        <at-dish-tag-select (tagSelected)="showTag($event)"></at-dish-tag-select>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,20 +1,20 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 
-import { TagDrilldownComponent } from './tag-drilldown.component';
+import {PocTagDrilldownComponent} from "./tag-drilldown.component";
 
-describe('TagDrilldownComponent', () => {
-  let component: TagDrilldownComponent;
-  let fixture: ComponentFixture<TagDrilldownComponent>;
+describe('PocTagDrilldownComponent', () => {
+  let component: PocTagDrilldownComponent;
+  let fixture: ComponentFixture<PocTagDrilldownComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TagDrilldownComponent ]
+      declarations: [PocTagDrilldownComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TagDrilldownComponent);
+    fixture = TestBed.createComponent(PocTagDrilldownComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

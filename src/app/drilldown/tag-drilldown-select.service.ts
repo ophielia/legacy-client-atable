@@ -2,7 +2,7 @@ import {EventEmitter, Injectable} from "@angular/core";
 import {TagDrilldown} from "../model/tag-drilldown";
 
 @Injectable()
-export class PocDrilldownCommunicationService {
+export class DrilldownCommService {
 
   selectEvent: EventEmitter<TagDrilldown> = new EventEmitter<TagDrilldown>();
 

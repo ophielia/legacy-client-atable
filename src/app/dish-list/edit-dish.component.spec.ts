@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 
-import {EditDishComponent} from './edit-dish.component';
+import {EditDishComponent} from "./edit-dish.component";
 
-describe('EditDishComponent', () => {
+describe('DishTagSelectComponent', () => {
   let component: EditDishComponent;
   let fixture: ComponentFixture<EditDishComponent>;
 
@@ -10,7 +10,7 @@ describe('EditDishComponent', () => {
     TestBed.configureTestingModule({
       declarations: [EditDishComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

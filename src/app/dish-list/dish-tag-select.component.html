@@ -1,0 +1,23 @@
+<h2>Tag Drilldown <span *ngIf="selectedTag">Selected: {{selectedTag.name}}</span></h2>
+<div class="card tagbox" (click)="expandFold('DishType')">DishType
+</div>
+<ng-container *ngIf="isShow('DishType')">
+  <div class="tagboxContainer" *ngFor="let tag of dishTypeTags">
+    <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
+      <at-tag-drilldown-container [tagDrilldown]="tag"
+                                  (selectedDrilldown)="showSelected($event)"></at-tag-drilldown-container>
+    </div>
+  </div>
+</ng-container>
+
+
+<div class="card tagbox" (click)="expandFold('Ingredient')">Ingredients
+</div>
+<ng-container *ngIf="isShow('Ingredient')">
+  <div class="tagboxContainer" *ngFor="let tag of ingredientTags">
+    <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
+      <at-tag-drilldown-container [tagDrilldown]="tag"
+                                  (selectedDrilldown)="showSelected($event)"></at-tag-drilldown-container>
+    </div>
+  </div>
+</ng-container>

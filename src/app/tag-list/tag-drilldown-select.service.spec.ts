@@ -1,15 +1,15 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {inject, TestBed} from "@angular/core/testing";
 
-import { DrilldownCommunicationService } from './tag-drilldown-select.service';
+import {PocDrilldownCommunicationService} from "./tag-drilldown-select.service";
 
-describe('DrilldownCommunicationService', () => {
+describe('PocDrilldownCommunicationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DrilldownCommunicationService]
+      providers: [PocDrilldownCommunicationService]
     });
   });
 
-  it('should be created', inject([DrilldownCommunicationService], (service: DrilldownCommunicationService) => {
+  it('should be created', inject([PocDrilldownCommunicationService], (service: PocDrilldownCommunicationService) => {
     expect(service).toBeTruthy();
   }));
 });

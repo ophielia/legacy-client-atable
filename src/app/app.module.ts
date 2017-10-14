@@ -5,7 +5,6 @@ import {HttpModule} from "@angular/http";
 
 import {AppComponent} from "./app.component";
 import {PocTagListComponent} from "./poc-tag-list/tag-list.component";
-import {MockTagsService} from "./mock-tags.service";
 import {routing} from "./app.routes";
 import {PocAddTagComponent} from "./poc-tag-list/add-tag.component";
 import {PocEditTagComponent} from "./poc-tag-list/edit-tag.component";
@@ -15,11 +14,12 @@ import {AuthenticationService} from "./authentication.service";
 import {LoginComponent} from "./login.component";
 import {TagsService} from "./tags.service";
 import {TagListComponent} from "./tag-list/tag-list.component";
-import {TagDrilldownComponent} from "./tag-list/tag-drilldown.component";
-import {DrilldownCommunicationService} from "./tag-list/tag-drilldown-select.service";
 import {DishListComponent} from "./dish-list/dish-list.component";
 import {DishService} from "./dish-service.service";
 import {EditDishComponent} from "./dish-list/edit-dish.component";
+import {DrilldownModule} from "./drilldown/drilldown.module";
+import {PocTagDrilldownComponent} from "./tag-list/tag-drilldown.component";
+import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
 
 @NgModule({
   declarations: [
@@ -28,10 +28,11 @@ import {EditDishComponent} from "./dish-list/edit-dish.component";
     PocAddTagComponent,
     PocEditTagComponent,
     PocDeleteTagComponent,
+    PocTagDrilldownComponent,
+    DishTagSelectComponent,
     HomeComponent,
     TagListComponent,
     LoginComponent,
-    TagDrilldownComponent,
     DishListComponent,
     EditDishComponent,
   ],
@@ -39,9 +40,10 @@ import {EditDishComponent} from "./dish-list/edit-dish.component";
     BrowserModule,
     FormsModule,
     HttpModule,
-    routing
+    routing,
+    DrilldownModule
   ],
-  providers: [MockTagsService, TagsService, DishService, AuthenticationService, DrilldownCommunicationService],
+  providers: [TagsService, DishService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Dish} from "../model/dish";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DishService} from "../dish-service.service";
-import {Tag} from "../model/tag";
+import {TagDrilldown} from "../model/tag-drilldown";
 
 @Component({
   selector: 'at-edit-dish',
@@ -11,11 +11,11 @@ import {Tag} from "../model/tag";
 })
 export class EditDishComponent implements OnInit, OnDestroy {
   dishId: string;
-  dishName: string;
+  name: string;
   dish: Dish = <Dish>{dish_id: "", name: "", description: ""};
   sub: any;
   private errorMessage: string;
-  dishType: string[];
+  selectedTag: TagDrilldown;
 
 
   constructor(private dishService: DishService,
@@ -38,6 +38,9 @@ export class EditDishComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  showTag(tag: TagDrilldown) {
+    this.selectedTag = tag;
+  }
   save() {
     this.dishService.saveDish(this.dish)
       .subscribe(r => {

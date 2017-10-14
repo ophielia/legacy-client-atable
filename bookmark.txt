@@ -1,8 +1,13 @@
 immediate
-  dish list
+  done - dish list
   authguards and cookies
-  edit dish
-    module for drilldown
+  in process - edit dish
+    done - module for drilldown
+    fill in rating and tagtype lists
+    wire save - of name
+    wire save of tags
+
+TagType enum => array?  Want to be able to access TagType.DishType = DishTypes
 
 drag and drop - npm2-dnd module
 make icons smaller and not grey (transparent? or just darker?)

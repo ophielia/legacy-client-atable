@@ -6,6 +6,7 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {TagDrilldown} from "./model/tag-drilldown";
 import MappingUtils from "./mapping-utils";
+import {TagType} from "app/model/tag-type";
 
 
 const tagType: string[] = ["TagType", "Ingredient", "Rating", "DishType"];
@@ -52,9 +53,14 @@ export class TagsService {
     return baseList.map(x => drilldownMaster.find(y => y.tag_id == x));
   }
 
-  getTagDrilldownList(): Observable<TagDrilldown[]> {
+
+  getTagDrilldownList(tagtype: string): Observable<TagDrilldown[]> {
+    var filter: string = "";
+    if (tagtype) {
+      filter = "?tag_type=" + tagtype;
+    }
     let tags$ = this.http
-      .get(`${this.tagUrl}/taginfo`, {headers: this.getHeaders()})
+      .get(`${this.tagUrl}/taginfo${filter}`, {headers: this.getHeaders()})
       .map(r => this.processTagDrilldownList(r)).catch(handleError);  // HERE: This is new!
     return tags$;
 
