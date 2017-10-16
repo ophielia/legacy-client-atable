@@ -14,6 +14,11 @@
           Save
         </button></span>
       </div>
+      <div style="padding-top:50px"></div>
+      <div *ngFor="let tag of dish.tags" class="row">
+        <div class="col-12 card tagbox" (dblclick)="deleteTag(tag)">{{tag.name}}</div>
+
+      </div>
       <div *ngIf="selectedTag">{{selectedTag.name}}</div>
     </div>
   </div>
@@ -21,7 +26,7 @@
     <!-- tags to add here-->
     <div class="row">
       <div class="col-md-10">
-        <at-dish-tag-select (tagSelected)="showTag($event)"></at-dish-tag-select>
+        <at-dish-tag-select (tagSelected)="addTag($event)"></at-dish-tag-select>
       </div>
     </div>
   </div>

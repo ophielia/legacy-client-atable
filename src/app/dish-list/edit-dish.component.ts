@@ -40,7 +40,9 @@ export class EditDishComponent implements OnInit, OnDestroy {
 
   showTag(tag: TagDrilldown) {
     this.selectedTag = tag;
+    return false;
   }
+
   save() {
     this.dishService.saveDish(this.dish)
       .subscribe(r => {
@@ -50,7 +52,33 @@ export class EditDishComponent implements OnInit, OnDestroy {
       });
   }
 
+  deleteTag(tag: TagDrilldown) {
+    // remove tag from model
+    this.dish.tags = this.dish.tags.filter(t => t.tag_id != tag.tag_id);
+    // remove tag from backend
+    this.dishService.removeTagFromDish(this.dish.dish_id, tag.tag_id)
+      .subscribe();
+  }
+
+  addTag(tag: TagDrilldown) {
+    // remove tag from model
+    var tagExists = this.dish.tags.filter(t => t.tag_id == tag.tag_id);
+    if (tagExists.length > 0) {
+      // tag already in dish - don't add again
+      return;
+    }
+    // add tag in back end
+    var dishtags = this.dish.tags.slice(0);
+    dishtags.push(tag);
+    this.dish.tags = dishtags;
+    this.dishService.addTagToDish(this.dish.dish_id, tag.tag_id)
+      .subscribe();
+    return false;
+  }
+
   goToList() {
     this.router.navigate(['/dish/list']);
   }
+
+
 }

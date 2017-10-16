@@ -20,6 +20,7 @@ export class DishService {
     let headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Content-Type', 'application/json');
+    headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Authorization', 'Bearer ' + this.authenticationService.getToken());
     return headers;
   }
@@ -68,6 +69,20 @@ export class DishService {
 
   mapDish(response: Response): Dish {
     return MappingUtils.toDish(response.json());
+  }
+
+  removeTagFromDish(dish_id: string, tag_id: string): Observable<Response> {
+    return this
+      .http
+      .delete(`${this.dishUrl}/dish/${dish_id}/tag/${tag_id}`,
+        {headers: this.getHeaders()});
+  }
+
+  addTagToDish(dish_id: string, tag_id: string): Observable<Response> {
+    return this
+      .http
+      .post(`${this.dishUrl}/dish/${dish_id}/tag/${tag_id}`, null,
+        {headers: this.getHeaders()});
   }
 }
 

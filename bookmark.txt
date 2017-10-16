@@ -4,7 +4,7 @@ immediate
   in process - edit dish
     done - module for drilldown
     fill in rating and tagtype lists
-    wire save - of name
+    wire save - of name - otherwise show little save icon
     wire save of tags
 
 TagType enum => array?  Want to be able to access TagType.DishType = DishTypes

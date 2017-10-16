@@ -17,7 +17,8 @@
   <div class="tagboxContainer" *ngFor="let tag of ingredientTags">
     <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
       <at-tag-drilldown-container [tagDrilldown]="tag"
-                                  (selectedDrilldown)="showSelected($event)"></at-tag-drilldown-container>
+                                  (selectedDrilldown)="showSelected($event)"
+      ></at-tag-drilldown-container>
     </div>
   </div>
 </ng-container>

@@ -18,6 +18,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
 
   dishTypeTags: TagDrilldown[];
   ingredientTags: TagDrilldown[];
+  lastSelectedId: string = "";
 
   constructor(private tagService: TagsService) {
 
@@ -43,7 +44,11 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
 
   showSelected(tag: TagDrilldown) {
     //this.selectedTag = tag;
-    this.tagSelected.emit(tag);
+    if (this.lastSelectedId != tag.tag_id) {
+      this.lastSelectedId = tag.tag_id;
+      console.log('showing from drilldown select container-' + tag.tag_id);
+      this.tagSelected.emit(tag);
+    }
   }
 
   expandFold(tagtype: string) {
