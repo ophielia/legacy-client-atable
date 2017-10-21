@@ -8,13 +8,31 @@
   </div>
 </div>
 <div class="row" style="margin-top: 12px;">
-  <div class="col-sm-6">
-    <button class="btn btn-success btn"
-            (click)="add()"
-            [disabled]="!tagName">
-      Add
-    </button>
-    <button class="btn btn-warning btn"
+  <div class="col-sm-12">
+    <div class="col-sm-3">
+      <button class="btn btn-success btn"
+              (click)="add(ratingType)"
+              [disabled]="!tagName">
+        Add Rating
+      </button>
+
+      <button class="btn btn-success btn"
+              (click)="add(ingredientType)"
+              [disabled]="!tagName">
+        Add Ingredient
+      </button>
+      <button class="btn btn-success btn"
+              (click)="add(tagType)"
+              [disabled]="!tagName">
+        Add General Tag
+      </button>
+      <button class="btn btn-success btn"
+              (click)="add(dishType)"
+              [disabled]="!tagName">
+        Add Dish Type
+      </button>
+
+      <button class="btn btn-warning btn"
             routerLink="/list">
       Cancel
     </button>

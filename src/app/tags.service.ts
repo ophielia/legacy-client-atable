@@ -6,10 +6,10 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {TagDrilldown} from "./model/tag-drilldown";
 import MappingUtils from "./mapping-utils";
-import {TagType} from "app/model/tag-type";
+import TType from "./model/tag-type";
 
 
-const tagType: string[] = ["TagType", "Ingredient", "Rating", "DishType"];
+const tagType: string[] = TType.listAll();
 
 @Injectable()
 export class TagsService {
@@ -34,6 +34,13 @@ export class TagsService {
     let tags$ = this.http
       .get(`${this.tagUrl}/tag`, {headers: this.getHeaders()})
       .map(this.mapTags).catch(handleError);  // HERE: This is new!
+    return tags$;
+  }
+
+  getAllSelectable(): Observable<Tag[]> {
+    let tags$ = this.http
+      .get(`${this.tagUrl}/tag?filter=ForSelect`, {headers: this.getHeaders()})
+      .map(this.mapTags).catch(handleError);
     return tags$;
   }
 
@@ -122,9 +129,10 @@ export class TagsService {
   }
 
 
-  addTag(newTagName: string): Observable<Response> {
+  addTag(newTagName: string, tagType: string): Observable<Response> {
     var newTag: Tag = <Tag>({
       name: newTagName,
+      tag_type: tagType
     });
 
     return this

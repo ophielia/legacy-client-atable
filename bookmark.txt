@@ -7,6 +7,11 @@ immediate
     wire save - of name - otherwise show little save icon
     wire save of tags
 
+===> user experience
+  dishes sorted creationdate desc...
+  pipe for displaying dish names with capitals
+  check duplicate of pasta - general tags
+
 TagType enum => array?  Want to be able to access TagType.DishType = DishTypes
 
 drag and drop - npm2-dnd module

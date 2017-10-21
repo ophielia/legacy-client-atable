@@ -1,7 +1,16 @@
 <div class="row">
-  <div class="col-sm-12">
+  <div *ngIf="!showAdd" class="col-sm-12">
     <a class="btn btn-primary btn-lg"
-       routerLink="/add">
+       (click)="add()">
+      Add new dish
+    </a>
+  </div>
+  <div *ngIf="showAdd" class="col-sm-12">
+    <input #dishNameBox class="form-control input-lg" type="text"
+           placeholder="tag name"
+           (keyup.enter)="addDish(dishNameBox.value)"/>
+    <a class="btn btn-primary btn-lg"
+       (click)="addDish(dishNameBox.value)">
       Add new dish
     </a>
   </div>

@@ -1,9 +1,50 @@
-<h2>Tag Drilldown <span *ngIf="selectedTag">Selected: {{selectedTag.name}}</span></h2>
-<div class="card tagbox" (click)="expandFold('DishType')">DishType
+<h4>Tags</h4>
+<div *ngIf="showSearch()">
+  <div><input #searchBox class="form-control input-lg" placeholder="Search"
+              (keyup.enter)="checkSearchEnter()"
+              (keyup)="filterTags(searchBox.value)"/>
+    <span (click)="setSearch(false)">Browse (search is showing)</span></div>
+  <hr/>
+  <!-- <div *ngFor="let indtag of alltags | tagFilter:searchBox.value" class="tagboxContainer">-->
+  <div *ngFor="let indtag of filteredTags" class="tagboxContainer">
+
+
+    <div (click)="showSelected(indtag)">{{indtag.name}}</div>
+  </div>
+
+  <div *ngIf="showAddTags">
+    <button class="btn btn-success btn"
+            (click)="add(searchBox.value,ratingType)">
+      Add Rating
+    </button>
+
+    <button class="btn btn-success btn"
+            (click)="add(searchBox.value,ingredientType)">
+      Add Ingredient
+    </button>
+    <button class="btn btn-success btn"
+            (click)="add(searchBox.value,tagType)">
+      Add General Tag
+    </button>
+    <button class="btn btn-success btn"
+            (click)="add(searchBox.value,dishType)">
+      Add Dish Type
+    </button>
+
+    <button class="btn btn-warning btn"
+            routerLink="/list">
+      Cancel
+    </button>
+  </div>
+</div>
+<div *ngIf="!showSearch()">
+  <span (click)="setSearch(true)">Search (browse is showing)</span>
+
+  <div class="card tagbox" (click)="expandFold('DishType')">DishType
 </div>
 <ng-container *ngIf="isShow('DishType')">
   <div class="tagboxContainer" *ngFor="let tag of dishTypeTags">
-    <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
+    <div class="card tagbox">
       <at-tag-drilldown-container [tagDrilldown]="tag"
                                   (selectedDrilldown)="showSelected($event)"></at-tag-drilldown-container>
     </div>
@@ -11,7 +52,7 @@
 </ng-container>
 
 
-<div class="card tagbox" (click)="expandFold('Ingredient')">Ingredients
+  <div class="card tagbox" (click)="expandFold('Ingredient')">Ingredient
 </div>
 <ng-container *ngIf="isShow('Ingredient')">
   <div class="tagboxContainer" *ngFor="let tag of ingredientTags">
@@ -22,3 +63,19 @@
     </div>
   </div>
 </ng-container>
+
+  <div class="card tagbox" (click)="expandFold('TagType')">General Tags
+  </div>
+  <ng-container *ngIf="isShow('TagType')">
+    <div class="tagboxContainer" *ngFor="let tag of generalTags">
+      <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
+        <at-tag-drilldown-container [tagDrilldown]="tag"
+                                    (selectedDrilldown)="showSelected($event)"
+        ></at-tag-drilldown-container>
+      </div>
+    </div>
+  </ng-container>
+
+</div>
+
+

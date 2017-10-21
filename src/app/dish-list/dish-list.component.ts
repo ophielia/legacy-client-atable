@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./dish-list.component.css']
 })
 export class DishListComponent implements OnInit {
+  showAdd: boolean;
 
 
   private dishService: DishService;
@@ -23,11 +24,29 @@ export class DishListComponent implements OnInit {
     this.router.navigate(['/dish/edit', tagId]);
   }
 
-  ngOnInit() {
+  add() {
+    this.showAdd = true;
+    //this.router.navigate(['/dish/edit', tagId]);
+  }
+
+  addDish(dishName: string) {
+    this.dishService.addDish(dishName)
+      .subscribe(r => {
+        console.log(`added!!! this.tagName`);
+        this.getAllDishes();
+      });
+    //this.router.navigate(['/dish/edit', tagId]);
+  }
+
+  getAllDishes() {
     this.dishService
       .getAll()
       .subscribe(p => this.dishes = p,
         e => this.errorMessage = e);
+  }
+
+  ngOnInit() {
+    this.getAllDishes();
   }
 
 }
