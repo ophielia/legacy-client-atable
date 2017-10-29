@@ -61,7 +61,7 @@ export class EditDishComponent implements OnInit, OnDestroy {
   }
 
   addTag(tag: TagDrilldown) {
-    // remove tag from model
+    // add tag to model
     var tagExists = this.dish.tags.filter(t => t.tag_id == tag.tag_id);
     if (tagExists.length > 0) {
       // tag already in dish - don't add again

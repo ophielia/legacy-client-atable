@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
-import {Headers, Http, Response} from "@angular/http";
 import {AuthenticationService} from "./authentication.service";
+import {Headers, Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {Dish} from "./model/dish";
 import MappingUtils from "./mapping-utils";

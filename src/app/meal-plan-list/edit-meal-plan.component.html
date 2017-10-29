@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-md-8">
+    <h2>Dishes</h2>
+    <!-- dish list (to add to meal plan) -->
+    <div class="row">
+      <div class="col-md-12"></div>
+
+      <div class="row">
+
+        <div *ngFor="let dish of dishList" class="col-md-3 card tagbox" (dblclick)="addDish(dish)">{{dish.name}}</div>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-4">
+    <!-- meal plan area-->
+    <h2>Meal Plan</h2>
+    <div class="row">
+      <div class="col-md-10">
+        <p>{{mealPlan.name}}</p>
+        <p>{{mealPlan.created}}</p>
+        <p>
+          <br/>
+        </p>
+
+        <div class="col-md-12 card tagbox" *ngFor="let slot of mealPlan.slots" (dblclick)="deleteDish(slot.dish)">
+          {{slot.dish.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

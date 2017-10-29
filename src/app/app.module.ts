@@ -22,6 +22,7 @@ import {PocTagDrilldownComponent} from "./tag-list/tag-drilldown.component";
 import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
 import {MealPlanListComponent} from './meal-plan-list/meal-plan-list.component';
 import {MealPlanService} from "./meal-plan.service";
+import {EditMealPlanComponent} from './meal-plan-list/edit-meal-plan.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {MealPlanService} from "./meal-plan.service";
     DishListComponent,
     EditDishComponent,
     MealPlanListComponent,
+    EditMealPlanComponent,
   ],
   imports: [
     BrowserModule,
