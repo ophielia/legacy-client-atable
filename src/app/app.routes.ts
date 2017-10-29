@@ -8,6 +8,7 @@ import {LoginComponent} from "./login.component";
 import {TagListComponent} from "./tag-list/tag-list.component";
 import {EditDishComponent} from "./dish-list/edit-dish.component";
 import {DishListComponent} from "./dish-list/dish-list.component";
+import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -21,6 +22,9 @@ const routes: Routes = [
   {path: 'dish/add', component: DishListComponent},
   {path: 'dish/edit/:id', component: EditDishComponent},
   {path: 'dish/delete/:id', component: PocDeleteTagComponent},
+  {path: 'mealplan/list', component: MealPlanListComponent},
+  {path: 'mealplan/edit/:id', component: MealPlanListComponent},//MM will be edit component
+  {path: 'mealplan/delete/:id', component: MealPlanListComponent}, // MM will be delete component
   {path: 'delete/:id', component: PocDeleteTagComponent},
   {path: '', redirectTo: 'dish/list', pathMatch: 'full'}
 ];

@@ -20,6 +20,8 @@ import {EditDishComponent} from "./dish-list/edit-dish.component";
 import {DrilldownModule} from "./drilldown/drilldown.module";
 import {PocTagDrilldownComponent} from "./tag-list/tag-drilldown.component";
 import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
+import {MealPlanListComponent} from './meal-plan-list/meal-plan-list.component';
+import {MealPlanService} from "./meal-plan.service";
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
     LoginComponent,
     DishListComponent,
     EditDishComponent,
+    MealPlanListComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,7 @@ import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
     routing,
     DrilldownModule
   ],
-  providers: [TagsService, DishService, AuthenticationService],
+  providers: [TagsService, DishService, MealPlanService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

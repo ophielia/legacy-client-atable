@@ -1,0 +1,37 @@
+<p>
+  meal-plan-list works!
+</p>
+
+<div class="row">
+  <div class="col-sm-12">
+    <a class="btn btn-primary btn-lg"
+       routerLink="/add">
+      Add new site
+    </a>
+  </div>
+</div>
+<h2>List of MealPlans</h2>
+<section *ngIf="errorMessage">
+  {{errorMessage}}
+</section>
+<div class="row" *ngFor="let mealPlan of mealPlans; let e=even; let f=first; let l=last"
+     ywActionable="#aaaaaa" (onAction)="edit(mealPlan.tag_id)"
+     [ngClass]="{ evenRow: e }"
+     [class.topRow]="f"
+     [class.bottomRow]="l">
+  <div class="col-sm-8">
+    <h4>{{mealPlan.meal_plan_id}}: {{mealPlan.name}}: {{mealPlan.created}} </h4>
+  </div>
+  <div class="col-sm-4" style="margin-top: 5px;">
+    <div class="pull-right">
+      <a class="btn btn-warning btn-sm"
+         [routerLink]="['/mealplan/edit', mealPlan.meal_plan_id]">
+        Edit
+      </a>
+      <a class="btn btn-danger btn-sm"
+         [routerLink]="['/mealplan/delete', mealPlan.meal_plan_id]">
+        Delete
+      </a>
+    </div>
+  </div>
+</div>
