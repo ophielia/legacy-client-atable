@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {TagsService} from "../tags.service";
 import {TagDrilldown} from "app/model/tag-drilldown";
-import {DrilldownCommService} from "./tag-drilldown-select.service";
+import {TagCommService} from "./tag-drilldown-select.service";
 
 @Component({
   selector: 'at-tag-drilldown-container',
@@ -20,7 +20,7 @@ export class TagDrilldownContainer implements OnInit {
 
 
   constructor(tagService: TagsService,
-              private tagCommunicationService: DrilldownCommService) {
+              private tagCommunicationService: TagCommService) {
     this.tagService = tagService;
 
     this.tagCommunicationService.selectEvent.subscribe(e => {

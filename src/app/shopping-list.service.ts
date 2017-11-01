@@ -7,6 +7,7 @@ import MappingUtils from "./mapping-utils";
 import ListLayoutType from "./model/list-layout-type";
 import {Item} from "./model/item";
 import ItemSourceType from "./model/item-source-type";
+import {Tag} from "./model/tag";
 
 @Injectable()
 export class ShoppingListService {
@@ -44,6 +45,14 @@ export class ShoppingListService {
     return shoppingList$;
   }
 
+  getByType(list_type: string): Observable<ShoppingList> {
+    let shoppingList$ = this.http
+      .get(`${this.shoppingListUrl}/shoppinglist/type/${list_type}`, {headers: this.getHeaders()})
+      .map(this.mapShoppingList)
+      .catch(handleError);
+    return shoppingList$;
+  }
+
   addShoppingList(listType: string): Observable<Response> {
     // MM hardcoding list layout type until there are 1) more or 2) defaults in backend
     var layoutType = ListLayoutType.All;
@@ -66,7 +75,12 @@ export class ShoppingListService {
   }
 
   mapShoppingList(response: Response): ShoppingList {
-    return MappingUtils.toShoppingList(response.json());
+    if (response.status == 200) {
+      var beep = MappingUtils.toShoppingList(response.json());
+      return beep;
+    }
+    return null;
+
   }
 
   removeItemFromShoppingList(shoppingList_id: string, item_id: string): Observable<Response> {
@@ -76,15 +90,12 @@ export class ShoppingListService {
         {headers: this.getHeaders()});
   }
 
-  addItemToShoppingList(shoppingList_id: string, item: Item): Observable<Response> {
-    if (!item.free_text) {
-      // put tag_id in field
-      item.tag_id = item.tag.tag_id;
-    }
+  addTagItemToShoppingList(shoppingList_id: string, tag: Tag): Observable<Response> {
+    var item: Item = <Item>{tag_id: tag.tag_id};
     item.item_source = ItemSourceType.Manual;
     return this
       .http
-      .post(`${this.shoppingListUrl}/shoppinglist/${shoppingList_id}`, item,
+      .post(`${this.shoppingListUrl}/shoppinglist/${shoppingList_id}/item`, item,
         {headers: this.getHeaders()});
   }
 

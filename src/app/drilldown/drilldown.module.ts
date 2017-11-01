@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {DrilldownCommService} from "./tag-drilldown-select.service";
+import {TagCommService} from "./tag-drilldown-select.service";
 import {TagDrilldownComponent} from "./tag-drilldown.component";
 import {TagDrilldownContainer} from "./tag-drilldown-container";
 import {FormsModule} from "@angular/forms";
@@ -20,7 +20,7 @@ import {CommonModule} from "@angular/common";
     routing
   ],
   exports: [TagDrilldownContainer],
-  providers: [TagsService, DrilldownCommService]
+  providers: [TagsService, TagCommService]
 })
 export class DrilldownModule {
 }

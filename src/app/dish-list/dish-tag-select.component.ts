@@ -132,13 +132,22 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     return this.isSearch;
   }
 
-  add(tagName: string, tagType: string) {
-    this.searchBoxValue = tagName;
+  add(tagType: string) {
+    var tagName = this.searchValue;
     console.log("tag type is " + tagType);
     this.tagService.addTag(tagName, tagType)
       .subscribe(r => {
         console.log(`added!!! this.tagName`);
         this.searchValue = null;
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        this.tagService.getById(id)
+          .subscribe(t => {
+            this.showSelected(t);
+          });
+
         this.getAllTags();
       });
   }

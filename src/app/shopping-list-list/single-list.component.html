@@ -1,0 +1,30 @@
+<div class="row" *ngIf="currentList.list_id">
+  <div class="col-sm-8">
+    <h4>{{currentList.list_id}}: {{currentList.list_type}}: {{currentList.created | date}} </h4>
+  </div>
+  <div class="col-sm-4" style="margin-top: 5px;">
+    <div class="pull-right">
+      <a class="btn btn-warning btn-sm"
+         [routerLink]="['/shoppinglist/edit', currentList.list_id]">
+        Edit
+      </a>
+      <a class="btn btn-danger btn-sm"
+         (click)="deleteExistingList(currentList.list_id)">
+        Delete
+      </a>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="!currentList.list_id">
+  <div class="col-sm-8">
+    <h4> - - - - - - - </h4>
+  </div>
+  <div class="col-sm-4" style="margin-top: 5px;">
+    <div class="pull-right">
+      <a class="btn btn-warning btn-sm" (click)="createNewList(currentList.list_type)"
+      >
+        Create List - {{currentList.list_type}}
+      </a>
+    </div>
+  </div>
+</div>

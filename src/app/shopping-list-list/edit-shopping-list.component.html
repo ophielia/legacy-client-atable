@@ -1,18 +1,16 @@
 <div class="row">
   <div class="col-md-8">
-    <h4>Edit Shopping List</h4>
+    <h4>Edit Shopping List - {{shoppingList.list_type}}</h4>
     <!-- list to edit here -->
     <div class="col-sm-7">
       <div style="padding-top:50px"></div>
       <div *ngFor="let category of shoppingList.categories" class="row">
         {{category.name}}
         <ul>
-          <li *ngFor="let item of category.items">
+          <li *ngFor="let item of category.items" (dblclick)="removeItem(item)">
             {{item.tag.name}}
           </li>
         </ul>
-        <!--<div class="col-12 card tagbox" (dblclick)="deleteTag(tag)">{{tag.name}}</div>-->
-
       </div>
     </div>
   </div>
@@ -20,7 +18,7 @@
     <!-- tags to add here-->
     <div class="row">
       <div class="col-md-10">
-        <at-dish-tag-select (tagSelected)="addTag($event)"></at-dish-tag-select>
+        <at-dish-tag-select (tagSelected)="addItem($event)"></at-dish-tag-select>
       </div>
     </div>
   </div>

@@ -1,10 +1,10 @@
-import {EventEmitter, Injectable} from "@angular/core";
+import {EventEmitter, Injectable, Output} from "@angular/core";
 import {TagDrilldown} from "../model/tag-drilldown";
 
 @Injectable()
-export class DrilldownCommService {
+export class TagCommService {
 
-  selectEvent: EventEmitter<TagDrilldown> = new EventEmitter<TagDrilldown>();
+  @Output() selectEvent: EventEmitter<TagDrilldown> = new EventEmitter<TagDrilldown>();
 
   constructor() {
   }

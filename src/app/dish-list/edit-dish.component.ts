@@ -3,6 +3,7 @@ import {Dish} from "../model/dish";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DishService} from "../dish-service.service";
 import {TagDrilldown} from "../model/tag-drilldown";
+import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 
 @Component({
   selector: 'at-edit-dish',
@@ -14,14 +15,18 @@ export class EditDishComponent implements OnInit, OnDestroy {
   name: string;
   dish: Dish = <Dish>{dish_id: "", name: "", description: ""};
   sub: any;
+  private subTagEvent: any;
   private errorMessage: string;
+  private tagCommService: TagCommService;
   selectedTag: TagDrilldown;
 
 
   constructor(private dishService: DishService,
+              tagCommService: TagCommService,
               private route: ActivatedRoute,
               private router: Router,) {
     this.dishId = this.route.snapshot.params['id'];
+    this.tagCommService = tagCommService;
   }
 
   ngOnInit() {
@@ -32,6 +37,10 @@ export class EditDishComponent implements OnInit, OnDestroy {
         .getById(id)
         .subscribe(p => this.dish = p);
     });
+    this.subTagEvent = this.tagCommService.selectEvent
+      .subscribe(selectevent => {
+        this.addTag(selectevent);
+      })
   }
 
   ngOnDestroy() {

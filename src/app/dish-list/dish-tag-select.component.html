@@ -14,20 +14,20 @@
 
   <div *ngIf="showAddTags">
     <button class="btn btn-success btn"
-            (click)="add(searchBox.value,ratingType)">
+            (click)="add(ratingType)">
       Add Rating
     </button>
 
     <button class="btn btn-success btn"
-            (click)="add(searchBox.value,ingredientType)">
+            (click)="add(ingredientType)">
       Add Ingredient
     </button>
     <button class="btn btn-success btn"
-            (click)="add(searchBox.value,tagType)">
+            (click)="add(tagType)">
       Add General Tag
     </button>
     <button class="btn btn-success btn"
-            (click)="add(searchBox.value,dishType)">
+            (click)="add(dishType)">
       Add Dish Type
     </button>
 
@@ -45,8 +45,7 @@
 <ng-container *ngIf="isShow('DishType')">
   <div class="tagboxContainer" *ngFor="let tag of dishTypeTags">
     <div class="card tagbox">
-      <at-tag-drilldown-container [tagDrilldown]="tag"
-                                  (selectedDrilldown)="showSelected($event)"></at-tag-drilldown-container>
+      <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
     </div>
   </div>
 </ng-container>
@@ -57,9 +56,7 @@
 <ng-container *ngIf="isShow('Ingredient')">
   <div class="tagboxContainer" *ngFor="let tag of ingredientTags">
     <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
-      <at-tag-drilldown-container [tagDrilldown]="tag"
-                                  (selectedDrilldown)="showSelected($event)"
-      ></at-tag-drilldown-container>
+      <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
     </div>
   </div>
 </ng-container>
@@ -69,9 +66,7 @@
   <ng-container *ngIf="isShow('TagType')">
     <div class="tagboxContainer" *ngFor="let tag of generalTags">
       <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
-        <at-tag-drilldown-container [tagDrilldown]="tag"
-                                    (selectedDrilldown)="showSelected($event)"
-        ></at-tag-drilldown-container>
+        <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
       </div>
     </div>
   </ng-container>
@@ -81,9 +76,7 @@
   <ng-container *ngIf="isShow('Rating')">
     <div class="tagboxContainer" *ngFor="let tag of ratingTags">
       <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
-        <at-tag-drilldown-container [tagDrilldown]="tag"
-                                    (selectedDrilldown)="showSelected($event)"
-        ></at-tag-drilldown-container>
+        <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
       </div>
     </div>
   </ng-container>

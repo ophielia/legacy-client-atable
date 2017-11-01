@@ -26,6 +26,8 @@ import {EditMealPlanComponent} from './meal-plan-list/edit-meal-plan.component';
 import {ShoppingListListComponent} from './shopping-list-list/shopping-list-list.component';
 import {ShoppingListService} from "./shopping-list.service";
 import {EditShoppingListComponent} from './shopping-list-list/edit-shopping-list.component';
+import {TagCommService} from "./drilldown/tag-drilldown-select.service";
+import {SingleListComponent} from './shopping-list-list/single-list.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,7 @@ import {EditShoppingListComponent} from './shopping-list-list/edit-shopping-list
     EditMealPlanComponent,
     ShoppingListListComponent,
     EditShoppingListComponent,
+    SingleListComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,7 +56,7 @@ import {EditShoppingListComponent} from './shopping-list-list/edit-shopping-list
     routing,
     DrilldownModule
   ],
-  providers: [TagsService, DishService, MealPlanService, ShoppingListService, AuthenticationService],
+  providers: [TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

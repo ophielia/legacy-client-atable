@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from "@angular/core";
 import {TagDrilldown} from "../model/tag-drilldown";
 import {dash, plus} from "octicons";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
-import {DrilldownCommService} from "./tag-drilldown-select.service";
+import {TagCommService} from "./tag-drilldown-select.service";
 
 @Component({
   selector: 'at-tag-drilldown',
@@ -30,7 +30,7 @@ export class TagDrilldownComponent implements OnInit {
   public minusIcon: SafeHtml;
 
   constructor(private sanitizer: DomSanitizer,
-              private _tagDrilldownSelectService: DrilldownCommService) {
+              private _tagDrilldownSelectService: TagCommService) {
   }
 
   ngOnInit() {
