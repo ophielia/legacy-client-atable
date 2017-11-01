@@ -7,6 +7,7 @@ export interface Item {
   free_text: string;
   crossed_off: number;
   tag_id: string;
+  used_count: number;
   tag: Tag;
 }
 

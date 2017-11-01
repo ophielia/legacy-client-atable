@@ -70,6 +70,8 @@ export default class MappingUtils {
       item_id: r.item_id,
       item_source: r.item_source,
       added: r.added,
+      tag_id: r.tag_id,
+      used_count: r.used_count,
       free_text: r.free_text,
       crossed_off: r.crossed_off,
       tag: MappingUtils._toTag(r.tag)

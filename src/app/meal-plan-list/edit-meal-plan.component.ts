@@ -64,6 +64,18 @@ export class EditMealPlanComponent implements OnInit {
     return false;
   }
 
+  generateShoppingList() {
+    this.mealPlanService.generateShoppingList(this.mealPlan.meal_plan_id)
+      .subscribe(r => {
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        //    this.getAllDishes();
+        this.router.navigate(['/shoppinglist/edit/', id]);
+      });
+  }
+
   goToList() {
     this.router.navigate(['/mealplan/list']);
   }

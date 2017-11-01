@@ -91,6 +91,15 @@ export class MealPlanService {
       .http
       .delete(`${url}`, {headers: this.getHeaders()});
   }
+
+  generateShoppingList(meal_plan_id: string) {
+    var url: string = this.baseUrl + '/shoppinglist/mealplan/' + meal_plan_id;
+    return this
+      .http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+  }
 }
 
 function handleError(error: any) {

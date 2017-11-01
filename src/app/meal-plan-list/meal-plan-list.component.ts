@@ -55,4 +55,15 @@ export class MealPlanListComponent implements OnInit {
       })
   }
 
+  generateShoppingList(mealPlanId: string) {
+    this.mealPlanService.generateShoppingList(mealPlanId)
+      .subscribe(r => {
+        var location = r.headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        //    this.getAllDishes();
+        this.router.navigate(['/shoppinglist/edit/', id]);
+      });
+  }
+
 }
