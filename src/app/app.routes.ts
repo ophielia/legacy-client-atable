@@ -10,6 +10,8 @@ import {EditDishComponent} from "./dish-list/edit-dish.component";
 import {DishListComponent} from "./dish-list/dish-list.component";
 import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
 import {EditMealPlanComponent} from "./meal-plan-list/edit-meal-plan.component";
+import {ShoppingListListComponent} from "./shopping-list-list/shopping-list-list.component";
+import {EditShoppingListComponent} from "./shopping-list-list/edit-shopping-list.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -23,6 +25,9 @@ const routes: Routes = [
   {path: 'dish/add', component: DishListComponent},
   {path: 'dish/edit/:id', component: EditDishComponent},
   {path: 'dish/delete/:id', component: PocDeleteTagComponent},
+  {path: 'shoppinglist/list', component: ShoppingListListComponent},
+  {path: 'shoppinglist/edit/:id', component: EditShoppingListComponent},
+  {path: 'shoppinglist/delete/:id', component: ShoppingListListComponent},
   {path: 'mealplan/list', component: MealPlanListComponent},
   {path: 'mealplan/edit/:id', component: EditMealPlanComponent},
   {path: 'mealplan/delete/:id', component: MealPlanListComponent}, // MM will be delete component

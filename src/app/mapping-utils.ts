@@ -3,18 +3,21 @@ import {Dish} from "./model/dish";
 import {TagDrilldown} from "./model/tag-drilldown";
 import {MealPlan} from "./model/mealplan";
 import {Slot} from "./model/slot";
+import {Category} from "./model/category";
+import {Item} from "./model/item";
+import {ShoppingList} from "./model/shoppinglist";
 export default class MappingUtils {
 
   static toTag(r: any): Tag {
-    let tag = <Tag>({
+    /*let tag = <Tag>({
       tag_id: r.tag.tag_id,
       name: r.tag.name,
       description: r.tag.description,
       tag_type: r.tag.tag_type
     });
 
-    console.log('Parsed tag:', tag);
-    return tag;
+     console.log('Parsed tag:', tag);*/
+    return MappingUtils._toTag(r.tag);
   }
 
   private static _toTag(r: any): Tag {
@@ -51,6 +54,31 @@ export default class MappingUtils {
     return slot;
   }
 
+  private static _toCategory(r: any): Category {
+    let category = <Category>({
+      name: r.name,
+      items: r.items.map(MappingUtils._toItem)
+    });
+
+    console.log('Parsed category:', category);
+    return category;
+  }
+
+  private static _toItem(r: any): Item {
+    let item = <Item>({
+      list_id: r.list_id,
+      item_id: r.item_id,
+      item_source: r.item_source,
+      added: r.added,
+      free_text: r.free_text,
+      crossed_off: r.crossed_off,
+      tag: MappingUtils._toTag(r.tag)
+    });
+
+    console.log('Parsed tag:', item);
+    return item;
+  }
+
   static toTagDrilldown(r: any) {
     console.log('in map drilldown');
     let drilldown = <TagDrilldown>({
@@ -78,7 +106,7 @@ export default class MappingUtils {
   }
 
   static toMealPlan(r: any): MealPlan {
-    let dish = <MealPlan>({
+    let mealplan = <MealPlan>({
       meal_plan_id: r.meal_plan.meal_plan_id,
       user_id: r.meal_plan.user_id,
       name: r.meal_plan.name,
@@ -88,7 +116,21 @@ export default class MappingUtils {
       })
     ;
 
-    console.log('Parsed dish:', dish);
-    return dish;
+    console.log('Parsed mealplan:', mealplan);
+    return mealplan;
+  }
+
+  static toShoppingList(r: any): ShoppingList {
+    let shoppinglist = <ShoppingList>({
+      list_id: r.shopping_list.list_id,
+      user_id: r.shopping_list.user_id,
+      created: r.shopping_list.created,
+      list_type: r.shopping_list.list_type,
+      layout_type: r.shopping_list.layout_type,
+      categories: r.shopping_list.categories.map(MappingUtils._toCategory)
+    });
+
+    console.log('Parsed dish:', shoppinglist);
+    return shoppinglist;
   }
 }

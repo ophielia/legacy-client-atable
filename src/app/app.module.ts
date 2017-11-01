@@ -23,6 +23,9 @@ import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
 import {MealPlanListComponent} from './meal-plan-list/meal-plan-list.component';
 import {MealPlanService} from "./meal-plan.service";
 import {EditMealPlanComponent} from './meal-plan-list/edit-meal-plan.component';
+import {ShoppingListListComponent} from './shopping-list-list/shopping-list-list.component';
+import {ShoppingListService} from "./shopping-list.service";
+import {EditShoppingListComponent} from './shopping-list-list/edit-shopping-list.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,8 @@ import {EditMealPlanComponent} from './meal-plan-list/edit-meal-plan.component';
     EditDishComponent,
     MealPlanListComponent,
     EditMealPlanComponent,
+    ShoppingListListComponent,
+    EditShoppingListComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +53,7 @@ import {EditMealPlanComponent} from './meal-plan-list/edit-meal-plan.component';
     routing,
     DrilldownModule
   ],
-  providers: [TagsService, DishService, MealPlanService, AuthenticationService],
+  providers: [TagsService, DishService, MealPlanService, ShoppingListService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

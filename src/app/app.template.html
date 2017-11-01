@@ -1,12 +1,23 @@
 <div class="container-fluid">
-  <nav>
-    <a routerLink="/home" routerLinkActive="active">Home</a>
-    <a routerLink="/login" routerLinkActive="active">Login</a>
-    <a routerLink="/list" routerLinkActive="active">List</a>
-    <a routerLink="/drilldown" routerLinkActive="active">Drilldown</a>
-    <a routerLink="/dish/list" routerLinkActive="active">Dish List</a>
-    <a routerLink="/mealplan/list" routerLinkActive="active">MealPlan List</a>
+  <nav class="navbar navbar-expand-lg navbar-light bg-faded">
+    <button class="navbar-toggler navbar-toggler-right" type="button"
+            data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">MealZap</a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="/home"
+           routerLinkActive="active">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" routerLinkActive="active" href="/login">Login</a>
+        <a class="nav-item nav-link" routerLinkActive="active" href="/list">List</a>
+        <a class="nav-item nav-link" routerLinkActive="active" href="/drilldown">Drilldown</a>
+        <a class="nav-item nav-link" routerLinkActive="active" href="/dish/list">Dish List</a>
+        <a class="nav-item nav-link" routerLinkActive="active" href="/mealplan/list">Meal Plan List</a>
+        <a class="nav-item nav-link" routerLinkActive="active" href="/shoppinglist/list">Shopping Lists</a>
+      </div>
+    </div>
   </nav>
-  <h1>Meal Zap</h1>
   <router-outlet></router-outlet>
 </div>

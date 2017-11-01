@@ -1,8 +1,8 @@
 <h4>Tags</h4>
 <div *ngIf="showSearch()">
-  <div><input #searchBox class="form-control input-lg" placeholder="Search"
-              (keyup.enter)="checkSearchEnter()"
-              (keyup)="filterTags(searchBox.value)"/>
+  <div><input [(ngModel)]="searchValue" class="form-control input-lg" placeholder="Search"
+              (keyup.enter)="checkSearchEnter();"
+              (keyup)="filterTags()"/>
     <span (click)="setSearch(false)">Browse (search is showing)</span></div>
   <hr/>
   <!-- <div *ngFor="let indtag of alltags | tagFilter:searchBox.value" class="tagboxContainer">-->
@@ -68,6 +68,18 @@
   </div>
   <ng-container *ngIf="isShow('TagType')">
     <div class="tagboxContainer" *ngFor="let tag of generalTags">
+      <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
+        <at-tag-drilldown-container [tagDrilldown]="tag"
+                                    (selectedDrilldown)="showSelected($event)"
+        ></at-tag-drilldown-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="card tagbox" (click)="expandFold('Rating')">Rating Tags
+  </div>
+  <ng-container *ngIf="isShow('Rating')">
+    <div class="tagboxContainer" *ngFor="let tag of ratingTags">
       <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
         <at-tag-drilldown-container [tagDrilldown]="tag"
                                     (selectedDrilldown)="showSelected($event)"

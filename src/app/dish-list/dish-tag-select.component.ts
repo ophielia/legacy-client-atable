@@ -15,12 +15,14 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   dish: Dish = <Dish>{dish_id: "", name: "", description: ""};
   private errorMessage: string;
 
+  searchValue: string;
   selectedTag: TagDrilldown;
   expandFoldState: Map<string, boolean> = new Map<string, boolean>();
   showAddTags: boolean;
   dishTypeTags: TagDrilldown[];
   ingredientTags: TagDrilldown[];
   generalTags: TagDrilldown[];
+  ratingTags: TagDrilldown[];
   newTag: Tag;
 
   lastSelectedId: string = "";
@@ -52,10 +54,16 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
       .getTagDrilldownList("TagType")
       .subscribe(p => this.generalTags = p,
         e => this.errorMessage = e);
+    this.tagService
+      .getTagDrilldownList("Rating")
+      .subscribe(p => this.ratingTags = p,
+        e => this.errorMessage = e);
     this.expandFoldState['DishType'] = false;
     this.expandFoldState['Ingredient'] = false;
     this.expandFoldState['TagType'] = false;
+    this.expandFoldState['Rating'] = false;
 
+    this.searchValue = null;
     this.getAllTags();
 
   }
@@ -66,19 +74,23 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
       .subscribe(p => {
           this.alltags = p;
           this.showAddTags = (this.alltags.length == 0);
-          if (this.searchBoxValue) {
-            this.filterTags(this.searchBoxValue);
+          if (this.searchValue) {
+            this.filterTags();
             this.checkSearchEnter();
           }
         },
         e => this.errorMessage = e);
   }
 
-  filterTags(filterBy: string) {
-    filterBy = filterBy.toLocaleLowerCase();
+  filterTags() {
+    if (this.searchValue) {
+      let filterBy = this.searchValue.toLocaleLowerCase();
     this.filteredTags = this.alltags.filter((tag: Tag) =>
     tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
     this.showAddTags = this.filteredTags.length == 0;
+    } else {
+      this.filteredTags = null;
+    }
   }
 
   ngOnDestroy() {
@@ -98,6 +110,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     // if only one tag is in the list, select this tag
     if (this.filteredTags.length == 1) {
       this.showSelected(this.filteredTags[0]);
+      this.searchValue = null;
     }
   }
 
@@ -125,6 +138,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     this.tagService.addTag(tagName, tagType)
       .subscribe(r => {
         console.log(`added!!! this.tagName`);
+        this.searchValue = null;
         this.getAllTags();
       });
   }

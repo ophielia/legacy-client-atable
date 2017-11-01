@@ -1,0 +1,26 @@
+<h2>List of Shopping Lists</h2>
+<section *ngIf="errorMessage">
+  {{errorMessage}}
+</section>
+<div class="row" *ngFor="let shoppingList of shoppingLists; let e=even; let f=first; let l=last"
+     ywActionable="#aaaaaa"
+     [ngClass]="{ evenRow: e }"
+     [class.topRow]="f"
+     [class.bottomRow]="l">
+  <div class="col-sm-8">
+    <h4>{{shoppingList.list_id}}: {{shoppingList.list_type}}: {{shoppingList.created | date}} </h4>
+  </div>
+  <div class="col-sm-4" style="margin-top: 5px;">
+    <div class="pull-right">
+      <a class="btn btn-warning btn-sm"
+         [routerLink]="['/shoppinglist/edit', shoppingList.list_id]">
+        Edit
+      </a>
+      <a class="btn btn-danger btn-sm"
+         (click)="deleteShoppingList(shoppingList.list_id)">
+        Delete
+      </a>
+    </div>
+  </div>
+</div>
+
