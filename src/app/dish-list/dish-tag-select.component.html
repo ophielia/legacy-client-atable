@@ -13,22 +13,26 @@
   </div>
 
   <div *ngIf="showAddTags">
-    <button class="btn btn-success btn"
+    <button *ngIf="isIncluded('Rating')" class="btn btn-success btn"
             (click)="add(ratingType)">
       Add Rating
     </button>
 
-    <button class="btn btn-success btn"
+    <button *ngIf="isIncluded('Ingredient')" class="btn btn-success btn"
             (click)="add(ingredientType)">
       Add Ingredient
     </button>
-    <button class="btn btn-success btn"
+    <button *ngIf="isIncluded('TagType')" class="btn btn-success btn"
             (click)="add(tagType)">
       Add General Tag
     </button>
-    <button class="btn btn-success btn"
+    <button *ngIf="isIncluded('DishType')" class="btn btn-success btn"
             (click)="add(dishType)">
       Add Dish Type
+    </button>
+    <button *ngIf="isIncluded('NonEdible')" class="btn btn-success btn"
+            (click)="add(nonEdible)">
+      Add Non Edible Type
     </button>
 
     <button class="btn btn-warning btn"
@@ -40,9 +44,10 @@
 <div *ngIf="!showSearch()">
   <span (click)="setSearch(true)">Search (browse is showing)</span>
 
-  <div class="card tagbox" (click)="expandFold('DishType')">DishType
+
+  <div *ngIf="isIncluded('DishType')" class="card tagbox" (click)="expandFold('DishType')">DishType
 </div>
-<ng-container *ngIf="isShow('DishType')">
+  <ng-container *ngIf="isExpanded('DishType')">
   <div class="tagboxContainer" *ngFor="let tag of dishTypeTags">
     <div class="card tagbox">
       <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
@@ -51,9 +56,9 @@
 </ng-container>
 
 
-  <div class="card tagbox" (click)="expandFold('Ingredient')">Ingredient
+  <div *ngIf="isIncluded('Ingredient')" class="card tagbox" (click)="expandFold('Ingredient')">Ingredient
 </div>
-<ng-container *ngIf="isShow('Ingredient')">
+  <ng-container *ngIf="isExpanded('Ingredient')">
   <div class="tagboxContainer" *ngFor="let tag of ingredientTags">
     <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
       <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
@@ -61,9 +66,9 @@
   </div>
 </ng-container>
 
-  <div class="card tagbox" (click)="expandFold('TagType')">General Tags
+  <div *ngIf="isIncluded('TagType')" class="card tagbox" (click)="expandFold('TagType')">General Tags
   </div>
-  <ng-container *ngIf="isShow('TagType')">
+  <ng-container *ngIf="isExpanded('TagType')">
     <div class="tagboxContainer" *ngFor="let tag of generalTags">
       <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
         <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
@@ -71,9 +76,9 @@
     </div>
   </ng-container>
 
-  <div class="card tagbox" (click)="expandFold('Rating')">Rating Tags
+  <div *ngIf="isIncluded('Rating')" class="card tagbox" (click)="expandFold('Rating')">Rating Tags
   </div>
-  <ng-container *ngIf="isShow('Rating')">
+  <ng-container *ngIf="isExpanded('Rating')">
     <div class="tagboxContainer" *ngFor="let tag of ratingTags">
       <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
         <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
@@ -81,6 +86,15 @@
     </div>
   </ng-container>
 
+  <div *ngIf="isIncluded('NonEdible')" class="card tagbox" (click)="expandFold('NonEdible')">Non Edible
+  </div>
+  <ng-container *ngIf="isExpanded('NonEdible')">
+    <div class="tagboxContainer" *ngFor="let tag of nonEdibleTags">
+      <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
+        <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
+      </div>
+    </div>
+  </ng-container>
 </div>
 
 

@@ -14,6 +14,7 @@ export class PocAddTagComponent {
   dishType: string = TagType.DishType;
   ratingType: string = TagType.Rating;
   tagType: string = TagType.TagType;
+  nonEdible: string = TagType.NonEdible;
 
   constructor(
     private tagService: TagsService,

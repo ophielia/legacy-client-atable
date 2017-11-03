@@ -31,7 +31,11 @@
               [disabled]="!tagName">
         Add Dish Type
       </button>
-
+      <button class="btn btn-success btn"
+              (click)="add(nonEdible)"
+              [disabled]="!tagName">
+        Add Non Edible
+      </button>
       <button class="btn btn-warning btn"
             routerLink="/list">
       Cancel

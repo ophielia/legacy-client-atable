@@ -11,6 +11,7 @@ import TagType from "../model/tag-type";
 })
 export class DishTagSelectComponent implements OnInit, OnDestroy {
   @Output() tagSelected: EventEmitter<Tag> = new EventEmitter<Tag>();
+  @Input() tagTypes: string;
   name: string;
   dish: Dish = <Dish>{dish_id: "", name: "", description: ""};
   private errorMessage: string;
@@ -18,12 +19,13 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   searchValue: string;
   selectedTag: TagDrilldown;
   expandFoldState: Map<string, boolean> = new Map<string, boolean>();
+  includedTypes: Map<string, boolean> = new Map<string, boolean>();
   showAddTags: boolean;
   dishTypeTags: TagDrilldown[];
   ingredientTags: TagDrilldown[];
   generalTags: TagDrilldown[];
   ratingTags: TagDrilldown[];
-  newTag: Tag;
+  nonEdibleTags: TagDrilldown[];
 
   lastSelectedId: string = "";
   alltags: Tag[];
@@ -33,6 +35,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   dishType: string = TagType.DishType;
   ratingType: string = TagType.Rating;
   tagType: string = TagType.TagType;
+  nonEdible: string = TagType.NonEdible;
   isSearch = true;
   searchBoxValue: string;
 
@@ -42,22 +45,52 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // get / fill tag lists here from service
-    this.tagService
-      .getTagDrilldownList("DishType")
-      .subscribe(p => this.dishTypeTags = p,
-        e => this.errorMessage = e);
-    this.tagService
-      .getTagDrilldownList("Ingredient")
-      .subscribe(p => this.ingredientTags = p,
-        e => this.errorMessage = e);
-    this.tagService
-      .getTagDrilldownList("TagType")
-      .subscribe(p => this.generalTags = p,
-        e => this.errorMessage = e);
-    this.tagService
-      .getTagDrilldownList("Rating")
-      .subscribe(p => this.ratingTags = p,
-        e => this.errorMessage = e);
+    if (this.tagTypes.includes(TagType.DishType)) {
+      this.includedTypes[TagType.DishType] = true;
+      this.tagService
+        .getTagDrilldownList("DishType")
+        .subscribe(p => this.dishTypeTags = p,
+          e => this.errorMessage = e);
+    } else {
+      this.includedTypes[TagType.DishType] = false;
+    }
+
+    if (this.tagTypes.includes(TagType.Ingredient)) {
+      this.includedTypes[TagType.Ingredient] = true;
+      this.tagService
+        .getTagDrilldownList("Ingredient")
+        .subscribe(p => this.ingredientTags = p,
+          e => this.errorMessage = e);
+    } else {
+      this.includedTypes[TagType.Ingredient] = false;
+    }
+    if (this.tagTypes.includes(TagType.TagType)) {
+      this.includedTypes[TagType.TagType] = true;
+      this.tagService
+        .getTagDrilldownList("TagType")
+        .subscribe(p => this.generalTags = p,
+          e => this.errorMessage = e);
+    } else {
+      this.includedTypes[TagType.TagType] = false;
+    }
+    if (this.tagTypes.includes(TagType.Rating)) {
+      this.includedTypes[TagType.Rating] = true;
+      this.tagService
+        .getTagDrilldownList("Rating")
+        .subscribe(p => this.ratingTags = p,
+          e => this.errorMessage = e);
+    } else {
+      this.includedTypes[TagType.Rating] = false;
+    }
+    if (this.tagTypes.includes(TagType.NonEdible)) {
+      this.includedTypes[TagType.NonEdible] = true;
+      this.tagService
+        .getTagDrilldownList("NonEdible")
+        .subscribe(p => this.nonEdibleTags = p,
+          e => this.errorMessage = e);
+    } else {
+      this.includedTypes[TagType.NonEdible] = false;
+    }
     this.expandFoldState['DishType'] = false;
     this.expandFoldState['Ingredient'] = false;
     this.expandFoldState['TagType'] = false;
@@ -70,7 +103,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
 
   getAllTags() {
     this.tagService
-      .getAllSelectable()
+      .getAllSelectable(this.tagTypes)
       .subscribe(p => {
           this.alltags = p;
           this.showAddTags = (this.alltags.length == 0);
@@ -85,9 +118,9 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   filterTags() {
     if (this.searchValue) {
       let filterBy = this.searchValue.toLocaleLowerCase();
-    this.filteredTags = this.alltags.filter((tag: Tag) =>
-    tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
-    this.showAddTags = this.filteredTags.length == 0;
+      this.filteredTags = this.alltags.filter((tag: Tag) =>
+      tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
+      this.showAddTags = this.filteredTags.length == 0;
     } else {
       this.filteredTags = null;
     }
@@ -119,8 +152,12 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     this.expandFoldState[tagtype] = !this.expandFoldState[tagtype];
   }
 
-  isShow(tagtype: string) {
+  isExpanded(tagtype: string) {
     return this.expandFoldState[tagtype];
+  }
+
+  isIncluded(tagtype: string) {
+    return this.includedTypes[tagtype];
   }
 
   setSearch(isSearch: boolean) {

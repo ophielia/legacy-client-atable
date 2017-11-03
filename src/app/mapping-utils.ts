@@ -38,6 +38,7 @@ export default class MappingUtils {
         name: r.name,
         description: r.description,
         user_id: r.user_id,
+      last_added: r.last_added,
         tags: r.tags.map(MappingUtils._toTag)
       })
     ;

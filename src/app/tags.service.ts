@@ -37,9 +37,9 @@ export class TagsService {
     return tags$;
   }
 
-  getAllSelectable(): Observable<Tag[]> {
+  getAllSelectable(tagTypes: string): Observable<Tag[]> {
     let tags$ = this.http
-      .get(`${this.tagUrl}/tag?filter=ForSelect`, {headers: this.getHeaders()})
+      .get(`${this.tagUrl}/tag?filter=ForSelect&tag_type=` + tagTypes, {headers: this.getHeaders()})
       .map(this.mapTags).catch(handleError);
     return tags$;
   }

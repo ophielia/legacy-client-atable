@@ -27,7 +27,8 @@
     <!-- tags to add here-->
     <div class="row">
       <div class="col-md-10">
-        <at-dish-tag-select (tagSelected)="addTag($event)"></at-dish-tag-select>
+        <at-dish-tag-select [tagTypes]="'Ingredient,Rating,TagType,DishType'"
+                            (tagSelected)="addTag($event)"></at-dish-tag-select>
       </div>
     </div>
   </div>

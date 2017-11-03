@@ -11,6 +11,9 @@ immediate
   dishes sorted creationdate desc...
   pipe for displaying dish names with capitals
   check duplicate of pasta - general tags
+  done - list edit should only have ingredient and non-grocery tags
+      done only ingredient shown - need to add non-grocery
+      done for drilldown - need type in rest /tag?filter=ForSelect&type=Ingredient,DishType
 
 TagType enum => array?  Want to be able to access TagType.DishType = DishTypes
 

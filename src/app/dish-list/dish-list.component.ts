@@ -41,8 +41,19 @@ export class DishListComponent implements OnInit {
   getAllDishes() {
     this.dishService
       .getAll()
-      .subscribe(p => this.dishes = p,
+      .subscribe(p => {
+          this.dishes = p;
+          this.sortDishes()
+        },
         e => this.errorMessage = e);
+  }
+
+  sortDishes() {
+    this.dishes.sort((a, b) => {
+      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+      else return 0;
+    });
   }
 
   ngOnInit() {
