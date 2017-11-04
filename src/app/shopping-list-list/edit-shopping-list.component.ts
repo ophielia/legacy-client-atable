@@ -1,9 +1,8 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from "@angular/core";
 import {ShoppingListService} from "../shopping-list.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ShoppingList} from "../model/shoppinglist";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
-import {TagDrilldown} from "../model/tag-drilldown";
 import {Tag} from "../model/tag";
 import {Item} from "../model/item";
 
@@ -12,7 +11,7 @@ import {Item} from "../model/item";
   templateUrl: './edit-shopping-list.component.html',
   styleUrls: ['./edit-shopping-list.component.css']
 })
-export class EditShoppingListComponent implements OnInit {
+export class EditShoppingListComponent implements OnInit, OnDestroy {
   private shoppingListId: string;
   private subGetId: any;
   private subTagEvent: any;

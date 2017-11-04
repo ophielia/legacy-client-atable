@@ -7,6 +7,9 @@ immediate
     wire save - of name - otherwise show little save icon
     wire save of tags
 
+===> debug
+  ?? tag assign tool adds tags twice??
+
 ===> user experience
   dishes sorted creationdate desc...
   pipe for displaying dish names with capitals
@@ -14,8 +17,9 @@ immediate
   done - list edit should only have ingredient and non-grocery tags
       done only ingredient shown - need to add non-grocery
       done for drilldown - need type in rest /tag?filter=ForSelect&type=Ingredient,DishType
+  autocomplete for tag component
+  fill in onDestroy for everything
 
-TagType enum => array?  Want to be able to access TagType.DishType = DishTypes
 
 drag and drop - npm2-dnd module
 make icons smaller and not grey (transparent? or just darker?)
@@ -25,6 +29,7 @@ on expand/fold - undo select.
 
 
 
+done - TagType enum => array?  Want to be able to access TagType.DishType = DishTypes
 
 
 

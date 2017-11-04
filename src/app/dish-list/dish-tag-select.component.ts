@@ -109,7 +109,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
           this.showAddTags = (this.alltags.length == 0);
           if (this.searchValue) {
             this.filterTags();
-            this.checkSearchEnter();
+            this.checkSearchEnter(null);
           }
         },
         e => this.errorMessage = e);
@@ -117,10 +117,12 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
 
   filterTags() {
     if (this.searchValue) {
-      let filterBy = this.searchValue.toLocaleLowerCase();
-      this.filteredTags = this.alltags.filter((tag: Tag) =>
-      tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
-      this.showAddTags = this.filteredTags.length == 0;
+      if (this.alltags) {
+        let filterBy = this.searchValue.toLocaleLowerCase();
+        this.filteredTags = this.alltags.filter((tag: Tag) =>
+        tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
+        this.showAddTags = this.filteredTags.length == 0;
+      }
     } else {
       this.filteredTags = null;
     }
@@ -138,12 +140,15 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkSearchEnter() {
+  checkSearchEnter(el) {
     // when the user clicks on return from the search box
     // if only one tag is in the list, select this tag
     if (this.filteredTags.length == 1) {
       this.showSelected(this.filteredTags[0]);
       this.searchValue = null;
+      if (el) {
+        el.focus();
+      }
     }
   }
 

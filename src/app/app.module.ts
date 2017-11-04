@@ -20,14 +20,15 @@ import {EditDishComponent} from "./dish-list/edit-dish.component";
 import {DrilldownModule} from "./drilldown/drilldown.module";
 import {PocTagDrilldownComponent} from "./tag-list/tag-drilldown.component";
 import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
-import {MealPlanListComponent} from './meal-plan-list/meal-plan-list.component';
+import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
 import {MealPlanService} from "./meal-plan.service";
-import {EditMealPlanComponent} from './meal-plan-list/edit-meal-plan.component';
-import {ShoppingListListComponent} from './shopping-list-list/shopping-list-list.component';
+import {EditMealPlanComponent} from "./meal-plan-list/edit-meal-plan.component";
+import {ShoppingListListComponent} from "./shopping-list-list/shopping-list-list.component";
 import {ShoppingListService} from "./shopping-list.service";
-import {EditShoppingListComponent} from './shopping-list-list/edit-shopping-list.component';
+import {EditShoppingListComponent} from "./shopping-list-list/edit-shopping-list.component";
 import {TagCommService} from "./drilldown/tag-drilldown-select.service";
-import {SingleListComponent} from './shopping-list-list/single-list.component';
+import {SingleListComponent} from "./shopping-list-list/single-list.component";
+import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign-tool.component";
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import {SingleListComponent} from './shopping-list-list/single-list.component';
     ShoppingListListComponent,
     EditShoppingListComponent,
     SingleListComponent,
+    DishTagAssignToolComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,8 @@
 <h4>Tags</h4>
 <div *ngIf="showSearch()">
   <div><input [(ngModel)]="searchValue" class="form-control input-lg" placeholder="Search"
-              (keyup.enter)="checkSearchEnter();"
-              (keyup)="filterTags()"/>
+              (keyup.enter)="checkSearchEnter(focusanchor);"
+              (keyup)="filterTags()" #focusanchor/>
     <span (click)="setSearch(false)">Browse (search is showing)</span></div>
   <hr/>
   <!-- <div *ngFor="let indtag of alltags | tagFilter:searchBox.value" class="tagboxContainer">-->
@@ -46,25 +46,25 @@
 
 
   <div *ngIf="isIncluded('DishType')" class="card tagbox" (click)="expandFold('DishType')">DishType
-</div>
-  <ng-container *ngIf="isExpanded('DishType')">
-  <div class="tagboxContainer" *ngFor="let tag of dishTypeTags">
-    <div class="card tagbox">
-      <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
-    </div>
   </div>
-</ng-container>
+  <ng-container *ngIf="isExpanded('DishType')">
+    <div class="tagboxContainer" *ngFor="let tag of dishTypeTags">
+      <div class="card tagbox">
+        <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
+      </div>
+    </div>
+  </ng-container>
 
 
   <div *ngIf="isIncluded('Ingredient')" class="card tagbox" (click)="expandFold('Ingredient')">Ingredient
-</div>
-  <ng-container *ngIf="isExpanded('Ingredient')">
-  <div class="tagboxContainer" *ngFor="let tag of ingredientTags">
-    <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
-      <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
-    </div>
   </div>
-</ng-container>
+  <ng-container *ngIf="isExpanded('Ingredient')">
+    <div class="tagboxContainer" *ngFor="let tag of ingredientTags">
+      <div class="card tagbox"><!--(selectEvent)="onNotify($event)" -->
+        <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
+      </div>
+    </div>
+  </ng-container>
 
   <div *ngIf="isIncluded('TagType')" class="card tagbox" (click)="expandFold('TagType')">General Tags
   </div>

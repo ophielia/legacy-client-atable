@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 import {Dish} from "../model/dish";
 import {DishService} from "../dish-service.service";
 import {Router} from "@angular/router";
@@ -26,14 +26,19 @@ export class DishListComponent implements OnInit {
 
   add() {
     this.showAdd = true;
-    //this.router.navigate(['/dish/edit', tagId]);
   }
 
   addDish(dishName: string) {
     this.dishService.addDish(dishName)
       .subscribe(r => {
-        console.log(`added!!! this.tagName`);
-        this.getAllDishes();
+        console.log(`added!!! dish`)
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        //    this.getAllDishes();
+        this.router.navigate(['/dish/edit', id]);
+
       });
     //this.router.navigate(['/dish/edit', tagId]);
   }

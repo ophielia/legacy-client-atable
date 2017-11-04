@@ -12,6 +12,7 @@ import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
 import {EditMealPlanComponent} from "./meal-plan-list/edit-meal-plan.component";
 import {ShoppingListListComponent} from "./shopping-list-list/shopping-list-list.component";
 import {EditShoppingListComponent} from "./shopping-list-list/edit-shopping-list.component";
+import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign-tool.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path: 'dishes', component: PocTagListComponent},
   {path: 'add', component: PocAddTagComponent},
   {path: 'edit/:id', component: PocEditTagComponent},
+  {path: 'delete/:id', component: PocDeleteTagComponent},
   {path: 'dish/list', component: DishListComponent},
   {path: 'dish/add', component: DishListComponent},
   {path: 'dish/edit/:id', component: EditDishComponent},
@@ -31,7 +33,7 @@ const routes: Routes = [
   {path: 'mealplan/list', component: MealPlanListComponent},
   {path: 'mealplan/edit/:id', component: EditMealPlanComponent},
   {path: 'mealplan/delete/:id', component: MealPlanListComponent}, // MM will be delete component
-  {path: 'delete/:id', component: PocDeleteTagComponent},
+  {path: 'tools/dishtotag', component: DishTagAssignToolComponent},
   {path: '', redirectTo: 'dish/list', pathMatch: 'full'}
 ];
 

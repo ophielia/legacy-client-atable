@@ -12,7 +12,16 @@
            routerLinkActive="active">Home <span class="sr-only">(current)</span></a>
         <a class="nav-item nav-link" routerLinkActive="active" href="/login">Login</a>
         <a class="nav-item nav-link" routerLinkActive="active" href="/list">List</a>
-        <a class="nav-item nav-link" routerLinkActive="active" href="/drilldown">Drilldown</a>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+          Tools
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/tools/dishtotag">Dish To Tag Tool</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+
         <a class="nav-item nav-link" routerLinkActive="active" href="/dish/list">Dish List</a>
         <a class="nav-item nav-link" routerLinkActive="active" href="/mealplan/list">Meal Plan List</a>
         <a class="nav-item nav-link" routerLinkActive="active" href="/shoppinglist/list">Shopping Lists</a>
