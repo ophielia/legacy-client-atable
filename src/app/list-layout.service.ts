@@ -76,10 +76,12 @@ export class ListLayoutService {
         {headers: this.getHeaders()});
   }
 
-  updateCategoryInListLayout(listLayout_id: string, category: ListLayoutCategory): Observable<Response> {
+  updateCategoryInListLayout(listLayout_id: string, category_id: string, category_name: string): Observable<Response> {
     var category: ListLayoutCategory = <ListLayoutCategory>{
-      name: category.name,
-      category_id: category.category_id
+      name: category_name,
+      category_id: category_id,
+      layout_id: listLayout_id,
+      tags: []
     };
     return this
       .http

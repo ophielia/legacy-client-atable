@@ -31,6 +31,7 @@ import {SingleListComponent} from "./shopping-list-list/single-list.component";
 import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign-tool.component";
 import {ListLayoutListComponent} from './list-layout-list/list-layout-list.component';
 import {ListLayoutService} from "./list-layout.service";
+import {EditListLayoutComponent} from './list-layout-list/edit-list-layout.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import {ListLayoutService} from "./list-layout.service";
     SingleListComponent,
     DishTagAssignToolComponent,
     ListLayoutListComponent,
+    EditListLayoutComponent,
   ],
   imports: [
     BrowserModule,

@@ -136,6 +136,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     if (this.lastSelectedId != tag.tag_id) {
       this.lastSelectedId = tag.tag_id;
       console.log('showing from drilldown select container-' + tag.tag_id);
+      this.searchValue = null;
       this.tagSelected.emit(tag);
     }
   }

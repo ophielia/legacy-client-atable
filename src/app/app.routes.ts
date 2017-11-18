@@ -14,6 +14,7 @@ import {ShoppingListListComponent} from "./shopping-list-list/shopping-list-list
 import {EditShoppingListComponent} from "./shopping-list-list/edit-shopping-list.component";
 import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign-tool.component";
 import {ListLayoutListComponent} from "./list-layout-list/list-layout-list.component";
+import {EditListLayoutComponent} from "./list-layout-list/edit-list-layout.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -32,6 +33,7 @@ const routes: Routes = [
   {path: 'shoppinglist/edit/:id', component: EditShoppingListComponent},
   {path: 'shoppinglist/delete/:id', component: ShoppingListListComponent},
   {path: 'listlayout/list', component: ListLayoutListComponent},
+  {path: 'listlayout/edit/:id', component: EditListLayoutComponent},
   {path: 'mealplan/list', component: MealPlanListComponent},
   {path: 'mealplan/edit/:id', component: EditMealPlanComponent},
   {path: 'mealplan/delete/:id', component: MealPlanListComponent}, // MM will be delete component
