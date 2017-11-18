@@ -6,6 +6,8 @@ import {Slot} from "./model/slot";
 import {Category} from "./model/category";
 import {Item} from "./model/item";
 import {ShoppingList} from "./model/shoppinglist";
+import {ListLayout} from "./model/listlayout";
+import {ListLayoutCategory} from "./model/listcategory";
 export default class MappingUtils {
 
   static toTag(r: any): Tag {
@@ -59,6 +61,17 @@ export default class MappingUtils {
     let category = <Category>({
       name: r.name,
       items: r.items.map(MappingUtils._toItem)
+    });
+
+    console.log('Parsed category:', category);
+    return category;
+  }
+
+  private static _toListLayoutCategory(r: any): ListLayoutCategory {
+    let category = <ListLayoutCategory>({
+      name: r.name,
+      category_id: r.category_id,
+      tags: r.tags.map(MappingUtils._toTag)
     });
 
     console.log('Parsed category:', category);
@@ -129,11 +142,23 @@ export default class MappingUtils {
       user_id: r.shopping_list.user_id,
       created: r.shopping_list.created,
       list_type: r.shopping_list.list_type,
-      layout_type: r.shopping_list.layout_type,
+      layout_type: r.shopping_list.list_layout_type,
       categories: r.shopping_list.categories.map(MappingUtils._toCategory)
     });
 
     console.log('Parsed dish:', shoppinglist);
     return shoppinglist;
+  }
+
+  static toListLayout(r: any): ListLayout {
+    let listlayouts = <ListLayout>({
+      layout_id: r.list_layout.layout_id,
+      list_layout_type: r.list_layout.list_layout_type,
+      name: r.list_layout.name,
+      listcategories: r.list_layout.categories.map(MappingUtils._toListLayoutCategory)
+    });
+
+    console.log('Parsed listlayout:', listlayouts);
+    return listlayouts;
   }
 }
