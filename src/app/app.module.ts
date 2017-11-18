@@ -29,6 +29,8 @@ import {EditShoppingListComponent} from "./shopping-list-list/edit-shopping-list
 import {TagCommService} from "./drilldown/tag-drilldown-select.service";
 import {SingleListComponent} from "./shopping-list-list/single-list.component";
 import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign-tool.component";
+import {ListLayoutListComponent} from './list-layout-list/list-layout-list.component';
+import {ListLayoutService} from "./list-layout.service";
 
 @NgModule({
   declarations: [
@@ -50,6 +52,7 @@ import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign
     EditShoppingListComponent,
     SingleListComponent,
     DishTagAssignToolComponent,
+    ListLayoutListComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,7 +61,7 @@ import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign
     routing,
     DrilldownModule
   ],
-  providers: [TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, AuthenticationService],
+  providers: [TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

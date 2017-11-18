@@ -1,0 +1,47 @@
+<p>
+  dish-tag-assign-tool works!
+</p>
+<div class="row">
+  <div class="col-md-8">
+    <h2>Dishes</h2>
+    <!-- dish list (to add to meal plan) -->
+    <div class="row">
+      <div class="col-md-12"></div>
+
+      <div class="row">
+        <span *ngIf="loading">Loading</span>
+
+
+        <ng-container *ngIf="!currentTag">
+          <div *ngFor="let dish of dishList" class="col-md-3 card tagbox">{{dish.name}}</div>
+        </ng-container>
+        <ng-container *ngIf="currentTag">
+          <div *ngFor="let dish of withoutTag" class="col-md-3 card tagbox" (dblclick)="addTagToDish(dish.dish_id)">
+            {{dish.name}}
+          </div>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <!-- tag area-->
+    <div class="row">
+      <div *ngIf="!currentTag" class="col-md-10">
+        <at-dish-tag-select [tagTypes]="'Ingredient,NonEdible,Rating,TagType,DishType'"
+                            (tagSelected)="setCurrentTag($event)"></at-dish-tag-select>
+      </div>
+      <div *ngIf="currentTag">
+        <span>{{currentTag.name}}         <a class="btn btn-warning btn-sm"
+                                             (click)="clearCurrentTag()">
+        Change
+          </a></span>
+        <div *ngFor="let dish of withTag" (dblclick)="deleteTagFromDish(dish.dish_id)">{{dish.name}}</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

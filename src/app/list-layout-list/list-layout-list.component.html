@@ -1,0 +1,35 @@
+<h2>List of List Layouts</h2>
+<section *ngIf="errorMessage">
+  {{errorMessage}}
+</section>
+<ng-container *ngFor="let layout of layoutTypes">
+
+  <div class="row" *ngIf="allLayouts[layout]">
+    <div class="col-sm-8">
+      <h4>{{allLayouts[layout].layout_id}}: {{layout}} </h4>
+    </div>
+    <div class="col-sm-4" style="margin-top: 5px;">
+      <div class="pull-right">
+        <a class="btn btn-warning btn-sm"
+           [routerLink]="['/listlayout/edit', allLayouts[layout].layout_id]">
+          Edit
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!allLayouts[layout]">
+    <div class="col-sm-8">
+      <h4> - - - - - - - </h4>
+    </div>
+    <div class="col-sm-4" style="margin-top: 5px;">
+      <div class="pull-right">
+        <a class="btn btn-warning btn-sm" (click)="createLayout(layout)"
+        >
+          Create List - {{layout}}
+        </a>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
