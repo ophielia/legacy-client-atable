@@ -103,6 +103,26 @@ export class ListLayoutService {
 
   }
 
+  addTagsToLayoutCategory(layout_id: string, category_id: string, listofids: string) {
+    //"/{listLayoutId}/category/{layoutCategoryId}/tag" tags
+    var url = this.baseUrl + "/listlayout/" + layout_id
+      + "/category/" + category_id + "/tag?tags=" + listofids;
+    return this
+      .http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+
+  }
+
+  removeTagsFromLayoutCategory(layout_id: string, category_id: string, listofids: string) {
+    var url = this.baseUrl + "/listlayout/" + layout_id
+      + "/category/" + category_id + "/tag?tags=" + listofids;
+    return this
+      .http
+      .delete(`${url}`,
+        {headers: this.getHeaders()});
+  }
 }
 
 function handleError(error: any) {

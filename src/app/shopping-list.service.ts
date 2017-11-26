@@ -108,6 +108,14 @@ export class ShoppingListService {
   }
 
 
+  setListActive(shoppingListId: string) {
+    var url = this.shoppingListUrl + "/shoppinglist/" + shoppingListId
+      + "?generateType=Replace";
+    return this
+      .http
+      .put(`${url}`, null,
+        {headers: this.getHeaders()});
+  }
 }
 
 

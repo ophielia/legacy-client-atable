@@ -1,0 +1,100 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3>Assign Tags To Layout - Layout {{listLayout.list_layout_type}}</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-12"><h4>Tags</h4></div>
+    </div>
+    <div class="row" *ngIf="!loading">
+
+      <div *ngFor="let tag of unCatTagList, let i = index" class="card"
+           style="margin:5px">
+        <div class="clearfix" *ngIf="i % 3 == 0"></div>
+        <div class="card-body tagbox" (click)="selectTagToAdd(tag)">
+          {{tag.name}}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="col-md-2" *ngIf="showToRemove">
+    <div class="row">
+      <div class="col-md-12"><h4>Tags To Remove</h4></div>
+    </div>
+    <div class="row">
+      <div class="col-md-12"><a class="btn btn-warning btn-sm"
+                                (click)="removeAllTagsFromCategory()">
+        Remove Tags
+      </a>
+        <a class="btn btn-warning btn-sm"
+           (click)="clearAllTagsToRemove()">
+          Clear
+        </a></div>
+    </div>
+    <div class="row card" style="margin:5px"
+         *ngFor="let tag of tagsToRemove"
+         (click)="removeFromTagsToRemove(tag)">
+      {{tag.name}}
+    </div>
+  </div>
+  <div class="col-md-2" *ngIf="showToAdd">
+    <div class="row">
+      <div class="col-md-12"><h4>Tags To Add</h4></div>
+    </div>
+    <div class="row">
+      <div class="col-md-12"><a class="btn btn-warning btn-sm"
+                                (click)="addAllTagsToCategory()">
+        Add Tags
+      </a>
+        <a class="btn btn-warning btn-sm"
+           (click)="clearAllTagsToAdd()">
+          Clear
+        </a></div>
+    </div>
+
+    <div class="row card" style="margin:5px"
+         *ngFor="let tag of tagsToAdd"
+         (click)="removeFromTagsToAdd(tag)">
+      {{tag.name}}
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="row">
+      <div class="col-md-12"><h4>List Layout</h4></div>
+
+    </div>
+    <ng-container *ngIf="!selectedCategory">
+      <div class="row">
+        <div class="col-md-12">Select Category</div>
+      </div>
+      <div class="row card" style="margin:5px"
+           *ngFor="let category of listLayout.listcategories"
+           (click)="selectCategory(category)">
+        {{category.name}}
+      </div>
+    </ng-container>
+    <ng-container *ngIf="selectedCategory">
+      <div class="row">
+        <div class="col-md-12">
+                  <span>{{selectedCategory.name}}
+                    <a class="btn btn-warning btn-sm"
+                       (click)="clearCurrentCategory()">
+        Change
+          </a></span>
+        </div>
+      </div>
+      <div class="row card" style="margin:5px"
+           *ngFor="let tag of categoryTags"
+           (click)="selectTagToRemove(tag)">
+        {{tag.name}}
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+
+

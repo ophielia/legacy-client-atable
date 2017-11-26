@@ -1,0 +1,88 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3>Assign Tags To Tags - TagType {{currentTagType}}</h3>
+  </div>
+</div>
+<div class="row justify-content-around">
+  <div class="col-md-2" *ngFor="let tagtype of tagTypeList">
+    <span class="card" style="text-align:center" (click)="changeTagType(tagtype)">{{tagtype}}</span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <div class="row">
+      <div class="col-md-12"><h4>Select Area</h4></div>
+    </div>
+    <ng-container *ngIf="!loading">
+      <div class="row" *ngFor="let tag of editTagList">
+        <div class="col-md-8">
+          <at-tag-drilldown-container [parentSelect]="true" [tagDrilldown]="tag"></at-tag-drilldown-container>
+        </div>
+      </div>
+
+    </ng-container>
+
+  </div>
+
+  <div class="col-md-4" *ngIf="showToAdd">
+    <div class="row">
+      <div class="col-md-12"><h4>Edit Area</h4></div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <a *ngIf="selectedTag" class="btn btn-warning btn-sm"
+           (click)="addAllTagsToSelected()">
+          Add Tags - {{selectedTag.name}}
+        </a>
+      </div>
+      <div class="col-md-12">
+        <a *ngIf="!createNewGroupFlag" class="btn btn-warning btn-sm"
+           (click)="createNewGroup()">
+          Add Tags to New Group
+        </a>
+        <ng-container *ngIf="createNewGroupFlag">
+          <input #newGroupBox class="form-control input-lg" type="text"
+                 placeholder="new group"
+                 (keyup.enter)="addTagsToNewGroup(newGroupBox.value)"/>
+        </ng-container>
+      </div>
+      <div class="col-md-12">
+        <a class="btn btn-warning btn-sm"
+           (click)="moveToBaseTag()">
+          Move To Base Tag
+        </a></div>
+      <div class="col-md-12">
+        <a class="btn btn-warning btn-sm"
+           (click)="clearAllTagsToAdd()">
+          Clear
+        </a></div>
+    </div>
+
+    <div class="row card" style="margin:5px"
+         *ngFor="let tag of hopperTags"
+         (click)="removeFromTagsToAdd(tag)">
+      {{tag.name}}
+    </div>
+    <fa class="card-link" [name]="'rocket'"></fa>
+  </div>
+
+
+  <div class="col-md-4">
+    <div class="row">
+      <div class="col-md-12"><h4>To Tag</h4></div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12">Select Tag</div>
+    </div>
+
+    <div class="row card" style="margin:5px"
+         *ngFor="let tag of parentTags"
+         (click)="selectAssignTag(tag)">
+      {{tag.name}}
+    </div>
+  </div>
+</div>
+
+
+

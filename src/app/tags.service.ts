@@ -44,6 +44,13 @@ export class TagsService {
     return tags$;
   }
 
+  getAllParentTags(tagTypes: string): Observable<Tag[]> {
+    let tags$ = this.http
+      .get(`${this.tagUrl}/tag?filter=ParentTags&tag_type=` + tagTypes, {headers: this.getHeaders()})
+      .map(this.mapTags).catch(handleError);
+    return tags$;
+  }
+
   getTagTypes(): string[] {
     return tagType;
   }
@@ -152,14 +159,76 @@ export class TagsService {
   }
 
   mapTags(response: Response): Tag[] {
-    // The response of the API has a results
-    // property with the actual results
+    if (response.json()) {
     return response.json()._embedded.tagResourceList.map(MappingUtils.toTag);
+  }
   }
 
   mapTag(response: Response): Tag {
     return MappingUtils.toTag(response.json());
   }
+
+  getUncategorizedTags(id: string) {
+    var url = this.tagUrl + "/listlayout/" + id + "/tag";
+    let tags$ = this.http
+      .get(`${url}`, {headers: this.getHeaders()})
+      .map(this.mapTags).catch(handleError);
+    return tags$;
+  }
+
+  getTagsForLayoutCategory(layoutId: any, category_id: string) {
+    ///{listLayoutId}/category/{layoutCategoryId}/tag
+    var url = this.tagUrl + "/listlayout/" + layoutId + "/category/" + category_id + "/tag";
+    let tags$ = this.http
+      .get(`${url}`, {headers: this.getHeaders()})
+      .map(this.mapTags).catch(handleError);
+    return tags$;
+  }
+
+  assignTagsToTag(tag_id: string, tagsToAdd: Tag[]) {
+    //"{parentId}/child/{childId}"
+    var basicUrl: string = this.tagUrl + "/tag/" + tag_id
+      + "/child/";
+    // create list of urls - 1 per hopperTag
+    let tag$ = null;
+    for (var i = 0; i < tagsToAdd.length; i++) {
+      // put together merge of urls
+      var tagUrl = basicUrl + tagsToAdd[i].tag_id;
+      if (tag$ == null) {
+        tag$ = this.http
+          .put(`${tagUrl}`, {headers: this.getHeaders()});
+      }
+      else {
+        tag$ = tag$.merge(this.http
+          .put(`${tagUrl}`, {headers: this.getHeaders()}));
+      }
+    }
+    // return observable
+    return tag$;
+  }
+
+  assignTagsToBaseTag(tagsToAdd: Tag[]) {
+    //"{parentId}/child/{childId}"
+    var basicUrl: string = this.tagUrl + "/tag/basetag/child/";
+    // create list of urls - 1 per hopperTag
+    let tag$ = null;
+    for (var i = 0; i < tagsToAdd.length; i++) {
+      // put together merge of urls
+      var tagUrl = basicUrl + tagsToAdd[i].tag_id;
+      if (tag$ == null) {
+        tag$ = this.http
+          .put(`${tagUrl}`, {headers: this.getHeaders()});
+      }
+      else {
+        tag$ = tag$.merge(this.http
+          .put(`${tagUrl}`, {headers: this.getHeaders()}));
+      }
+    }
+    // return observable
+    return tag$;
+  }
+
+
 }
 
 

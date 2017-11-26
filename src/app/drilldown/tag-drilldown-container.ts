@@ -7,13 +7,14 @@ import {TagCommService} from "./tag-drilldown-select.service";
   selector: 'at-tag-drilldown-container',
   template: `
     <div class="tagbox" (selectEvent)="0">
-      <at-tag-drilldown [node]="tagDrilldown"></at-tag-drilldown>
+      <at-tag-drilldown [node]="tagDrilldown" [parentSelect]="parentSelect"></at-tag-drilldown>
     </div>`,
   styleUrls: ['./tag-drilldown-container.css', '../shared.styles.css']
 })
 export class TagDrilldownContainer implements OnInit {
 
   @Input() tagDrilldown: TagDrilldown;
+  @Input() parentSelect: boolean;
   @Output() selectedDrilldown: EventEmitter<TagDrilldown> = new EventEmitter<TagDrilldown>();
   currentTag: TagDrilldown;
   private tagService: TagsService;
@@ -31,11 +32,15 @@ export class TagDrilldownContainer implements OnInit {
 
   ngOnInit() {
     this.currentTag = this.tagDrilldown;
+    if (this.parentSelect == null) {
+      this.parentSelect = false;
+    }
   }
 
 
   onSelect(tag: TagDrilldown) {
     this.selectedDrilldown.emit(tag);
   }
+
 
 }

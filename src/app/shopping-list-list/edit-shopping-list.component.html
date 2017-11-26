@@ -1,6 +1,10 @@
 <div class="row">
   <div class="col-md-8">
-    <h4>Edit Shopping List - {{shoppingList.list_type}}</h4>
+    <h4>Edit Shopping List - {{shoppingList.list_type}}
+      <button *ngIf="shoppingList.list_type == 'InProcess'" class="btn btn-success btn" (click)="generateActiveList()">
+        Generate Active List
+      </button>
+    </h4>
     <!-- list to edit here -->
     <div class="col-sm-7">
       <div style="padding-top:50px"></div>

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input, OnInit, OnDestroy} from "@angular/core";
 import {TagDrilldown} from "../model/tag-drilldown";
 import {dash, plus} from "octicons";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
@@ -23,7 +23,7 @@ import {PocDrilldownCommunicationService} from "./tag-drilldown-select.service";
   `,
   styleUrls: ['./tag-drilldown.component.css']
 })
-export class PocTagDrilldownComponent implements OnInit {
+export class PocTagDrilldownComponent implements OnInit, OnDestroy {
 
   @Input() node;
   public plusIcon: SafeHtml;
@@ -37,6 +37,7 @@ export class PocTagDrilldownComponent implements OnInit {
     this.plusIcon = this.sanitizer.bypassSecurityTrustHtml(plus.toSVG());
     this.minusIcon = this.sanitizer.bypassSecurityTrustHtml(dash.toSVG());
   }
+
 
   showHideChildren(tag: TagDrilldown) {
     console.log('tag is ', tag);

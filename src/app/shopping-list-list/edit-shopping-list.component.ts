@@ -56,6 +56,18 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   }
 
+  generateActiveList() {
+    this.shoppingListService.setListActive(this.shoppingListId)
+      .subscribe(r => {
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        this.shoppingListId = id;
+        this.refreshList(id);
+      });
+  }
+
   removeItem(item: Item) {
 
     // remove Item from shopping list

@@ -32,6 +32,9 @@ import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign
 import {ListLayoutListComponent} from './list-layout-list/list-layout-list.component';
 import {ListLayoutService} from "./list-layout.service";
 import {EditListLayoutComponent} from './list-layout-list/edit-list-layout.component';
+import {ListTagAssignToolComponent} from './list-layout-list/list-tag-assign-tool.component';
+import {TagTagAssignToolComponent} from './tag-tag-assign-tool/tag-tag-assign-tool.component';
+import {Angular2FontawesomeModule} from "angular2-fontawesome";
 
 @NgModule({
   declarations: [
@@ -55,13 +58,16 @@ import {EditListLayoutComponent} from './list-layout-list/edit-list-layout.compo
     DishTagAssignToolComponent,
     ListLayoutListComponent,
     EditListLayoutComponent,
+    ListTagAssignToolComponent,
+    TagTagAssignToolComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     routing,
-    DrilldownModule
+    DrilldownModule,
+    Angular2FontawesomeModule
   ],
   providers: [TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService],
   bootstrap: [AppComponent]
