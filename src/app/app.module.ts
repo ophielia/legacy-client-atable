@@ -18,7 +18,7 @@ import {DishListComponent} from "./dish-list/dish-list.component";
 import {DishService} from "./dish-service.service";
 import {EditDishComponent} from "./dish-list/edit-dish.component";
 import {DrilldownModule} from "./drilldown/drilldown.module";
-import {PocTagDrilldownComponent} from "./tag-list/tag-drilldown.component";
+// MM remove this import {PocTagDrilldownComponent} from "./tag-list/tag-drilldown.component";
 import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
 import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
 import {MealPlanService} from "./meal-plan.service";
@@ -43,7 +43,6 @@ import {Angular2FontawesomeModule} from "angular2-fontawesome";
     PocAddTagComponent,
     PocEditTagComponent,
     PocDeleteTagComponent,
-    PocTagDrilldownComponent,
     DishTagSelectComponent,
     HomeComponent,
     TagListComponent,

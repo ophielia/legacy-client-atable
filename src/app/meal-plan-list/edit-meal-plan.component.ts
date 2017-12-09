@@ -1,21 +1,39 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {MealPlan} from "../model/mealplan";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MealPlanService} from "../meal-plan.service";
 import {Dish} from "../model/dish";
 import {Slot} from "../model/slot";
 import {DishService} from "../dish-service.service";
+import {TagCommService} from "../drilldown/tag-drilldown-select.service";
+import {Tag} from "../model/tag";
 
 @Component({
   selector: 'at-edit-meal-plan',
   templateUrl: './edit-meal-plan.component.html',
-  styleUrls: ['./edit-meal-plan.component.css']
-})
-export class EditMealPlanComponent implements OnInit {
+  styleUrls: ['./edit-meal-plan.component.css'],
+  styles: [`
+    .inverted {
+      color: red;
+    }
 
+    .notinverted {
+      color: dimgrey;
+    }
+  `
+  ]
+})
+export class EditMealPlanComponent implements OnInit, OnDestroy {
+  filterTags: Tag[];
+  subTagEvent: any;
+  tagCommService: TagCommService;
+  mealPlanDishIds: string[];
+  invertTagIds: string[];
   dishList: Dish[];
   mealPlanId: string;
   name: string;
+  showFilter: boolean = true;
+
   mealPlan: MealPlan = <MealPlan>{meal_plan_id: "", name: ""};
   sub: any;
   private errorMessage: string;
@@ -23,10 +41,13 @@ export class EditMealPlanComponent implements OnInit {
 
   constructor(private mealPlanService: MealPlanService,
               private dishService: DishService,
+              tagCommService: TagCommService,
               private route: ActivatedRoute,
               private router: Router,) {
     this.mealPlanId = this.route.snapshot.params['id'];
+    this.tagCommService = tagCommService;
     this.dishList = [];
+    this.mealPlanDishIds = [];
   }
 
   ngOnInit() {
@@ -37,14 +58,36 @@ export class EditMealPlanComponent implements OnInit {
         .getById(id)
         .subscribe(p => this.mealPlan = p);
     });
+    this.subTagEvent = this.tagCommService.selectEvent
+      .subscribe(selectevent => {
+        this.addTagToFilter(selectevent);
+      })
     this.getAllDishes();
+    this.filterTags = [];
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   getAllDishes() {
-    this.dishService
-      .getAll()
-      .subscribe(p => this.dishList = p,
-        e => this.errorMessage = e);
+    if (!this.filterTags || this.filterTags.length == 0) {
+      this.dishService
+        .getAll()
+        .subscribe(p => this.dishList = p,
+          e => this.errorMessage = e);
+    } else {
+      var includeTagList = this.filterTags.filter(t => t.is_inverted == false).map(t => t.tag_id);
+      var excludeTagList = this.filterTags.filter(t => t.is_inverted == true).map(t => t.tag_id);
+      this.dishService
+        .findByTags(includeTagList, excludeTagList)
+        .subscribe(p => this.filterOutMealPlanDishes(p),
+          e => this.errorMessage = e);
+    }
+  }
+
+  private filterOutMealPlanDishes(dishlist: Dish[]) {
+    this.dishList = dishlist.filter(t => !(this.mealPlanDishIds.indexOf(t.dish_id) > -1));
   }
 
   addDish(dish: Dish) {
@@ -59,6 +102,8 @@ export class EditMealPlanComponent implements OnInit {
     var slot: Slot = <Slot>{slot_id: "", dish: dish};
     slots.push(slot);
     this.mealPlan.slots = slots;
+    // add dish id to list
+    this.mealPlanDishIds.push(dish.dish_id);
     this.mealPlanService.addDishToMealPlan(dish.dish_id, this.mealPlan.meal_plan_id)
       .subscribe();
     return false;
@@ -89,4 +134,28 @@ export class EditMealPlanComponent implements OnInit {
     return false;
   }
 
+  toggleFilter() {
+    this.showFilter = !this.showFilter;
+  }
+
+  addTagToFilter(tag: Tag) {
+    tag.is_inverted = false;
+    this.filterTags.push(tag);
+    this.getAllDishes();
+  }
+
+  removeTagFromFilter(tag: Tag) {
+    this.filterTags = this.filterTags.filter(t => t.tag_id != tag.tag_id);
+    this.getAllDishes();
+  }
+
+
+  toggleInvert(tag: Tag) {
+    for (var i: number = 0; i < this.filterTags.length; i++) {
+      if (this.filterTags[i].tag_id == tag.tag_id) {
+        this.filterTags[i].is_inverted = !this.filterTags[i].is_inverted;
+      }
+    }
+    this.getAllDishes();
+  }
 }

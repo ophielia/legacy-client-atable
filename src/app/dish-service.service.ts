@@ -84,6 +84,32 @@ export class DishService {
       .post(`${this.dishUrl}/dish/${dish_id}/tag/${tag_id}`, null,
         {headers: this.getHeaders()});
   }
+
+  findByTags(inclList: string[], exclList: string[]) {
+    var inclString = "";
+    if (inclList) {
+      inclString = inclList.join(",");
+
+    }
+    var exclString = "";
+    if (exclList) {
+      exclString = exclList.join(",");
+
+    }
+
+    var url = this.dishUrl + "/dish";
+    if (inclString.length > 0) {
+      url = url + "?includedTags=" + inclString;
+    }
+    if (exclString.length > 0) {
+      url = url +
+        (inclString.length > 0 ? "&" : "?") + "excludedTags=" + exclString;
+    }
+    let dishs$ = this.http
+      .get(url, {headers: this.getHeaders()})
+      .map(this.mapDishes).catch(handleError);
+    return dishs$;
+  }
 }
 
 

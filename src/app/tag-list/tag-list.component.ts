@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {TagsService} from "../tags.service";
 import {TagDrilldown} from "app/model/tag-drilldown";
-import {PocDrilldownCommunicationService} from "./tag-drilldown-select.service";
+import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 
 @Component({
   selector: 'at-tag-list',
@@ -12,7 +12,7 @@ import {PocDrilldownCommunicationService} from "./tag-drilldown-select.service";
       <div *ngIf="this.isComplete" class="row card-group">
         <div class="col-4 tagboxContainer" *ngFor="let tag of tags">
           <div class="card tagbox" (selectEvent)="onNotify($event)">
-            <at-tag-drilldown-poc [node]="tag"></at-tag-drilldown-poc>
+            <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@ export class TagListComponent implements OnInit {
   private isComplete: boolean = false;
 
   constructor(tagService: TagsService, private router: Router,
-              private tagCommunicationService: PocDrilldownCommunicationService) {
+              private tagCommunicationService: TagCommService) {
     this.tagService = tagService;
 
     this.tagCommunicationService.selectEvent.subscribe(e => {

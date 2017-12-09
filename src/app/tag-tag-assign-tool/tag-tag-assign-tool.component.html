@@ -16,10 +16,35 @@
     <ng-container *ngIf="!loading">
       <div class="row" *ngFor="let tag of editTagList">
         <div class="col-md-8">
-          <at-tag-drilldown-container [parentSelect]="true" [tagDrilldown]="tag"></at-tag-drilldown-container>
+          <at-tag-drilldown-container [parentSelect]="true" [tagDrilldown]="tag">
+
+          </at-tag-drilldown-container>
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-md-8">
+        <span *ngIf="showAddTag()">
+                         <div class="input-group">
+                 <input #addTagBox class="form-control input-lg" type="text"
+                        placeholder="new tag"
+                        (keyup.enter)="addNewTag(addTagBox.value)"/>
+                       <span class="input-group-btn">
+                         <button class="btn btn-success btn"
+                                 (click)="toggleAddTag()">X</button>
+                         <button class="btn btn-success btn"
+                                 (click)="addNewTag(addTagBox.value)">
+    <fa [name]="'empire'"></fa>
+                       </button>
+      </span>
+               </div>
+        </span>
+          <span *ngIf="!showAddTag()">
+        <button class="btn btn-success btn"
+                (click)="toggleAddTag()">Add Tag </button>
+        </span>
+        </div>
+      </div>
     </ng-container>
 
   </div>
@@ -58,12 +83,32 @@
         </a></div>
     </div>
 
-    <div class="row card" style="margin:5px"
-         *ngFor="let tag of hopperTags"
-         (click)="removeFromTagsToAdd(tag)">
-      {{tag.name}}
-    </div>
-    <fa class="card-link" [name]="'rocket'"></fa>
+    <ng-container
+      *ngFor="let tag of hopperTags"
+    >
+      <div class="row {{showEditTag(tag.tag_id)? '': 'card'}}" style="margin:5px">
+      <span *ngIf="!showEditTag(tag.tag_id)" style="margin-right:15px;margin-left:15px"><span
+        (click)="removeFromTagsToAdd(tag)">{{tag.name}}</span>
+    <fa class="card-link" style="float:right; " [name]="'rocket'" (click)="editTagName(tag)"></fa>
+
+
+      </span>
+
+
+        <span *ngIf="showEditTag(tag.tag_id)" style="margin-right:15px;margin-left:15px">
+               <div class="input-group">
+                 <input #editTagBox class="form-control input-lg" type="text"
+                        placeholder="{{editTag.name}}"
+                        (keyup.enter)="saveTagNameEdit(editTagBox.value)"/>
+                       <span class="input-group-btn"><button class="btn btn-success btn"
+                                                             (click)="saveTagNameEdit(editTagBox.value)">
+    <fa [name]="'empire'"></fa>
+                       </button>
+      </span>
+               </div>
+      </span>
+      </div>
+    </ng-container>
   </div>
 
 

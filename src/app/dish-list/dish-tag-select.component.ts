@@ -101,6 +101,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
 
   }
 
+
   getAllTags() {
     this.tagService
       .getAllSelectable(this.tagTypes)

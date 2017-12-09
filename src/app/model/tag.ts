@@ -3,4 +3,5 @@ export interface Tag {
   name: string;
   description: string;
   tag_type: string;
+  is_inverted: boolean;
 }

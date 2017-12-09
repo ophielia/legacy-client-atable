@@ -15,8 +15,9 @@ import {TagCommService} from "../drilldown/tag-drilldown-select.service";
   styleUrls: ['./tag-tag-assign-tool.component.css']
 })
 export class TagTagAssignToolComponent implements OnInit, OnDestroy {
-  hopperTags: TagDrilldown[];
+  hopperTags: Tag[];
   showToRemove: boolean = false;
+  doShowAddTag: boolean = false;
   currentTagType: string = TagType.Rating;
   tagTypeList: string[] = TagType.listAll();
   selectedTag: Tag;
@@ -37,12 +38,11 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   private listLayout: ListLayout;
   private addLocked: boolean = true;
   private deleteLocked: boolean = true;
+  private editTag: Tag;
 
-  constructor(private listLayoutService: ListLayoutService,
-              private tagCommService: TagCommService,
+  constructor(private tagCommService: TagCommService,
               private tagService: TagsService,
-              private route: ActivatedRoute,
-              private router: Router,) {
+              private route: ActivatedRoute) {
     this.layoutId = this.route.snapshot.params['id'];
   }
 
@@ -102,18 +102,24 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   clearAllTagsToAdd() {
     this.hopperTags = [];
     this.showToAdd = false;
+    this.editTag = null;
   }
 
   addAllTagsToSelected() {
     this.showToAdd = false;
     this.loading = true;
+    var addTags = this.hopperTags;
+    this.hopperTags = [];
+    this.editTagList = [];
+    var listofids = addTags.map(t => t.tag_id);
+    var idstring = listofids.join(",");
+
     this.tagService
-      .assignTagsToTag(this.selectedTag.tag_id, this.hopperTags)
+      .assignTagsToTag(this.selectedTag.tag_id, idstring)
       .subscribe(r => {
         this.retrieveTagDrilldown();
         this.retrieveParentTags();
       });
-    this.hopperTags = [];
   }
 
   moveToBaseTag() {
@@ -151,7 +157,8 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
       var location = headers.get("Location");
       var splitlocation = location.split("/");
       var id = splitlocation[splitlocation.length - 1];
-      this.tagService.assignTagsToTag(id, tagsToAdd)
+      var listofids = tagsToAdd.map(t => t.tag_id).join(",");
+      this.tagService.assignTagsToTag(id, listofids)
         .subscribe(r => {
           this.retrieveParentTags();
           this.retrieveTagDrilldown();
@@ -181,6 +188,51 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
     if (this.tagsToAdd.length == 0) {
       this.showToAdd = false;
     }
+  }
+
+  editTagName(tag: Tag) {
+    // set the editTag variable
+    this.editTag = tag;
+  }
+
+  saveTagNameEdit(tagname: string) {
+    var updateTag: Tag = this.editTag;
+    this.editTag = null;
+    updateTag.name = tagname;
+    this.tagService.saveTag(updateTag)
+      .subscribe();
+    this.hopperTags.forEach(t => {
+      if (t.tag_id == updateTag.tag_id) {
+        t.name = updateTag.name;
+      }
+    })
+    this.editTag == null;
+  }
+
+  showEditTag(tag_id: string) {
+    if (!this.editTag) {
+      return false;
+    }
+    if (this.editTag.tag_id == tag_id) {
+      return true;
+    }
+    return false;
+  }
+
+  showAddTag() {
+    return this.doShowAddTag;
+  }
+
+  toggleAddTag() {
+    this.doShowAddTag = !this.doShowAddTag;
+  }
+
+  addNewTag(tagname: string) {
+    this.tagService.addTag(tagname, this.currentTagType)
+      .subscribe(r => {
+        console.log(`added!!! this.tagName`);
+        this.retrieveTagDrilldown();
+      });
   }
 
   clearAllTagsToRemove() {

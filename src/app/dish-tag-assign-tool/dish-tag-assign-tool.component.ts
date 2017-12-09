@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DishService} from "../dish-service.service";
@@ -11,11 +11,10 @@ import {TagsService} from "../tags.service";
   templateUrl: './dish-tag-assign-tool.component.html',
   styleUrls: ['./dish-tag-assign-tool.component.css']
 })
-export class DishTagAssignToolComponent implements OnInit {
+export class DishTagAssignToolComponent implements OnInit, OnDestroy {
   withTag: Dish[];
-  withoutTag: Dish[];
   errorMessage: any;
-  dishList: Dish[];
+  dishPool: Dish[];
   currentTag: any;
   tagCommService: TagCommService;
   private subTagEvent: any;
@@ -42,39 +41,48 @@ export class DishTagAssignToolComponent implements OnInit {
       });
   }
 
+  ngOnDestroy() {
+    this.subTagEvent.unsubscribe();
+  }
+
   getAllDishes() {
     this.loading = true;
-    this._dishService
-      .getAll()
-      .subscribe(p => {
-          this.dishList = p;
-          if (this.currentTag) {
-            this.withoutTag = this.filterWithoutTag();
-            this.withTag = this.filterWithTag();
+    this.dishPool = [];
+    this.withTag = [];
+    if (this.currentTag) {
+      var inclList: string[] = [this.currentTag.tag_id];
+      var exclList: string[] = [this.currentTag.tag_id];
+      this._dishService.findByTags(inclList, null)
+        .subscribe(p => {
+          this.withTag = p;
+          this._dishService.findByTags(null, exclList)
+            .subscribe(t => {
+              this.dishPool = t;
+              this.loading = false;
+            })
+        });
+    } else {
+      this._dishService
+        .getAll()
+        .subscribe(p => {
+            this.dishPool = p;
             this.loading = false;
-          }
 
-        },
-        e => this.errorMessage = e);
+
+          },
+          e => this.errorMessage = e);
+    }
+
   }
 
   clearCurrentTag() {
     this.currentTag = null;
-    this.withoutTag = null;
-    this.withTag = null;
+    this.getAllDishes();
   }
 
   setCurrentTag(tag: Tag) {
-    this.getAllDishes();
     this.currentTag = tag;
-  }
-
-  private filterWithTag(): Dish[] {
-    return this.dishList.filter(d => d.tags.some(t => t.tag_id == this.currentTag.tag_id))
-  }
-
-  private filterWithoutTag(): Dish[] {
-    return this.dishList.filter(d => d.tags.every(t => t.tag_id != this.currentTag.tag_id))
+    this.getAllDishes();
   }
 
   addTagToDish(dish_id: string) {

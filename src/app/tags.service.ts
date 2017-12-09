@@ -185,25 +185,12 @@ export class TagsService {
     return tags$;
   }
 
-  assignTagsToTag(tag_id: string, tagsToAdd: Tag[]) {
+  assignTagsToTag(tag_id: string, tagsToAdd: string) {
     //"{parentId}/child/{childId}"
     var basicUrl: string = this.tagUrl + "/tag/" + tag_id
-      + "/child/";
+      + "/children?tagIds=" + tagsToAdd;
     // create list of urls - 1 per hopperTag
-    let tag$ = null;
-    for (var i = 0; i < tagsToAdd.length; i++) {
-      // put together merge of urls
-      var tagUrl = basicUrl + tagsToAdd[i].tag_id;
-      if (tag$ == null) {
-        tag$ = this.http
-          .put(`${tagUrl}`, {headers: this.getHeaders()});
-      }
-      else {
-        tag$ = tag$.merge(this.http
-          .put(`${tagUrl}`, {headers: this.getHeaders()}));
-      }
-    }
-    // return observable
+    let tag$ = this.http.post(basicUrl, null, {headers: this.getHeaders()});
     return tag$;
   }
 
@@ -212,6 +199,7 @@ export class TagsService {
     var basicUrl: string = this.tagUrl + "/tag/basetag/child/";
     // create list of urls - 1 per hopperTag
     let tag$ = null;
+
     for (var i = 0; i < tagsToAdd.length; i++) {
       // put together merge of urls
       var tagUrl = basicUrl + tagsToAdd[i].tag_id;

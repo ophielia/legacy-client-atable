@@ -110,7 +110,7 @@ export class ShoppingListService {
 
   setListActive(shoppingListId: string) {
     var url = this.shoppingListUrl + "/shoppinglist/" + shoppingListId
-      + "?generateType=Replace";
+      + "?generateType=Add";
     return this
       .http
       .put(`${url}`, null,

@@ -1,44 +1,45 @@
 <div class="row">
   <div class="col-md-8">
-    <h2>Dishes</h2>
-    <!-- dish list (to add to meal plan) -->
-    <div class="row">
-      <div class="col-md-12"></div>
-
+    <h3>Assign Dishes To Tags </h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
       <div class="row">
-        <span *ngIf="loading">Loading</span>
-
-
-        <ng-container *ngIf="!currentTag">
-          <div *ngFor="let dish of dishList" class="col-md-3 card tagbox">{{dish.name}}</div>
-        </ng-container>
-        <ng-container *ngIf="currentTag">
-          <div *ngFor="let dish of withoutTag" class="col-md-3 card tagbox" (dblclick)="addTagToDish(dish.dish_id)">
-            {{dish.name}}
-          </div>
-        </ng-container>
-
+        <div class="col-md-12"><h4>Dishes</h4></div>
+      </div>
+    <div class="row" *ngIf="!loading">
+      <!--<div class="col-md-4">-->
+      <div *ngFor="let dish of dishPool, let i=index" class="card" style="margin:5px">
+        <div class="clearfix" *ngIf="i % 3 == 0"></div>
+        <div class="card-body tagbox" (dblclick)="addTagToDish(dish.dish_id) "><!---->
+          {{dish.name}}
+          <!--</div>-->
+        </div>
       </div>
     </div>
   </div>
+
   <div class="col-md-4">
-    <!-- tag area-->
     <div class="row">
-      <div *ngIf="!currentTag" class="col-md-10">
-        <at-dish-tag-select [tagTypes]="'Ingredient,NonEdible,Rating,TagType,DishType'"
-                            (tagSelected)="setCurrentTag($event)"></at-dish-tag-select>
-      </div>
-      <div *ngIf="currentTag">
+      <div class="col-md-12">
+        <div class="row" *ngIf="!currentTag" class="col-md-10">
+          <at-dish-tag-select [tagTypes]="'Ingredient,NonEdible,Rating,TagType,DishType'"
+                              (tagSelected)="setCurrentTag($event)"></at-dish-tag-select>
+        </div>
+        <div *ngIf="currentTag" class="row">
         <span>{{currentTag.name}}         <a class="btn btn-warning btn-sm"
                                              (click)="clearCurrentTag()">
         Change
           </a></span>
-        <div *ngFor="let dish of withTag" (dblclick)="deleteTagFromDish(dish.dish_id)">{{dish.name}}</div>
+        </div>
+        <div *ngFor="let dish of withTag" class="row" (dblclick)="deleteTagFromDish(dish.dish_id)">
+          {{dish.name}}
+        </div>
 
       </div>
     </div>
   </div>
 </div>
-
 
 

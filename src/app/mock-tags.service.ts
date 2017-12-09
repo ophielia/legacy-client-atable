@@ -3,9 +3,9 @@ import {Tag} from "./model/tag";
 import TType from "./model/tag-type";
 
 const TAGS: Tag[] = [
-  {tag_id: "1", name: 'carrot', description: 'orange', tag_type: TType.TagType},
-  {tag_id: "2", name: 'easy', description: 'easy to make', tag_type: TType.TagType},
-  {tag_id: "3", name: 'cheap', description: 'not expensive', tag_type: TType.TagType}
+  {tag_id: "1", name: 'carrot', description: 'orange', tag_type: TType.TagType, is_inverted: false},
+  {tag_id: "2", name: 'easy', description: 'easy to make', tag_type: TType.TagType, is_inverted: false},
+  {tag_id: "3", name: 'cheap', description: 'not expensive', tag_type: TType.TagType, is_inverted: false}
 ];
 
 @Injectable()

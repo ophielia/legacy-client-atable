@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
 import {TagsService} from "../tags.service";
 import {TagDrilldown} from "app/model/tag-drilldown";
 import {TagCommService} from "./tag-drilldown-select.service";
@@ -11,11 +11,11 @@ import {TagCommService} from "./tag-drilldown-select.service";
     </div>`,
   styleUrls: ['./tag-drilldown-container.css', '../shared.styles.css']
 })
-export class TagDrilldownContainer implements OnInit {
+export class TagDrilldownContainer implements OnInit, OnDestroy {
 
   @Input() tagDrilldown: TagDrilldown;
   @Input() parentSelect: boolean;
-  @Output() selectedDrilldown: EventEmitter<TagDrilldown> = new EventEmitter<TagDrilldown>();
+  //@Output() selectedDrilldown: EventEmitter<TagDrilldown> = new EventEmitter<TagDrilldown>();
   currentTag: TagDrilldown;
   private tagService: TagsService;
 
@@ -37,9 +37,12 @@ export class TagDrilldownContainer implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+
+  }
 
   onSelect(tag: TagDrilldown) {
-    this.selectedDrilldown.emit(tag);
+    //this.selectedDrilldown.emit(tag);
   }
 
 
