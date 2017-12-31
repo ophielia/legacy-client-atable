@@ -68,16 +68,14 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       });
   }
 
-  removeItem(item: Item) {
+  removeItem(categoryname: string, item: Item) {
 
     // remove Item from shopping list
     this.shoppingListService.removeItemFromShoppingList(this.shoppingListId, item.item_id)
-      .subscribe(p => {
-        this.refreshList(this.shoppingListId);
-      });
+      .subscribe(t => this.refreshList(this.shoppingListId));
     return false;
-
   }
+
 
   refreshList(id: string) {
     this.shoppingListService

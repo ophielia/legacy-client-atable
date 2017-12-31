@@ -1,0 +1,43 @@
+<div class="row">
+  <div *ngIf="!showAdd" class="col-sm-12">
+    <a class="btn btn-primary btn-lg"
+       (click)="showAddInput()">
+      Add new target
+    </a>
+  </div>
+  <div *ngIf="showAdd" class="col-sm-12">
+    <input #targetNameBox class="form-control input-lg" type="text"
+           placeholder="tag name"
+           (keyup.enter)="addTarget(targetNameBox.value)"/>
+    <a class="btn btn-primary btn-lg"
+       (click)="addTarget(targetNameBox.value)">
+      Save
+    </a>
+  </div>
+
+</div>
+<h2>List of Targets</h2>
+<section *ngIf="errorMessage">
+  {{errorMessage}}
+</section>
+<div class="row" *ngFor="let target of targets; let e=even; let f=first; let l=last"
+     ywActionable="#aaaaaa" (onAction)="edit(target.tag_id)"
+     [ngClass]="{ evenRow: e }"
+     [class.topRow]="f"
+     [class.bottomRow]="l">
+  <div class="col-sm-8">
+    <h4>{{target.target_id}}:{{target.target_name}}: {{target.created | date}} </h4>
+  </div>
+  <div class="col-sm-4" style="margin-top: 5px;">
+    <div class="pull-right">
+      <a class="btn btn-warning btn-sm"
+         [routerLink]="['/targets/edit', target.target_id]">
+        Edit
+      </a>
+      <a class="btn btn-danger btn-sm"
+         (click)="deleteTarget(target.target_id)">
+        Delete
+      </a>
+    </div>
+  </div>
+</div>

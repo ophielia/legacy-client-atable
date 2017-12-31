@@ -8,17 +8,11 @@ import {Item} from "./model/item";
 import {ShoppingList} from "./model/shoppinglist";
 import {ListLayout} from "./model/listlayout";
 import {ListLayoutCategory} from "./model/listcategory";
+import {Target} from "./model/target";
+import {TargetSlot} from "./model/target-slot";
 export default class MappingUtils {
 
   static toTag(r: any): Tag {
-    /*let tag = <Tag>({
-      tag_id: r.tag.tag_id,
-      name: r.tag.name,
-      description: r.tag.description,
-      tag_type: r.tag.tag_type
-    });
-
-     console.log('Parsed tag:', tag);*/
     return MappingUtils._toTag(r.tag);
   }
 
@@ -47,13 +41,26 @@ export default class MappingUtils {
     return dish;
   }
 
+  private static _toTargetSlot(r: any): TargetSlot {
+    let slot = <TargetSlot>({
+      target_slot_id: r.target_slot_id,
+      slot_dish_tag_id: r.slot_dish_tag_id,
+      slot_dish_tag: r.slot_dish_tag ? MappingUtils._toTag(r.slot_dish_tag) : null,
+      slot_tags: r.slot_tags ? r.slot_tags.map(MappingUtils.toTag) : null,
+      slot_order: r.slot_order,
+    });
+
+    console.log('Parsed target slot:', slot);
+    return slot;
+  }
+
   private static _toSlot(r: any): Slot {
     let slot = <Slot>({
       slot_id: r.slot_id,
       dish: MappingUtils._toDish(r.dish)
     });
 
-    console.log('Parsed tag:', slot);
+    console.log('Parsed slot:', slot);
     return slot;
   }
 
@@ -160,5 +167,26 @@ export default class MappingUtils {
 
     console.log('Parsed listlayout:', listlayouts);
     return listlayouts;
+  }
+
+  static _toTarget(r: any): Target {
+    let target = <Target>({
+      created: r.created,
+      target_tags: r.target_tags ? r.target_tags.map(MappingUtils._toTag) : null,
+      target_id: r.target_id,
+      user_id: r.user_id,
+      target_name: r.target_name,
+      last_used: r.last_used,
+      target_slots: r.target_slots ? r.target_slots.map(MappingUtils._toTargetSlot) : null,
+    });
+
+    return target;
+  }
+
+  static toTarget(r: any): Target {
+    let target = MappingUtils._toTarget(r.target);
+
+    console.log('Parsed target:', target);
+    return target;
   }
 }

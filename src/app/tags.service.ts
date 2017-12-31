@@ -33,7 +33,7 @@ export class TagsService {
   getAll(): Observable<Tag[]> {
     let tags$ = this.http
       .get(`${this.tagUrl}/tag`, {headers: this.getHeaders()})
-      .map(this.mapTags).catch(handleError);  // HERE: This is new!
+      .map(this.mapTags).catch(handleError);
     return tags$;
   }
 

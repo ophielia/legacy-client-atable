@@ -35,6 +35,9 @@ import {EditListLayoutComponent} from './list-layout-list/edit-list-layout.compo
 import {ListTagAssignToolComponent} from './list-layout-list/list-tag-assign-tool.component';
 import {TagTagAssignToolComponent} from './tag-tag-assign-tool/tag-tag-assign-tool.component';
 import {Angular2FontawesomeModule} from "angular2-fontawesome";
+import {TargetListComponent} from './target-list/target-list.component';
+import {TargetService} from "./target.service";
+import {TargetEditComponent} from './target-list/target-edit.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +62,8 @@ import {Angular2FontawesomeModule} from "angular2-fontawesome";
     EditListLayoutComponent,
     ListTagAssignToolComponent,
     TagTagAssignToolComponent,
+    TargetListComponent,
+    TargetEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,7 +73,7 @@ import {Angular2FontawesomeModule} from "angular2-fontawesome";
     DrilldownModule,
     Angular2FontawesomeModule
   ],
-  providers: [TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService],
+  providers: [TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService, TargetService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
