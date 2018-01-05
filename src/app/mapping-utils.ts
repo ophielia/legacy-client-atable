@@ -10,6 +10,9 @@ import {ListLayout} from "./model/listlayout";
 import {ListLayoutCategory} from "./model/listcategory";
 import {Target} from "./model/target";
 import {TargetSlot} from "./model/target-slot";
+import {Proposal} from "./model/proposal";
+import {ProposalSlot} from "./model/proposal-slot";
+import {ProposalDish} from "./model/proposal-dish";
 export default class MappingUtils {
 
   static toTag(r: any): Tag {
@@ -46,7 +49,7 @@ export default class MappingUtils {
       target_slot_id: r.target_slot_id,
       slot_dish_tag_id: r.slot_dish_tag_id,
       slot_dish_tag: r.slot_dish_tag ? MappingUtils._toTag(r.slot_dish_tag) : null,
-      slot_tags: r.slot_tags ? r.slot_tags.map(MappingUtils.toTag) : null,
+      slot_tags: r.slot_tags ? r.slot_tags.map(MappingUtils._toTag) : null,
       slot_order: r.slot_order,
     });
 
@@ -188,5 +191,53 @@ export default class MappingUtils {
 
     console.log('Parsed target:', target);
     return target;
+  }
+
+  static _toProposal(r: any): Proposal {
+    let proposal = <Proposal>({
+      created: r.created,
+      proposal_id: r.proposal_id,
+      user_id: r.user_id,
+      target_name: r.target_name,
+      last_used: r.last_used,
+      target_tags: r.target_tags ? r.target_tags.map(MappingUtils._toTag) : null,
+      proposal_slots: r.proposal_slots ? r.proposal_slots.map(MappingUtils._toProposalSlot) : null,
+    });
+
+    return proposal;
+  }
+
+  static toProposal(r: any): Proposal {
+    let proposal = MappingUtils._toProposal(r.proposal);
+
+    console.log('Parsed proposal:', proposal);
+    return proposal;
+  }
+
+  private static _toProposalSlot(r: any): ProposalSlot {
+    let slot = <ProposalSlot>({
+
+      slot_id: r.slot_id,
+      slot_dish_tag: MappingUtils._toTag(r.slot_dish_tag),
+      tags: r.slot_tags ? r.slot_tags.map(MappingUtils._toTag) : null,
+      dish_slot_list: r.dish_slot_list ? r.dish_slot_list.map(MappingUtils._toProposalDishList) : null,
+      slot_order: r.slot_order,
+      selected_dish_index: r.selected_dish_index,
+
+    });
+
+    console.log('Parsed proposal slot:', slot);
+    return slot;
+  }
+
+  private static _toProposalDishList(r: any): ProposalDish {
+    let dish = <ProposalDish>({
+      dish: MappingUtils._toDish(r.dish),
+      matched_tags: r.matched_tags ? r.matched_tags.map(MappingUtils._toTag) : null,
+
+    });
+
+    console.log('Parsed proposal dish:', dish);
+    return dish;
   }
 }

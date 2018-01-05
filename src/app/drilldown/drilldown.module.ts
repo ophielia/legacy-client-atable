@@ -7,6 +7,7 @@ import {HttpModule} from "@angular/http";
 import {routing} from "../app.routes";
 import {TagsService} from "../tags.service";
 import {CommonModule} from "@angular/common";
+import {Angular2FontawesomeModule} from "angular2-fontawesome";
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import {CommonModule} from "@angular/common";
     CommonModule,
     FormsModule,
     HttpModule,
-    routing
+    routing,
+    Angular2FontawesomeModule
   ],
   exports: [TagDrilldownContainer],
   providers: [TagsService, TagCommService]

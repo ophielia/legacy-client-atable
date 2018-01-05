@@ -35,7 +35,10 @@ export class TargetService {
   }
 
   private mapTargets(response: Response): Target[] {
+    if (response.json()._embedded.targetResourceList) {
     return response.json()._embedded.targetResourceList.map(MappingUtils.toTarget);
+    }
+    return null;
   }
 
   private mapTarget(response: Response): Target {
@@ -123,6 +126,56 @@ export class TargetService {
         {headers: this.getHeaders()});
   }
 
+  moveTagToTarget(target_id: string, tag_id: string, source_slot_id: string) {
+    var addTagUrl: string = this.baseUrl + '/target/'
+      + target_id + "/tag/" + tag_id;
+    var cleanupTagUrl: string = this.baseUrl + '/target/'
+      + target_id + "/slot/" + source_slot_id
+      + "/tag/" + tag_id;
+
+
+    let addTagCall = this
+      .http
+      .post(`${addTagUrl}`,
+        null,
+        {headers: this.getHeaders()});
+
+    let cleanupTagCall = this
+      .http
+      .delete(`${cleanupTagUrl}`,
+        {headers: this.getHeaders()});
+
+    return addTagCall.concat(cleanupTagCall);
+  }
+
+  moveTagToTargetSlot(target_id: string, tag_id: string, source_slot_id: string, dest_slot_id: string) {
+    var addTagUrl: string = this.baseUrl + '/target/'
+      + target_id + "/slot/" + dest_slot_id
+      + "/tag/" + tag_id;
+    var cleanupTagUrl: string;
+    if (source_slot_id) {
+      cleanupTagUrl = this.baseUrl + '/target/'
+        + target_id + "/slot/" + source_slot_id
+        + "/tag/" + tag_id;
+    } else {
+      // no source id - this was from the target, and should be deleted from the target
+      cleanupTagUrl = this.baseUrl + '/target/' + target_id + "/tag/" + tag_id;
+    }
+
+
+    let addTagCall = this
+      .http
+      .post(`${addTagUrl}`,
+        null,
+        {headers: this.getHeaders()});
+
+    let cleanupTagCall = this
+      .http
+      .delete(`${cleanupTagUrl}`,
+        {headers: this.getHeaders()});
+
+    return addTagCall.concat(cleanupTagCall);
+  }
 }
 
 function handleError(error: any) {

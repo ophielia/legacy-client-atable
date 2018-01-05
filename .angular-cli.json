@@ -20,8 +20,8 @@
       "prefix": "at",
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
-        "../node_modules/octicons/build/octicons.css",
         "../node_modules/font-awesome/css/font-awesome.css",
+        "../node_modules/dragula/dist/dragula.css",
         "styles.css"
       ],
       "scripts": [

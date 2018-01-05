@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3>Edit Proposal - {{proposal.target_name}} - {{proposal.proposal_id}}</h3>
+  </div>
+</div>
+<div class="row">
+  <!-- main proposal area -->
+  <div class="col-md-12">
+
+    <div>
+      <!-- top row with proposal name, proposal tags and add tag button -->
+      <div class="col-md-12">
+        <!-- proposal tags -->
+        <div class="row">
+          <div class="col-md-12">
+            <div><h4>Proposal Tags</h4></div>
+
+            <!-- list of slots -->
+            <div class="row">
+              <div class="col-md-2 border rounded-left bg-primary slotPuff">Proposal Tags</div>
+              <div class="col-md-10 border rounded-right slotPuff">
+                <span *ngFor="let tag of proposal.target_tags, let i = index"
+                      class="border bg-warning rounded"
+                      style="padding:3px;margin:3px;">
+                  {{tag.name}}
+                </span>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+        <!-- list of slots -->
+        <div class="row">
+
+          <div class="col-md-12">
+            <div><h4>Slots</h4></div>
+            <!-- list of slots -->
+            <div class="row" *ngFor="let slot of proposal.proposal_slots, let i = index">
+              <div class="col-md-2 border rounded-left bg-primary slotPuff">{{slot.slot_dish_tag.name}}</div>
+              <div class="col-md-10 border rounded-right slotPuff">
+                <span *ngFor="let proposaldish of slot.dish_slot_list"
+                      class="border bg-warning rounded"
+                      style="padding:3px;margin:3px;">
+                  {{proposaldish.dish.name}}
+                </span>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

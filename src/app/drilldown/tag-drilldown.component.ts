@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {TagDrilldown} from "../model/tag-drilldown";
-import {dash, plus} from "octicons";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {TagCommService} from "./tag-drilldown-select.service";
 
@@ -10,8 +9,8 @@ import {TagCommService} from "./tag-drilldown-select.service";
     <div class="drilldown-level-{{node.level}}" (dblclick)="notifyIsSelected(node)">{{node.name}} ({{node.level}})
       <button *ngIf="node.children.length > 0" (click)="showHideChildren(node)" type="button"
               class="btn btn-sm ">
-        <span *ngIf="!node.expanded" class="octicon " [innerHTML]="plusIcon"></span>
-        <span *ngIf="node.expanded" class="octicon " [innerHTML]="minusIcon"></span>
+        <span *ngIf="!node.expanded"><fa [name]="'empire'"></fa></span>
+        <span *ngIf="node.expanded"><fa [name]="'rocket'"></fa></span>
       </button>
 
     </div>
@@ -26,8 +25,7 @@ import {TagCommService} from "./tag-drilldown-select.service";
 export class TagDrilldownComponent implements OnInit {
   @Input() parentSelect: boolean;
   @Input() node;
-  public plusIcon: SafeHtml;
-  public minusIcon: SafeHtml;
+
 
   constructor(private sanitizer: DomSanitizer,
               private _tagDrilldownSelectService: TagCommService) {
@@ -35,8 +33,7 @@ export class TagDrilldownComponent implements OnInit {
 
   ngOnInit() {
     console.log('in drilldown component');
-    this.plusIcon = this.sanitizer.bypassSecurityTrustHtml(plus.toSVG());
-    this.minusIcon = this.sanitizer.bypassSecurityTrustHtml(dash.toSVG());
+
   }
 
   showHideChildren(tag: TagDrilldown) {

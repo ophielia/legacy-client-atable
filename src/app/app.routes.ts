@@ -19,6 +19,7 @@ import {ListTagAssignToolComponent} from "./list-layout-list/list-tag-assign-too
 import {TagTagAssignToolComponent} from "./tag-tag-assign-tool/tag-tag-assign-tool.component";
 import {TargetListComponent} from "./target-list/target-list.component";
 import {TargetEditComponent} from "./target-list/target-edit.component";
+import {ProposalEditComponent} from "app/proposal-edit/proposal-edit.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -42,6 +43,7 @@ const routes: Routes = [
   {path: 'tools/tagtotag', component: TagTagAssignToolComponent},
   {path: 'targets/list', component: TargetListComponent},
   {path: 'targets/edit/:id', component: TargetEditComponent},
+  {path: 'proposal/edit/:id', component: ProposalEditComponent},
   {path: 'mealplan/list', component: MealPlanListComponent},
   {path: 'mealplan/edit/:id', component: EditMealPlanComponent},
   {path: 'mealplan/delete/:id', component: MealPlanListComponent}, // MM will be delete component

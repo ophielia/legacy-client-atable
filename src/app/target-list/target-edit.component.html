@@ -18,11 +18,12 @@
             <!-- list of slots -->
             <div class="row">
               <div class="col-md-2 border rounded-left bg-primary slotPuff">Target Tags</div>
-              <div class="col-md-9 border slotPuff">
+              <div class="col-md-9 border slotPuff" [dragula]='"first_bag"' [attr.data-is-target]="true">
                 <span *ngFor="let tag of target.target_tags, let i = index"
                       (click)="removeTagFromTarget(tag.tag_id)"
                       class="border bg-warning rounded"
-                      style="padding:3px;margin:3px;">
+                      style="padding:3px;margin:3px;"
+                      [attr.data-id]="tag.tag_id">
                   {{tag.name}}
                 </span>
               </div>
@@ -41,7 +42,14 @@
             <!-- list of slots -->
             <div class="row" *ngFor="let slot of target.target_slots, let i = index">
               <div class="col-md-2 border rounded-left bg-primary slotPuff">{{slot.slot_dish_tag.name}}</div>
-              <div class="col-md-9 border slotPuff">. . .</div>
+              <div class="col-md-9 border slotPuff" [dragula]='"first_bag"' [attr.data-id]="slot.target_slot_id">
+                <span *ngFor="let tag of slot.slot_tags"
+                      class="border bg-warning rounded"
+                      style="padding:3px;margin:3px;"
+                      [attr.data-id]="tag.tag_id">
+                  {{tag.name}}
+                </span>
+              </div>
               <div class="col-md-1 border rounded-right bg-warning slotPuff"
                    (click)="deleteSlot(slot.target_slot_id)">Delete
               </div>

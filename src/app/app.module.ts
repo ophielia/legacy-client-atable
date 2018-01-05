@@ -38,6 +38,9 @@ import {Angular2FontawesomeModule} from "angular2-fontawesome";
 import {TargetListComponent} from './target-list/target-list.component';
 import {TargetService} from "./target.service";
 import {TargetEditComponent} from './target-list/target-edit.component';
+import {DragulaModule} from "ng2-dragula";
+import {ProposalService} from "./proposal.service";
+import {ProposalEditComponent} from "app/proposal-edit/proposal-edit.component";
 
 @NgModule({
   declarations: [
@@ -64,6 +67,7 @@ import {TargetEditComponent} from './target-list/target-edit.component';
     TagTagAssignToolComponent,
     TargetListComponent,
     TargetEditComponent,
+    ProposalEditComponent
   ],
   imports: [
     BrowserModule,
@@ -71,9 +75,10 @@ import {TargetEditComponent} from './target-list/target-edit.component';
     HttpModule,
     routing,
     DrilldownModule,
-    Angular2FontawesomeModule
+    Angular2FontawesomeModule,
+    DragulaModule
   ],
-  providers: [TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService, TargetService],
+  providers: [TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService, TargetService, ProposalService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -7,6 +7,7 @@ import {TargetService} from "../target.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TagsService} from "../tags.service";
 import TagType from "../model/tag-type";
+import {DragulaService} from "ng2-dragula";
 
 @Component({
   selector: 'at-target-edit',
@@ -33,6 +34,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
 
 
   constructor(private targetService: TargetService,
+              private dragulaService: DragulaService,
               private tagService: TagsService,
               tagCommService: TagCommService,
               private route: ActivatedRoute,
@@ -55,6 +57,12 @@ export class TargetEditComponent implements OnInit, OnDestroy {
       .subscribe(selectevent => {
         this.addTagToTarget(selectevent);
       })
+
+    this.dragulaService.drop.subscribe((value) => {
+      let [bagName, item, destination, source] = value;
+      this.tagMoved(item.dataset.id, destination.dataset.id, source.dataset.id);
+
+    });
     this.filterTags = [];
     // fill slot tag ids
     this.tagService
@@ -121,6 +129,26 @@ export class TargetEditComponent implements OnInit, OnDestroy {
     this.targetService
       .getById(targetid)
       .subscribe(p => this.target = p);
+
+  }
+
+  private tagMoved(tag_id: string, dest_slot_id: string, source_slot_id: string) {
+    console.log("tag has been dropped" + tag_id);
+    console.log("tag has been dropped" + dest_slot_id);
+
+    if (!dest_slot_id) {
+      // slot to target move
+      // moveTagToTarget()
+      this.target.target_tags = null;
+      this.targetService.moveTagToTarget(this.targetId, tag_id, source_slot_id)
+        .subscribe();
+      //.subscribe(p=> {this.refreshTarget(this.targetId)});
+    } else {
+      // target to slot move or slot to slot move
+      this.targetService.moveTagToTargetSlot(this.targetId, tag_id, source_slot_id, dest_slot_id)
+        .subscribe();
+      //.subscribe(p=> {this.refreshTarget(this.targetId)});
+    }
 
   }
 }
