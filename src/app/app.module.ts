@@ -41,6 +41,7 @@ import {TargetEditComponent} from './target-list/target-edit.component';
 import {DragulaModule} from "ng2-dragula";
 import {ProposalService} from "./proposal.service";
 import {ProposalEditComponent} from "app/proposal-edit/proposal-edit.component";
+import {ProposalSlotComponentComponent} from './proposal-slot-component/proposal-slot-component.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import {ProposalEditComponent} from "app/proposal-edit/proposal-edit.component";
     TagTagAssignToolComponent,
     TargetListComponent,
     TargetEditComponent,
-    ProposalEditComponent
+    ProposalEditComponent,
+    ProposalSlotComponentComponent
   ],
   imports: [
     BrowserModule,

@@ -64,7 +64,10 @@ export class DishService {
   mapDishes(response: Response): Dish[] {
     // The response of the API has a results
     // property with the actual results
+    if (response.json()._embedded && response.json()._embedded.dishResourceList) {
     return response.json()._embedded.dishResourceList.map(MappingUtils.toDish);
+    }
+    return null;
   }
 
   mapDish(response: Response): Dish {

@@ -31,6 +31,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
   target: Target = <Target>{target_id: "", target_name: ""};
   sub: any;
   private errorMessage: string;
+  private proposalId: string;
 
 
   constructor(private targetService: TargetService,
@@ -113,6 +114,18 @@ export class TargetEditComponent implements OnInit, OnDestroy {
     console.log("slot added to target");
   }
 
+  generateProposal() {
+    this.targetService.generateProposal(this.targetId)
+      .subscribe(r => {
+        console.log(`added!!! mealPlan`)
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        //    this.getAllDishes();
+        this.router.navigate(['/proposal/edit', id]);
+      });
+  }
 
   private _fillSlots(rawlist: Tag[]) {
     this.dishSlotTagIds = new Map();
@@ -128,7 +141,10 @@ export class TargetEditComponent implements OnInit, OnDestroy {
   private refreshTarget(targetid: any) {
     this.targetService
       .getById(targetid)
-      .subscribe(p => this.target = p);
+      .subscribe(p => {
+        this.target = p;
+        this.proposalId = this.target.proposal_id;
+      });
 
   }
 

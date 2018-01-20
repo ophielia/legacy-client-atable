@@ -39,9 +39,87 @@ export class ProposalService {
 
 
   private mapProposal(response: Response): Proposal {
-    return MappingUtils.toProposal(response.json());
+    let proposal = MappingUtils.toProposal(response.json());
+    for (var i = 0; i < proposal.proposal_slots.length; i++) {
+      let slot = proposal.proposal_slots[i];
+      if (slot.selected_dish_index > -1) {
+        let dish = slot.dish_slot_list[slot.selected_dish_index];
+        dish.selected = true;
+      }
+    }
+    return proposal;
   }
 
+  selectDishForSlot(proposalId: string, slot_id: string, dish_id: string) {
+    let url = this.baseUrl + "/proposal/"
+      + proposalId
+      + "/slot/"
+      + slot_id
+      + "/dish/"
+      + dish_id;
+
+
+    let proposal$ = this.http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+    return proposal$;
+  }
+
+  clearDishFromSlot(proposalId: string, slot_id: string, dish_id: string) {
+    let url = this.baseUrl + "/proposal/"
+      + proposalId
+      + "/slot/"
+      + slot_id
+      + "/dish/"
+      + dish_id;
+
+
+    let proposal$ = this.http
+      .delete(`${url}`,
+        {headers: this.getHeaders()});
+    return proposal$;
+  }
+
+  generateMealPlan(proposalId: string) {
+    let url = this.baseUrl + "/mealplan/proposal/"
+      + proposalId;
+
+
+    let proposal$ = this.http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+    return proposal$;
+  }
+
+  refreshProposal(proposalId: string, direction: string) {
+    let url = this.baseUrl + "/proposal/"
+      + proposalId
+      + "?direction="
+      + direction;
+
+
+    let proposal$ = this.http
+      .put(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+    return proposal$;
+  }
+
+  refreshProposalSlot(proposalId: string, slot_id: string) {
+    let url = this.baseUrl + "/proposal/"
+      + proposalId
+      + "/slot/"
+      + slot_id;
+
+
+    let proposal$ = this.http
+      .put(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+    return proposal$;
+  }
 }
 
 function handleError(error: any) {

@@ -9,9 +9,10 @@ import {TagCommService} from "./tag-drilldown-select.service";
     <div class="drilldown-level-{{node.level}}" (dblclick)="notifyIsSelected(node)">{{node.name}} ({{node.level}})
       <button *ngIf="node.children.length > 0" (click)="showHideChildren(node)" type="button"
               class="btn btn-sm ">
-        <span *ngIf="!node.expanded"><fa [name]="'empire'"></fa></span>
-        <span *ngIf="node.expanded"><fa [name]="'rocket'"></fa></span>
+        <span *ngIf="!node.expanded"><fa [name]="'plus'"></fa></span>
+        <span *ngIf="node.expanded"><fa [name]="'minus'"></fa></span>
       </button>
+      <span style="margin-left:3px" [routerLink]="['/edit', node.tag_id]"><fa [name]="'pencil'"></fa></span>
 
     </div>
     <ul *ngIf="node.expanded" class="tagboxList">

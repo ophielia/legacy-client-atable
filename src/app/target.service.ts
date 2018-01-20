@@ -34,16 +34,6 @@ export class TargetService {
     return targets$;
   }
 
-  private mapTargets(response: Response): Target[] {
-    if (response.json()._embedded.targetResourceList) {
-    return response.json()._embedded.targetResourceList.map(MappingUtils.toTarget);
-    }
-    return null;
-  }
-
-  private mapTarget(response: Response): Target {
-    return MappingUtils.toTarget(response.json());
-  }
 
   getById(target_id: any) {
     let target$ = this.http
@@ -175,6 +165,27 @@ export class TargetService {
         {headers: this.getHeaders()});
 
     return addTagCall.concat(cleanupTagCall);
+  }
+
+  generateProposal(target_id: string) {
+    var url: string = this.baseUrl + '/proposal/target/' + target_id;
+
+    return this
+      .http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+  }
+
+  private mapTargets(response: Response): Target[] {
+    if (response.json()._embedded && response.json()._embedded.targetResourceList) {
+      return response.json()._embedded.targetResourceList.map(MappingUtils.toTarget);
+    }
+    return null;
+  }
+
+  private mapTarget(response: Response): Target {
+    return MappingUtils.toTarget(response.json());
   }
 }
 

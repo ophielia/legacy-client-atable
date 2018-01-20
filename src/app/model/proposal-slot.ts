@@ -7,6 +7,7 @@ export interface ProposalSlot {
   dish_slot_list: ProposalDish[];
   slot_order: number;
   selected_dish_index: number;
+  selected_dish_id: string;
 }
 
 

@@ -1,6 +1,16 @@
 <div class="row">
-  <div class="col-md-8">
+  <div class="{{showTagSelect?'col-md-6':'col-md-10'}} ">
     <h3>Edit Target - {{target.target_name}} - {{target.target_id}}</h3>
+  </div>
+  <div class="col-md-2 ">
+    <a *ngIf="proposalId" class="btn btn-success"
+       [routerLink]="['/proposal/edit', target.proposal_id]">
+      View Proposal
+    </a>
+    <span *ngIf="!proposalId" class="btn btn-success"
+          (click)="generateProposal()">
+      Generate Proposal
+                </span>
   </div>
 </div>
 <div class="row">

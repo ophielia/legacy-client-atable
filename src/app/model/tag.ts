@@ -3,5 +3,7 @@ export interface Tag {
   name: string;
   description: string;
   tag_type: string;
+  assign_select: boolean;
+  search_select: boolean;
   is_inverted: boolean;
 }

@@ -13,37 +13,55 @@
     <div class="col-sm-6">
       <input #tagDescriptionBox class="form-control input-lg" type="text"
              [value]="tag.description"
-             placeholder="site name"
+             placeholder="description"
              (keyup)="tag.description=tagDescriptionBox.value"
              (keyup.enter)="save()"/>
       <input type="hidden" value="{{tag.tag_id}}"/>
     </div>
   </div>
 
-  <div class="row" >
-  <div class="col-sm-6">
-    <div>
-      <select name="tag_type" [(ngModel)]="tag.tag_type">
-        <option *ngFor="let tt of tagType" [value]="tt">{{tt}}</option>
-      </select>
+  <div class="row">
+    <div class="col-sm-6">
+      <div>
+        <select name="tag_type" [(ngModel)]="tag.tag_type">
+          <option *ngFor="let tt of tagType" [value]="tt">{{tt}}</option>
+        </select>
+      </div>
     </div>
   </div>
-</div>
 
 
-<div class="row" style="margin-top: 12px;">
-  <div class="col-sm-6">
-    <button class="btn btn-success btn"
-            (click)="save()"
-            [disabled]="!tag.name">
-      Save
-    </button>
-    <a class="btn btn-warning btn"
-       routerLink="/list">
-      Cancel
-    </a>
+  <div class="row">
+    <div class="col-sm-6">
+      <div>
+        <label>Selectable for Assign</label>
+        <input type="checkbox" name="assign_select" [(ngModel)]="tag.assign_select"/>
+      </div>
+    </div>
   </div>
-</div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div>
+        <label>Selectable for Search</label>
+        <input type="checkbox" name="search_select" [(ngModel)]="tag.search_select"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 12px;">
+    <div class="col-sm-6">
+      <button class="btn btn-success btn"
+              (click)="save()"
+              [disabled]="!tag.name">
+        Save
+      </button>
+      <a class="btn btn-warning btn"
+         routerLink="/list">
+        Cancel
+      </a>
+    </div>
+  </div>
 
 
 </div>

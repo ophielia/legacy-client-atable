@@ -114,6 +114,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
           }
         },
         e => this.errorMessage = e);
+
   }
 
   filterTags() {

@@ -5,6 +5,7 @@ export interface Target {
   target_tags: Tag[];
   target_id: string;
   user_id: string;
+  proposal_id: string;
   target_name: string;
   last_used: number;
   target_slots: TargetSlot[];

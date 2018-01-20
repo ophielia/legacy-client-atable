@@ -2,6 +2,19 @@
   <div class="col-md-8">
     <h3>Edit Proposal - {{proposal.target_name}} - {{proposal.proposal_id}}</h3>
   </div>
+  <div class="col-md-3 ">
+    <a *ngIf="allSelected" class="btn btn-success"
+       (click)="generateMealPlan()">
+      Generate Meal Plan
+    </a>
+    <span class="btn btn-warning border rounded-left"
+          (click)="doRefreshProposal('DOWN')"><fa [name]="'empire'"></fa></span>
+    <span class="btn btn-success"
+          (click)="doRefreshProposal('UP')">Refresh Proposal</span>
+    <span class="btn btn-warning border rounded-right"
+          (click)="doRefreshProposal('UP')"><fa [name]="'rocket'"></fa></span>
+
+  </div>
 </div>
 <div class="row">
   <!-- main proposal area -->
@@ -35,16 +48,55 @@
 
           <div class="col-md-12">
             <div><h4>Slots</h4></div>
+
+
             <!-- list of slots -->
             <div class="row" *ngFor="let slot of proposal.proposal_slots, let i = index">
+
+
               <div class="col-md-2 border rounded-left bg-primary slotPuff">{{slot.slot_dish_tag.name}}</div>
-              <div class="col-md-10 border rounded-right slotPuff">
-                <span *ngFor="let proposaldish of slot.dish_slot_list"
-                      class="border bg-warning rounded"
-                      style="padding:3px;margin:3px;">
+              <div class="col-md-9 border rounded-right slotPuff">
+                <div class="row">
+                  <ng-container *ngFor="let proposaldish of slot.dish_slot_list, let j = index">
+                    <div *ngIf="!proposaldish.selected && showAll(slot.selected_dish_index)"
+                         class="col-md-2 border border-warning rounded non-selected-dish"
+                         style="padding:3px;margin:3px;"
+                         (mouseenter)="displayDetails(proposaldish.dish.dish_id)"
+                         (mouseleave)="hideDetails(proposaldish.dish.dish_id)"
+                         (click)="selectDishForSlot(proposaldish.dish.dish_id,slot.slot_id,j)">
                   {{proposaldish.dish.name}}
-                </span>
+                      <div *ngIf="showDishDetails(proposaldish.dish.dish_id)"
+                           class="bg-warning" style="color:white;text-align:center">
+                        <div *ngFor="let tag of proposaldish.matched_tags">
+                          {{tag.name}}
+                        </div>
+                        <div>{{getDishDisplayDate(proposaldish.dish.last_added)}}</div>
+                      </div>
+                    </div>
+                    <div *ngIf="proposaldish.selected"
+                         class="col-md-2 border bg-warning rounded "
+                         style="padding:3px;margin:3px "
+                         (mouseenter)="displayDetails(proposaldish.dish.dish_id)"
+                         (mouseleave)="hideDetails(proposaldish.dish.dish_id)"
+                         (click)="clearDishFromSlot(proposaldish.dish.dish_id,slot.slot_id)">
+                      {{proposaldish.dish.name}}
+                      <div *ngIf="showDishDetails(proposaldish.dish.dish_id)"
+                           class="border border-warning rounded non-selected-dish"
+                           style="background-color:white;text-align:center">
+                        <div *ngFor="let tag of proposaldish.matched_tags">
+                          {{tag.name}}
+                        </div>
+                        <div>{{getDishDisplayDate(proposaldish.dish.last_added)}}</div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
               </div>
+              <div class="col-md-1 border vertical-center rounded-right bg-warning slotPuff"
+                   style="font-size:2rem;text-align:center" (click)="addToSlot(slot.slot_id)">
+                <fa [name]="'plus'"></fa>
+              </div>
+
 
             </div>
 

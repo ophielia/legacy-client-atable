@@ -24,6 +24,8 @@ export default class MappingUtils {
       tag_id: r.tag_id,
       name: r.name,
       description: r.description,
+      search_select: r.search_select,
+      assign_select: r.assign_select,
       tag_type: r.tag_type
     });
 
@@ -178,6 +180,7 @@ export default class MappingUtils {
       target_tags: r.target_tags ? r.target_tags.map(MappingUtils._toTag) : null,
       target_id: r.target_id,
       user_id: r.user_id,
+      proposal_id: r.proposal_id,
       target_name: r.target_name,
       last_used: r.last_used,
       target_slots: r.target_slots ? r.target_slots.map(MappingUtils._toTargetSlot) : null,
@@ -223,6 +226,7 @@ export default class MappingUtils {
       dish_slot_list: r.dish_slot_list ? r.dish_slot_list.map(MappingUtils._toProposalDishList) : null,
       slot_order: r.slot_order,
       selected_dish_index: r.selected_dish_index,
+      selected_dish_id: r.selected_dish_id,
 
     });
 
@@ -234,7 +238,7 @@ export default class MappingUtils {
     let dish = <ProposalDish>({
       dish: MappingUtils._toDish(r.dish),
       matched_tags: r.matched_tags ? r.matched_tags.map(MappingUtils._toTag) : null,
-
+      selected: false
     });
 
     console.log('Parsed proposal dish:', dish);

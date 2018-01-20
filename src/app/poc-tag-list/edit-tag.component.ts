@@ -11,7 +11,15 @@ import {Tag} from "../model/tag";
 export class PocEditTagComponent implements OnInit, OnDestroy {
   tagId: string;
   tagName: string;
-  tag: Tag = {tag_id: "", name: "", description: "", tag_type: "", is_inverted: false};
+  tag: Tag = {
+    tag_id: "",
+    name: "",
+    description: "",
+    tag_type: "",
+    assign_select: false,
+    search_select: false,
+    is_inverted: false
+  };
   sub: any;
   private errorMessage: string;
   tagType: string[];
