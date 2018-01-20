@@ -8,6 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import TagType from "../model/tag-type";
 import {TagDrilldown} from "../model/tag-drilldown";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
+import TagSelectType from "../model/tag-select-type";
 
 @Component({
   selector: 'at-tag-tag-assign-tool',
@@ -25,7 +26,7 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   private showToAdd: boolean = false;
   private subTagEvent: any;
   private createNewGroupFlag: boolean = false;
-
+  currentSelectType: string = TagSelectType.All;
 
   tagsToRemove: Tag[];
   categoryTags: Tag[];
