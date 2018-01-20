@@ -1,16 +1,21 @@
 <h4>Tags</h4>
 <div *ngIf="showSearch()">
-  <div><input [(ngModel)]="searchValue" class="form-control input-lg" placeholder="Search"
-              (keyup.enter)="checkSearchEnter(focusanchor);"
-              (keyup)="filterTags()" #focusanchor/>
+  <div>
+    <p-autoComplete [(ngModel)]="autoSelectedTag"
+                    [suggestions]="filteredTags"
+                    (completeMethod)="acFilterTags($event)"
+                    field="name" [size]="30"
+                    (onSelect)="bingo($event)"
+                    (keyup.enter)="checkSearchEnter(focusanchor)"
+                    placeholder="try this" [minLength]="1" #focusanchor></p-autoComplete>
     <span (click)="setSearch(false)">Browse (search is showing)</span></div>
   <hr/>
   <!-- <div *ngFor="let indtag of alltags | tagFilter:searchBox.value" class="tagboxContainer">-->
-  <div *ngFor="let indtag of filteredTags" class="tagboxContainer">
+  <!--<div *ngFor="let indtag of filteredTags" class="tagboxContainer">
 
 
     <div (click)="showSelected(indtag)">{{indtag.name}}</div>
-  </div>
+  </div>-->
 
   <div *ngIf="showAddTags">
 

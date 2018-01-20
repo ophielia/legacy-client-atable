@@ -42,6 +42,8 @@ import {DragulaModule} from "ng2-dragula";
 import {ProposalService} from "./proposal.service";
 import {ProposalEditComponent} from "app/proposal-edit/proposal-edit.component";
 import {ProposalSlotComponentComponent} from './proposal-slot-component/proposal-slot-component.component';
+import {AutoCompleteModule} from "primeng/primeng";
+
 
 @NgModule({
   declarations: [
@@ -78,7 +80,8 @@ import {ProposalSlotComponentComponent} from './proposal-slot-component/proposal
     routing,
     DrilldownModule,
     Angular2FontawesomeModule,
-    DragulaModule
+    DragulaModule,
+    AutoCompleteModule
   ],
   providers: [TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService, TargetService, ProposalService],
   bootstrap: [AppComponent]

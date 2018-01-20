@@ -23,6 +23,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   expandFoldState: Map<string, boolean> = new Map<string, boolean>();
   includedTypes: Map<string, boolean> = new Map<string, boolean>();
   showAddTags: boolean;
+  autoSelectedTag: Tag;
   dishTypeTags: TagDrilldown[];
   ingredientTags: TagDrilldown[];
   generalTags: TagDrilldown[];
@@ -99,6 +100,25 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     }
   }
 
+  acFilterTags(event) {
+    if (event.query) {
+      if (this.alltags) {
+        let filterBy = event.query.toLocaleLowerCase();
+        this.filteredTags = this.alltags.filter((tag: Tag) =>
+        tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
+        this.showAddTags = this.filteredTags.length == 0;
+      }
+    } else {
+      this.filteredTags = null;
+    }
+  }
+
+  bingo(event) {
+    this.tagSelected.emit(event);
+    this.autoSelectedTag = null;
+    this.filteredTags = [];
+  }
+
   ngOnDestroy() {
 
   }
@@ -107,7 +127,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     if (this.lastSelectedId != tag.tag_id) {
       this.lastSelectedId = tag.tag_id;
       console.log('showing from drilldown select container-' + tag.tag_id);
-      this.searchValue = null;
+      this.autoSelectedTag = null;
       this.tagSelected.emit(tag);
     }
   }
@@ -116,10 +136,11 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     // when the user clicks on return from the search box
     // if only one tag is in the list, select this tag
     if (this.filteredTags.length == 1) {
-      this.showSelected(this.filteredTags[0]);
-      this.searchValue = null;
+      this.bingo(this.filteredTags[0]);
       if (el) {
-        el.focus();
+        el.panelVisible = false;
+
+        //el.focus();
       }
     }
   }
