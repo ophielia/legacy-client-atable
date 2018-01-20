@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {DishService} from "../dish-service.service";
 import {TagDrilldown} from "../model/tag-drilldown";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
+import TagSelectType from "../model/tag-select-type";
 
 @Component({
   selector: 'at-edit-dish',
@@ -19,6 +20,7 @@ export class EditDishComponent implements OnInit, OnDestroy {
   private errorMessage: string;
   private tagCommService: TagCommService;
   selectedTag: TagDrilldown;
+  selectType: string = TagSelectType.Assign;
 
 
   constructor(private dishService: DishService,

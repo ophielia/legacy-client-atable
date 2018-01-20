@@ -29,6 +29,7 @@
         <div *ngIf="showFilter" class="col-md-4">
           <div>
             <at-dish-tag-select [tagTypes]="'Ingredient,Rating,TagType,DishType'"
+                                [selectType]="selectType"
                                 (tagSelected)="addTagToFilter($event)">
 
             </at-dish-tag-select>

@@ -8,10 +8,10 @@ export default class TagType {
 
   public static listAll(): string[] {
     let all = [
+      TagType.DishType,
+      TagType.Ingredient,
       TagType.TagType,
       TagType.Rating,
-      TagType.Ingredient,
-      TagType.DishType,
       TagType.NonEdible
     ];
 

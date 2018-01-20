@@ -5,6 +5,7 @@ import {DishService} from "../dish-service.service";
 import {Dish} from "../model/dish";
 import {Tag} from "../model/tag";
 import {TagsService} from "../tags.service";
+import TagSelectType from "../model/tag-select-type";
 
 @Component({
   selector: 'at-dish-tag-assign-tool',
@@ -17,6 +18,7 @@ export class DishTagAssignToolComponent implements OnInit, OnDestroy {
   dishPool: Dish[];
   currentTag: any;
   tagCommService: TagCommService;
+  selectType: string = TagSelectType.Assign;
   private subTagEvent: any;
   private _dishService: DishService;
   private tagService: TagsService;

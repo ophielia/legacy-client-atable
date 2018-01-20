@@ -5,6 +5,7 @@ import {ShoppingList} from "../model/shoppinglist";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 import {Tag} from "../model/tag";
 import {Item} from "../model/item";
+import TagSelectType from "../model/tag-select-type";
 
 @Component({
   selector: 'at-edit-shopping-list',
@@ -17,6 +18,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private subTagEvent: any;
   shoppingList: ShoppingList = <ShoppingList>{list_id: "", list_type: ""};
   private tagCommService: TagCommService;
+  selectType: string = TagSelectType.Assign;
   @Output() tagEvent: EventEmitter<Tag> = new EventEmitter<Tag>();
 
 

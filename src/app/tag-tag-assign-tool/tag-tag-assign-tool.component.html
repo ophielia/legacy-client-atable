@@ -16,7 +16,8 @@
     <ng-container *ngIf="!loading">
       <div class="row" *ngFor="let tag of editTagList">
         <div class="col-md-8">
-          <at-tag-drilldown-container [parentSelect]="true" [tagDrilldown]="tag">
+          <at-tag-drilldown-container [tagDrilldown]="tag">
+            <!--<at-tag-drilldown-container [parentSelect]="true" [tagDrilldown]="tag">-->
 
           </at-tag-drilldown-container>
         </div>

@@ -7,6 +7,7 @@ import {Slot} from "../model/slot";
 import {DishService} from "../dish-service.service";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 import {Tag} from "../model/tag";
+import TagSelectType from "../model/tag-select-type";
 
 @Component({
   selector: 'at-edit-meal-plan',
@@ -33,6 +34,7 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
   mealPlanId: string;
   name: string;
   showFilter: boolean = true;
+  selectType: string = TagSelectType.Search;
 
   mealPlan: MealPlan = <MealPlan>{meal_plan_id: "", name: ""};
   sub: any;

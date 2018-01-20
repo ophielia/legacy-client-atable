@@ -8,6 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {TagsService} from "../tags.service";
 import TagType from "../model/tag-type";
 import {DragulaService} from "ng2-dragula";
+import TagSelectType from "../model/tag-select-type";
 
 @Component({
   selector: 'at-target-edit',
@@ -18,6 +19,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
   slotsFilled: boolean;
   dishSlotTags: any;
   dishSlotTagIds: Map<string, string>;
+  selectType: string = TagSelectType.Search;
 
   filterTags: Tag[];
   subTagEvent: any;
@@ -67,7 +69,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
     this.filterTags = [];
     // fill slot tag ids
     this.tagService
-      .getAllSelectable(TagType.DishType)
+      .getAllSelectable(TagType.DishType, TagSelectType.Search)
       .subscribe(p => {
           this._fillSlots(p);
           this.slotsFilled = true;

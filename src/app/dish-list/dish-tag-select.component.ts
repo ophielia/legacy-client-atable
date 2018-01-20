@@ -4,6 +4,7 @@ import {TagDrilldown} from "../model/tag-drilldown";
 import {TagsService} from "../tags.service";
 import {Tag} from "../model/tag";
 import TagType from "../model/tag-type";
+import TagSelectType from "../model/tag-select-type";
 
 @Component({
   selector: 'at-dish-tag-select',
@@ -12,10 +13,11 @@ import TagType from "../model/tag-type";
 export class DishTagSelectComponent implements OnInit, OnDestroy {
   @Output() tagSelected: EventEmitter<Tag> = new EventEmitter<Tag>();
   @Input() tagTypes: string;
+  @Input() selectType: string = TagSelectType.Assign;
   name: string;
   dish: Dish = <Dish>{dish_id: "", name: "", description: ""};
   private errorMessage: string;
-
+  currentSelect: string;
   searchValue: string;
   selectedTag: TagDrilldown;
   expandFoldState: Map<string, boolean> = new Map<string, boolean>();
@@ -27,6 +29,8 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   ratingTags: TagDrilldown[];
   nonEdibleTags: TagDrilldown[];
 
+  allTagTypes: string[];
+  allDrilldowns: { [type: string]: TagDrilldown[] } = {};
   lastSelectedId: string = "";
   alltags: Tag[];
   filteredTags: Tag[];
@@ -40,63 +44,28 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   searchBoxValue: string;
 
   constructor(private tagService: TagsService) {
-
+    this.allTagTypes = TagType.listAll();
   }
 
   ngOnInit() {
-    // get / fill tag lists here from service
-    if (this.tagTypes.includes(TagType.DishType)) {
-      this.includedTypes[TagType.DishType] = true;
-      this.tagService
-        .getTagDrilldownList("DishType")
-        .subscribe(p => this.dishTypeTags = p,
-          e => this.errorMessage = e);
-    } else {
-      this.includedTypes[TagType.DishType] = false;
+    for (var i = 0; i < this.allTagTypes.length; i++) {
+      let ttype = this.allTagTypes[i];
+      // get / fill tag lists here from service
+      if (this.tagTypes.includes(ttype)) {
+        this.includedTypes[ttype] = true;
+        this.tagService
+          .getTagDrilldownList(ttype)
+          .subscribe(p => {
+            this.allDrilldowns[ttype] = p
+          });
+      } else {
+        this.includedTypes[ttype] = false;
+      }
+      this.expandFoldState[ttype] = false;
     }
-
-    if (this.tagTypes.includes(TagType.Ingredient)) {
-      this.includedTypes[TagType.Ingredient] = true;
-      this.tagService
-        .getTagDrilldownList("Ingredient")
-        .subscribe(p => this.ingredientTags = p,
-          e => this.errorMessage = e);
-    } else {
-      this.includedTypes[TagType.Ingredient] = false;
-    }
-    if (this.tagTypes.includes(TagType.TagType)) {
-      this.includedTypes[TagType.TagType] = true;
-      this.tagService
-        .getTagDrilldownList("TagType")
-        .subscribe(p => this.generalTags = p,
-          e => this.errorMessage = e);
-    } else {
-      this.includedTypes[TagType.TagType] = false;
-    }
-    if (this.tagTypes.includes(TagType.Rating)) {
-      this.includedTypes[TagType.Rating] = true;
-      this.tagService
-        .getTagDrilldownList("Rating")
-        .subscribe(p => this.ratingTags = p,
-          e => this.errorMessage = e);
-    } else {
-      this.includedTypes[TagType.Rating] = false;
-    }
-    if (this.tagTypes.includes(TagType.NonEdible)) {
-      this.includedTypes[TagType.NonEdible] = true;
-      this.tagService
-        .getTagDrilldownList("NonEdible")
-        .subscribe(p => this.nonEdibleTags = p,
-          e => this.errorMessage = e);
-    } else {
-      this.includedTypes[TagType.NonEdible] = false;
-    }
-    this.expandFoldState['DishType'] = false;
-    this.expandFoldState['Ingredient'] = false;
-    this.expandFoldState['TagType'] = false;
-    this.expandFoldState['Rating'] = false;
 
     this.searchValue = null;
+    this.currentSelect = this.selectType;
     this.getAllTags();
 
   }
@@ -104,7 +73,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
 
   getAllTags() {
     this.tagService
-      .getAllSelectable(this.tagTypes)
+      .getAllSelectable(this.tagTypes, this.selectType)
       .subscribe(p => {
           this.alltags = p;
           this.showAddTags = (this.alltags.length == 0);

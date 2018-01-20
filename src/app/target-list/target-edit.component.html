@@ -94,6 +94,7 @@
       <div *ngIf="showTagSelect" class="col-md-10">
         <div>
           <at-dish-tag-select [tagTypes]="'Ingredient,Rating,TagType,DishType'"
+                              [selectType]="selectType"
                               (tagSelected)="addTagToTarget($event)">
 
           </at-dish-tag-select>

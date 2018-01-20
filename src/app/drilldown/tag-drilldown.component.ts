@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from "@angular/core";
 import {TagDrilldown} from "../model/tag-drilldown";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {TagCommService} from "./tag-drilldown-select.service";
+import TagSelectType from "../model/tag-select-type";
 
 @Component({
   selector: 'at-tag-drilldown',
@@ -17,15 +18,17 @@ import {TagCommService} from "./tag-drilldown-select.service";
     </div>
     <ul *ngIf="node.expanded" class="tagboxList">
       <li *ngFor="let node of node.children">
-        <at-tag-drilldown [node]="node" [parentSelect]="parentSelect"></at-tag-drilldown>
+        <at-tag-drilldown [node]="node" [selectType]="currentSelect"></at-tag-drilldown>
       </li>
     </ul>
   `,
   styleUrls: ['./tag-drilldown.component.css']
 })
 export class TagDrilldownComponent implements OnInit {
-  @Input() parentSelect: boolean;
+  //@Input() parentSelect: boolean;
+  @Input() selectType: string;
   @Input() node;
+  currentSelect: string;
 
 
   constructor(private sanitizer: DomSanitizer,
@@ -34,7 +37,7 @@ export class TagDrilldownComponent implements OnInit {
 
   ngOnInit() {
     console.log('in drilldown component');
-
+    this.currentSelect = this.selectType;
   }
 
   showHideChildren(tag: TagDrilldown) {
@@ -44,10 +47,25 @@ export class TagDrilldownComponent implements OnInit {
 
   notifyIsSelected(tag: TagDrilldown) {
     console.log('child clicked');
-    if (tag.children.length == 0 || this.parentSelect) {
+    if (this.isSelectable(tag)) {
       console.log('child clicked and event fired');
       this._tagDrilldownSelectService.selected(tag);
     }
+  }
+
+  private isSelectable(tag: TagDrilldown) {
+    if (this.selectType == TagSelectType.All) {
+      return true;
+    }
+    if (this.selectType == TagSelectType.Assign
+      && tag.assign_select) {
+      return true;
+    }
+    if (this.selectType == TagSelectType.Search
+      && tag.search_select) {
+      return true;
+    }
+    return false;
   }
 }
 

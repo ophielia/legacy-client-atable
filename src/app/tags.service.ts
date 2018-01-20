@@ -7,6 +7,7 @@ import "rxjs/add/operator/map";
 import {TagDrilldown} from "./model/tag-drilldown";
 import MappingUtils from "./mapping-utils";
 import TType from "./model/tag-type";
+import TagSelectType from "./model/tag-select-type";
 
 
 const tagType: string[] = TType.listAll();
@@ -37,9 +38,15 @@ export class TagsService {
     return tags$;
   }
 
-  getAllSelectable(tagTypes: string): Observable<Tag[]> {
+  getAllSelectable(tagTypes: string, selectType: string): Observable<Tag[]> {
+    let searchString = "ForSelectAssign";
+    if (selectType == TagSelectType.Search) {
+      searchString = "ForSelectSearch";
+    }
+    let url = this.tagUrl + "/tag?filter="
+      + searchString + "&tag_type=" + tagTypes;
     let tags$ = this.http
-      .get(`${this.tagUrl}/tag?filter=ForSelectAssig&tag_type=` + tagTypes, {headers: this.getHeaders()})
+      .get(`${url}`, {headers: this.getHeaders()})
       .map(this.mapTags).catch(handleError);
     return tags$;
   }

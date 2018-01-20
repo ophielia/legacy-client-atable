@@ -116,6 +116,8 @@ export default class MappingUtils {
       "tag_type": r.tag_type,
       "parent_id": r.parent_id,
       "children_ids": r.children_ids,
+      "assign_select": r.assign_select,
+      "search_select": r.search_select,
       "expanded": false,
       "level": 1,
       "children": []
