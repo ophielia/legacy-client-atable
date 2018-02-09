@@ -20,6 +20,7 @@ import {TagTagAssignToolComponent} from "./tag-tag-assign-tool/tag-tag-assign-to
 import {TargetListComponent} from "./target-list/target-list.component";
 import {TargetEditComponent} from "./target-list/target-edit.component";
 import {ProposalEditComponent} from "app/proposal-edit/proposal-edit.component";
+import {RatingTagAssignToolComponent} from "./rating-tag-assign-tool/rating-tag-assign-tool.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -48,6 +49,7 @@ const routes: Routes = [
   {path: 'mealplan/edit/:id', component: EditMealPlanComponent},
   {path: 'mealplan/delete/:id', component: MealPlanListComponent}, // MM will be delete component
   {path: 'tools/dishtotag', component: DishTagAssignToolComponent},
+  {path: 'tools/ratingtag', component: RatingTagAssignToolComponent},
   {path: '', redirectTo: 'dish/list', pathMatch: 'full'}
 ];
 

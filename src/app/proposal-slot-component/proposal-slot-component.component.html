@@ -1,0 +1,19 @@
+<div class="col-md-2 border rounded-left bg-primary slotPuff">{{slot.slot_dish_tag.name}}</div>
+<div class="col-md-10 border rounded-right slotPuff">
+  <div class="row">
+    <ng-container *ngFor="let proposaldish of slot.dish_slot_list">
+      <div *ngIf="!proposaldish.selected"
+           class="col-md-2 border border-warning rounded non-selected-dish"
+           style="padding:3px;margin:3px;"
+           (click)="selectDishForSlot(proposaldish.dish.dish_id,slot.slot_id)">
+        {{proposaldish.dish.name}}
+      </div>
+      <div *ngIf="proposaldish.selected"
+           class="col-md-2 border bg-warning rounded "
+           style="padding:3px;margin:3px "
+           (click)="clearDishFromSlot(proposaldish.dish.dish_id,slot.slot_id)">
+        {{proposaldish.dish.name}}
+      </div>
+    </ng-container>
+  </div>
+</div>

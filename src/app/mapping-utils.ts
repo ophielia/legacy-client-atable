@@ -26,6 +26,9 @@ export default class MappingUtils {
       description: r.description,
       search_select: r.search_select,
       assign_select: r.assign_select,
+      power: r.power,
+      dishes: r.dishes ? r.dishes.map(MappingUtils._toDish) : null,
+      is_inverted: false,
       tag_type: r.tag_type
     });
 
@@ -205,6 +208,7 @@ export default class MappingUtils {
       user_id: r.user_id,
       target_name: r.target_name,
       last_used: r.last_used,
+      can_be_refreshed: r.can_be_refreshed,
       target_tags: r.target_tags ? r.target_tags.map(MappingUtils._toTag) : null,
       proposal_slots: r.proposal_slots ? r.proposal_slots.map(MappingUtils._toProposalSlot) : null,
     });

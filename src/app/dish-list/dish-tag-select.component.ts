@@ -14,21 +14,17 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   @Output() tagSelected: EventEmitter<Tag> = new EventEmitter<Tag>();
   @Input() tagTypes: string;
   @Input() selectType: string = TagSelectType.Assign;
+
+
   name: string;
   dish: Dish = <Dish>{dish_id: "", name: "", description: ""};
   private errorMessage: string;
   currentSelect: string;
-  searchValue: string;
   selectedTag: TagDrilldown;
   expandFoldState: Map<string, boolean> = new Map<string, boolean>();
   includedTypes: Map<string, boolean> = new Map<string, boolean>();
   showAddTags: boolean;
-  autoSelectedTag: Tag;
-  dishTypeTags: TagDrilldown[];
-  ingredientTags: TagDrilldown[];
-  generalTags: TagDrilldown[];
-  ratingTags: TagDrilldown[];
-  nonEdibleTags: TagDrilldown[];
+  autoSelectedTag: any;
 
   allTagTypes: string[];
   allDrilldowns: { [type: string]: TagDrilldown[] } = {};
@@ -36,13 +32,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   alltags: Tag[];
   filteredTags: Tag[];
 
-  ingredientType: string = TagType.Ingredient;
-  dishType: string = TagType.DishType;
-  ratingType: string = TagType.Rating;
-  tagType: string = TagType.TagType;
-  nonEdible: string = TagType.NonEdible;
   isSearch = true;
-  searchBoxValue: string;
 
   constructor(private tagService: TagsService) {
     this.allTagTypes = TagType.listAll();
@@ -65,7 +55,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
       this.expandFoldState[ttype] = false;
     }
 
-    this.searchValue = null;
+    this.autoSelectedTag = null;
     this.currentSelect = this.selectType;
     this.getAllTags();
 
@@ -78,29 +68,12 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
       .subscribe(p => {
           this.alltags = p;
           this.showAddTags = (this.alltags.length == 0);
-          if (this.searchValue) {
-            this.filterTags();
-            this.checkSearchEnter(null);
-          }
         },
         e => this.errorMessage = e);
 
   }
 
-  filterTags() {
-    if (this.searchValue) {
-      if (this.alltags) {
-        let filterBy = this.searchValue.toLocaleLowerCase();
-        this.filteredTags = this.alltags.filter((tag: Tag) =>
-        tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
-        this.showAddTags = this.filteredTags.length == 0;
-      }
-    } else {
-      this.filteredTags = null;
-    }
-  }
-
-  acFilterTags(event) {
+  filterTags(event) {
     if (event.query) {
       if (this.alltags) {
         let filterBy = event.query.toLocaleLowerCase();
@@ -139,8 +112,6 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
       this.bingo(this.filteredTags[0]);
       if (el) {
         el.panelVisible = false;
-
-        //el.focus();
       }
     }
   }
@@ -168,12 +139,12 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   }
 
   add(tagType: string) {
-    var tagName = this.searchValue;
+    var tagName = this.autoSelectedTag;
     console.log("tag type is " + tagType);
     this.tagService.addTag(tagName, tagType)
       .subscribe(r => {
         console.log(`added!!! this.tagName`);
-        this.searchValue = null;
+        this.autoSelectedTag = null;
         var headers = r.headers;
         var location = headers.get("Location");
         var splitlocation = location.split("/");

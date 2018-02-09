@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3>Rating Tags </h3>
+  </div>
+</div>
+<div class="row justify-content-around ">
+  <div class="col-md-2" *ngFor="let tag of ratingTags">
+    <span class="card border-primary text-primary" (click)="selectRatingType(tag.tag_id)" style="text-align:center">{{tag.name}}</span>
+  </div>
+</div>
+
+<div class="row" style="margin-top:10px;">
+  <div class="col-md-10">
+    <div class="row ">
+
+      <div *ngFor="let tag of ratingSubTags, let i = index" class="col-md-6 mb-2">
+        <div class="clearfix" *ngIf="i % 2 == 0"></div>
+        <div class="">
+          <div class="border mx-auto  bg-warning text-white text-center rounded"
+               [dragula]='"first_bag"' [attr.data-is-target]="false"
+          >
+            <span [attr.data-id]="tag.tag_id" [attr.data-is-tag]="true">{{tag.name}}</span></div>
+          <div class="row">
+            <div class="col-md-4" *ngFor="let dish of tag.dishes, let j = index" [dragula]='"first_bag"'
+                 [attr.data-is-target]="false">
+              <div class="clearfix" *ngIf="j % 3 ==0"></div>
+              <div class="border text-truncate border-warning mb-1 rounded non-selected-dish"
+                   [attr.data-id]="dish.dish_id" [attr.data-is-tag]="false"> {{dish.name}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <div class="col-md-2 ">
+    <div class="row sticky-top ">
+      <div class="col-md-12 ">
+        <ng-container *ngFor="let tag of ratingSubTags">
+          <div *ngIf="tag.power > 0"
+               class="row border mb-3  bg-warning text-white text-center rounded"
+               [dragula]='"first_bag"' [attr.data-id]="tag.tag_id" [attr.data-is-target]="true">
+            {{tag.name}}
+          </div>
+        </ng-container>
+      </div>
+
+    </div>
+

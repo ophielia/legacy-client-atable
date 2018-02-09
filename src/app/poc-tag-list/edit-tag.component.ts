@@ -18,6 +18,8 @@ export class PocEditTagComponent implements OnInit, OnDestroy {
     tag_type: "",
     assign_select: false,
     search_select: false,
+    power: null,
+    dishes: [],
     is_inverted: false
   };
   sub: any;

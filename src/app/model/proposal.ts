@@ -7,5 +7,6 @@ export interface Proposal {
   target_name: string;
   last_used: number;
   target_tags: Tag[];
+  can_be_refreshed: boolean;
   proposal_slots: ProposalSlot[];
 }

@@ -33,11 +33,9 @@ export class EditDishComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      let id = params['id'];
-      console.log('getting dish with id: ', id);
-      this.dishService
-        .getById(id)
-        .subscribe(p => this.dish = p);
+      this.dishId = params['id'];
+      console.log('getting dish with id: ', this.dishId);
+      this.refreshDish();
     });
     this.subTagEvent = this.tagCommService.selectEvent
       .subscribe(selectevent => {
@@ -63,6 +61,12 @@ export class EditDishComponent implements OnInit, OnDestroy {
       });
   }
 
+  refreshDish() {
+    this.dishService
+      .getById(this.dishId)
+      .subscribe(p => this.dish = p);
+  }
+
   deleteTag(tag: TagDrilldown) {
     // remove tag from model
     this.dish.tags = this.dish.tags.filter(t => t.tag_id != tag.tag_id);
@@ -78,12 +82,13 @@ export class EditDishComponent implements OnInit, OnDestroy {
       // tag already in dish - don't add again
       return;
     }
+
     // add tag in back end
     var dishtags = this.dish.tags.slice(0);
     dishtags.push(tag);
     this.dish.tags = dishtags;
     this.dishService.addTagToDish(this.dish.dish_id, tag.tag_id)
-      .subscribe();
+      .subscribe(p => this.refreshDish());
     return false;
   }
 

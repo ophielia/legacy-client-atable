@@ -10,6 +10,8 @@ const TAGS: Tag[] = [
     tag_type: TType.TagType,
     assign_select: false,
     search_select: false,
+    dishes: null,
+    power: null,
     is_inverted: false
   },
   {
@@ -19,6 +21,8 @@ const TAGS: Tag[] = [
     tag_type: TType.TagType,
     assign_select: false,
     search_select: false,
+    dishes: null,
+    power: null,
     is_inverted: false
   },
   {
@@ -28,6 +32,8 @@ const TAGS: Tag[] = [
     tag_type: TType.TagType,
     assign_select: false,
     search_select: false,
+    dishes: null,
+    power: null,
     is_inverted: false
   }
 ];

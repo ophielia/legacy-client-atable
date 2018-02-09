@@ -7,13 +7,14 @@
        (click)="generateMealPlan()">
       Generate Meal Plan
     </a>
+    <ng-container *ngIf="proposal.can_be_refreshed">
     <span class="btn btn-warning border rounded-left"
           (click)="doRefreshProposal('DOWN')"><fa [name]="'empire'"></fa></span>
-    <span class="btn btn-success"
-          (click)="doRefreshProposal('UP')">Refresh Proposal</span>
-    <span class="btn btn-warning border rounded-right"
-          (click)="doRefreshProposal('UP')"><fa [name]="'rocket'"></fa></span>
-
+      <span class="btn btn-success"
+            (click)="doRefreshProposal('UP')">Refresh Proposal</span>
+      <span class="btn btn-warning border rounded-right"
+            (click)="doRefreshProposal('UP')"><fa [name]="'rocket'"></fa></span>
+    </ng-container>
   </div>
 </div>
 <div class="row">

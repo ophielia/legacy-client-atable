@@ -224,6 +224,25 @@ export class TagsService {
   }
 
 
+  getDishesForRatingTags(selectedRatingId: number) {
+    var url = this.tagUrl + "/tag/" + selectedRatingId + "/children/dish";
+    let tags$ = this.http
+      .get(`${url}`, {headers: this.getHeaders()})
+      .map(this.mapTags).catch(handleError);
+    return tags$;
+  }
+
+
+  replaceTagsInDishes(fromTagId: string, toTagId: string) {
+    var url = this.tagUrl + "/tag/" + fromTagId + "/dish/" + toTagId;
+
+    let tag$ = this.http
+      .put(`${url}`, null,
+        {headers: this.getHeaders()});
+
+    return tag$;
+  }
+
 }
 
 

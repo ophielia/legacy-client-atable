@@ -43,35 +43,12 @@ import {ProposalService} from "./proposal.service";
 import {ProposalEditComponent} from "app/proposal-edit/proposal-edit.component";
 import {ProposalSlotComponentComponent} from './proposal-slot-component/proposal-slot-component.component';
 import {AutoCompleteModule} from "primeng/primeng";
+import {RatingTagAssignToolComponent} from './rating-tag-assign-tool/rating-tag-assign-tool.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    PocTagListComponent,
-    PocAddTagComponent,
-    PocEditTagComponent,
-    PocDeleteTagComponent,
-    DishTagSelectComponent,
-    HomeComponent,
-    TagListComponent,
-    LoginComponent,
-    DishListComponent,
-    EditDishComponent,
-    MealPlanListComponent,
-    EditMealPlanComponent,
-    ShoppingListListComponent,
-    EditShoppingListComponent,
-    SingleListComponent,
-    DishTagAssignToolComponent,
-    ListLayoutListComponent,
-    EditListLayoutComponent,
-    ListTagAssignToolComponent,
-    TagTagAssignToolComponent,
-    TargetListComponent,
-    TargetEditComponent,
-    ProposalEditComponent,
-    ProposalSlotComponentComponent
   ],
   imports: [
     BrowserModule,

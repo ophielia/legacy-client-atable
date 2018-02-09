@@ -3,20 +3,13 @@
   <div>
     <p-autoComplete [(ngModel)]="autoSelectedTag"
                     [suggestions]="filteredTags"
-                    (completeMethod)="acFilterTags($event)"
+                    (completeMethod)="filterTags($event)"
                     field="name" [size]="30"
                     (onSelect)="bingo($event)"
                     (keyup.enter)="checkSearchEnter(focusanchor)"
-                    placeholder="try this" [minLength]="1" #focusanchor></p-autoComplete>
+                    placeholder="search tag" [minLength]="1" #focusanchor></p-autoComplete>
     <span (click)="setSearch(false)">Browse (search is showing)</span></div>
   <hr/>
-  <!-- <div *ngFor="let indtag of alltags | tagFilter:searchBox.value" class="tagboxContainer">-->
-  <!--<div *ngFor="let indtag of filteredTags" class="tagboxContainer">
-
-
-    <div (click)="showSelected(indtag)">{{indtag.name}}</div>
-  </div>-->
-
   <div *ngIf="showAddTags">
 
     <ng-container *ngFor="let ttype of allTagTypes">
