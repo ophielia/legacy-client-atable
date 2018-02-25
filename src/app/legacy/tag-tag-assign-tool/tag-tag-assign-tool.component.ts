@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Tag} from "../../model/tag";
+import {ITag} from "../../model/tag";
 import {ListLayoutCategory} from "../../model/listcategory";
 import {ListLayout} from "../../model/listlayout";
 import {ListLayoutService} from "../../services/list-layout.service";
@@ -16,21 +16,21 @@ import TagSelectType from "../../model/tag-select-type";
   styleUrls: ['./tag-tag-assign-tool.component.css']
 })
 export class TagTagAssignToolComponent implements OnInit, OnDestroy {
-  hopperTags: Tag[];
+  hopperTags: ITag[];
   showToRemove: boolean = false;
   doShowAddTag: boolean = false;
   currentTagType: string = TagType.Rating;
   tagTypeList: string[] = TagType.listAll();
-  selectedTag: Tag;
-  parentTags: Tag[];
+  selectedTag: ITag;
+  parentTags: ITag[];
   private showToAdd: boolean = false;
   private subTagEvent: any;
   private createNewGroupFlag: boolean = false;
   currentSelectType: string = TagSelectType.All;
 
-  tagsToRemove: Tag[];
-  categoryTags: Tag[];
-  tagsToAdd: Tag[];
+  tagsToRemove: ITag[];
+  categoryTags: ITag[];
+  tagsToAdd: ITag[];
   private editTagList: TagDrilldown[];
   private errorMessage: string;
   private loading: boolean = false;
@@ -39,7 +39,7 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   private listLayout: ListLayout;
   private addLocked: boolean = true;
   private deleteLocked: boolean = true;
-  private editTag: Tag;
+  private editTag: ITag;
 
   constructor(private tagCommService: TagCommService,
               private tagService: TagsService,
@@ -94,7 +94,7 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   }
 
 
-  selectAssignTag(tag: Tag) {
+  selectAssignTag(tag: ITag) {
     this.selectedTag = tag;
     this.addLocked = false;
   }
@@ -169,7 +169,7 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
 
   }
 
-  selectTagToAdd(tag: Tag) {
+  selectTagToAdd(tag: ITag) {
     if (this.addLocked) {
       return;
     }
@@ -183,7 +183,7 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
     this.showToAdd = true;
   }
 
-  removeFromTagsToAdd(tag: Tag) {
+  removeFromTagsToAdd(tag: ITag) {
     this.hopperTags = this.hopperTags
       .filter(p => p !== tag);
     if (this.tagsToAdd.length == 0) {
@@ -191,13 +191,13 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
     }
   }
 
-  editTagName(tag: Tag) {
+  editTagName(tag: ITag) {
     // set the editTag variable
     this.editTag = tag;
   }
 
   saveTagNameEdit(tagname: string) {
-    var updateTag: Tag = this.editTag;
+    var updateTag: ITag = this.editTag;
     this.editTag = null;
     updateTag.name = tagname;
     this.tagService.saveTag(updateTag)
@@ -236,17 +236,5 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
       });
   }
 
-  clearAllTagsToRemove() {
-    this.categoryTags = this.categoryTags.concat(this.tagsToRemove);
-    this.tagsToRemove = [];
-    this.showToRemove = false;
-  }
 
-
-  private retrieveCategoryTags(category_id: string) {
-
-    this.tagService
-      .getTagsForLayoutCategory(this.listLayout.layout_id, category_id)
-      .subscribe(p => this.categoryTags = p);
-  }
 }

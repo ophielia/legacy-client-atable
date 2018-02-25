@@ -1,4 +1,4 @@
-import {Tag} from "./tag";
+import {ITag} from "./tag";
 import {ProposalSlot} from "./proposal-slot";
 export interface Proposal {
   created: number;
@@ -6,7 +6,7 @@ export interface Proposal {
   user_id: string;
   target_name: string;
   last_used: number;
-  target_tags: Tag[];
+  target_tags: ITag[];
   can_be_refreshed: boolean;
   proposal_slots: ProposalSlot[];
 }

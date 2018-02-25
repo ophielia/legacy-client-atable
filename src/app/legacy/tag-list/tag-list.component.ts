@@ -1,52 +1,32 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, Output, EventEmitter} from "@angular/core";
+import {ITag} from "../../model/tag";
 import {Router} from "@angular/router";
 import {TagsService} from "../../services/tags.service";
-import {TagDrilldown} from "app/model/tag-drilldown";
-import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 
 @Component({
   selector: 'at-tag-list',
-  template: `
-    <div>
-      <h2>Tag Drilldown <span *ngIf="selectedTag">Selected: {{selectedTag.name}}</span></h2>
-      <div *ngIf="this.isComplete" class="row card-group">
-        <div class="col-4 tagboxContainer" *ngFor="let tag of tags">
-          <div class="card tagbox" (selectEvent)="onNotify($event)">
-            <at-tag-drilldown-container [tagDrilldown]="tag"></at-tag-drilldown-container>
-          </div>
-        </div>
-      </div>
-    </div>`,
-  styleUrls: ['./tag-list.component.css', '../../shared.styles.css']
+  templateUrl: './tag-list.component.html',
+  styleUrls: ['./tag-list.component.css']
 })
 export class TagListComponent implements OnInit {
 
   private tagService: TagsService;
-  selectedTag: TagDrilldown;
-  tags: TagDrilldown[] = [];
+  tags: ITag[] = [];
   errorMessage: string;
-  private isComplete: boolean = false;
 
-  constructor(tagService: TagsService, private router: Router,
-              private tagCommunicationService: TagCommService) {
+  constructor(tagService: TagsService, private router: Router) {
     this.tagService = tagService;
-
-    this.tagCommunicationService.selectEvent.subscribe(e => {
-      this.onSelect(e);
-    });
   }
 
+  edit(tagId : string) {
+    this.router.navigate(['/dish/edit', tagId]);
+  }
 
   ngOnInit() {
-    this.tagService
-      .getTagDrilldownList(null)
-      .subscribe(p => this.tags = p,
-        e => this.errorMessage = e,
-        () => this.isComplete = true);
-  }
-
-  onSelect(tag: TagDrilldown) {
-    this.selectedTag = tag;
+      this.tagService
+        .getAll()
+        .subscribe(p => this.tags = p,
+          e => this.errorMessage = e);
   }
 
 }

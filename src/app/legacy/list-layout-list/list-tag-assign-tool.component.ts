@@ -3,7 +3,7 @@ import {ListLayoutService} from "../../services/list-layout.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ListLayout} from "../../model/listlayout";
 import {TagsService} from "../../services/tags.service";
-import {Tag} from "../../model/tag";
+import {ITag} from "../../model/tag";
 import {ListLayoutCategory} from "../../model/listcategory";
 
 @Component({
@@ -13,11 +13,11 @@ import {ListLayoutCategory} from "../../model/listcategory";
 })
 export class ListTagAssignToolComponent implements OnInit, OnDestroy {
   showToRemove: boolean = false;
-  tagsToRemove: Tag[];
-  categoryTags: Tag[];
-  tagsToAdd: Tag[];
+  tagsToRemove: ITag[];
+  categoryTags: ITag[];
+  tagsToAdd: ITag[];
   selectedCategory: ListLayoutCategory;
-  private unCatTagList: Tag[];
+  private unCatTagList: ITag[];
   private layoutId: string;
   private subGetId: any;
   private listLayout: ListLayout;
@@ -68,7 +68,7 @@ export class ListTagAssignToolComponent implements OnInit, OnDestroy {
   }
 
   retrieveTags(id: string) {
-    this.tagService
+    this.listLayoutService
       .getUncategorizedTags(id)
       .subscribe(p => {
         this.unCatTagList = p;
@@ -90,7 +90,7 @@ export class ListTagAssignToolComponent implements OnInit, OnDestroy {
     this.addLocked = false;
   }
 
-  selectTagToAdd(tag: Tag) {
+  selectTagToAdd(tag: ITag) {
     if (this.addLocked) {
       return;
     }
@@ -104,7 +104,7 @@ export class ListTagAssignToolComponent implements OnInit, OnDestroy {
     this.showToAdd = true;
   }
 
-  selectTagToRemove(tag: Tag) {
+  selectTagToRemove(tag: ITag) {
     if (this.deleteLocked) {
       return;
     }
@@ -118,7 +118,7 @@ export class ListTagAssignToolComponent implements OnInit, OnDestroy {
     this.showToRemove = true;
   }
 
-  removeFromTagsToAdd(tag: Tag) {
+  removeFromTagsToAdd(tag: ITag) {
     this.tagsToAdd = this.tagsToAdd
       .filter(p => p !== tag);
     if (this.tagsToAdd.length == 0) {
@@ -126,7 +126,7 @@ export class ListTagAssignToolComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeFromTagsToRemove(tag: Tag) {
+  removeFromTagsToRemove(tag: ITag) {
     this.tagsToRemove = this.tagsToRemove
       .filter(p => p !== tag);
     if (this.tagsToRemove.length == 0) {
@@ -164,7 +164,7 @@ export class ListTagAssignToolComponent implements OnInit, OnDestroy {
 
   private retrieveCategoryTags(category_id: string) {
 
-    this.tagService
+    this.listLayoutService
       .getTagsForLayoutCategory(this.listLayout.layout_id, category_id)
       .subscribe(p => this.categoryTags = p);
   }

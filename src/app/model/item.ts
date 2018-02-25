@@ -1,4 +1,4 @@
-import {Tag} from "./tag";
+import {ITag} from "./tag";
 export interface Item {
   list_id: string;
   item_id: string;
@@ -8,6 +8,6 @@ export interface Item {
   crossed_off: number;
   tag_id: string;
   used_count: number;
-  tag: Tag;
+  tag: ITag;
 }
 

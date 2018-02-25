@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row page-title dish-text-color">Add Tags</div>
+  <div class="row">
+    <div class="col-9" style="padding-left:0px;">
+      <div class="row menubar dish-menubar-text-color dish-menu-color justify-content-end">
+        <div class=" add-button-md" (click)="goToPrevious()">
+          <fa [name]="'chevron-left'"></fa>
+        </div>
+        <div class=" add-button-md" (click)="goToNext()">
+          <fa [name]="'chevron-right'"></fa>
+        </div>
+
+      </div>
+
+      <div class="row submenubar" style="margin-left:0px">
+        <div *ngFor="let tag of tagsToAdd" class=" dish-tag-element dish-tag-xl-squished tagtype-color col-4">
+          <div class="clearfix" *ngIf="i % 3 == 0"></div>
+          <div (dblclick)="removeFromSelected(tag)">{{tag.name}}</div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-left:0px">
+        <div *ngFor="let tag of generalList, let index = i" class="col-4" style="padding-left:0px">
+          <div class="clearfix" *ngIf="i % 3 == 0"></div>
+          <at-tag-browse [tagDrilldown]="tag" [showEdit]="false"></at-tag-browse>
+        </div>
+      </div>
+    </div>
+    <div class="col-3">
+      <at-dish-window *ngIf="dish" [dish]="dish" [tagTypes]="'DishType,Ingredient,Ratings'"></at-dish-window>
+    </div>
+  </div>
+</div>

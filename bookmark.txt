@@ -1,4 +1,15 @@
-immediate
+now -
+dish management page
+
+cleaning up behind
+  add dish tunnel
+    landing page
+    add ingredient tag button
+    ratings update all tags at once
+    autotag bugging
+
+
+older
   done - dish list
   authguards and cookies
   in process - edit dish
@@ -21,7 +32,7 @@ immediate
   fill in onDestroy for everything
 
 
-drag and drop - npm2-dnd module
+done - drag and drop - npm2-dnd module
 make icons smaller and not grey (transparent? or just darker?)
 sort tags in poc tag list in alphabetical order (server)
 on expand/fold - undo select.

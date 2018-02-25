@@ -1,0 +1,21 @@
+<form class="container" #addDishForm="ngForm">
+  <div class="row page-title dish-text-color">Add Dish</div>
+  <div class="row">
+    <div class="col">
+      <input #dishNameBox class=" atinput-dish form-control input-lg"
+             name="dishName"
+             type="text"
+             placeholder="dish name" required
+             [(ngModel)]="dishName"/>
+    </div>
+    <div class="col">
+      <div class="row" *ngFor="let tag of dishTypes">
+        <button class="dish-tag-element dish-tag-xl dish-color" [disabled]="!addDishForm.form.valid"
+                (click)="createDish(tag)">Add as {{tag.name}}
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</form>

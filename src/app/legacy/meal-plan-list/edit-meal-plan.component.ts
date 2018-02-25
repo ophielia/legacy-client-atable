@@ -6,8 +6,9 @@ import {Dish} from "../../model/dish";
 import {Slot} from "../../model/slot";
 import {DishService} from "../../services/dish-service.service";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
-import {Tag} from "../../model/tag";
+import {ITag} from "../../model/tag";
 import TagSelectType from "../../model/tag-select-type";
+import {ShoppingListService} from "app/services/shopping-list.service";
 
 @Component({
   selector: 'at-edit-meal-plan',
@@ -25,7 +26,7 @@ import TagSelectType from "../../model/tag-select-type";
   ]
 })
 export class EditMealPlanComponent implements OnInit, OnDestroy {
-  filterTags: Tag[];
+  filterTags: ITag[];
   subTagEvent: any;
   tagCommService: TagCommService;
   mealPlanDishIds: string[];
@@ -43,6 +44,7 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
 
   constructor(private mealPlanService: MealPlanService,
               private dishService: DishService,
+              private shoppingListService: ShoppingListService,
               tagCommService: TagCommService,
               private route: ActivatedRoute,
               private router: Router,) {
@@ -112,7 +114,7 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
   }
 
   generateShoppingList() {
-    this.mealPlanService.generateShoppingList(this.mealPlan.meal_plan_id)
+    this.shoppingListService.generateShoppingList(this.mealPlan.meal_plan_id)
       .subscribe(r => {
         var headers = r.headers;
         var location = headers.get("Location");
@@ -140,19 +142,19 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
     this.showFilter = !this.showFilter;
   }
 
-  addTagToFilter(tag: Tag) {
+  addTagToFilter(tag: ITag) {
     tag.is_inverted = false;
     this.filterTags.push(tag);
     this.getAllDishes();
   }
 
-  removeTagFromFilter(tag: Tag) {
+  removeTagFromFilter(tag: ITag) {
     this.filterTags = this.filterTags.filter(t => t.tag_id != tag.tag_id);
     this.getAllDishes();
   }
 
 
-  toggleInvert(tag: Tag) {
+  toggleInvert(tag: ITag) {
     for (var i: number = 0; i < this.filterTags.length; i++) {
       if (this.filterTags[i].tag_id == tag.tag_id) {
         this.filterTags[i].is_inverted = !this.filterTags[i].is_inverted;

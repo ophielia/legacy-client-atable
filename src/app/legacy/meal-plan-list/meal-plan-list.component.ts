@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {MealPlanService} from "../../services/meal-plan.service";
 import {MealPlan} from "../../model/mealplan";
 import {Router} from "@angular/router";
+import {ShoppingListService} from "../../services/shopping-list.service";
 
 @Component({
   selector: 'at-meal-plan-list',
@@ -15,7 +16,9 @@ export class MealPlanListComponent implements OnInit {
   errorMessage: string;
   showAdd: boolean;
 
-  constructor(mealPlanService: MealPlanService, private router: Router) {
+  constructor(mealPlanService: MealPlanService,
+              private shoppingListService: ShoppingListService,
+              private router: Router) {
     this.mealPlanService = mealPlanService;
   }
 
@@ -56,7 +59,7 @@ export class MealPlanListComponent implements OnInit {
   }
 
   generateShoppingList(mealPlanId: string) {
-    this.mealPlanService.generateShoppingList(mealPlanId)
+    this.shoppingListService.generateShoppingList(mealPlanId)
       .subscribe(r => {
         var location = r.headers.get("Location");
         var splitlocation = location.split("/");

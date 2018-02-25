@@ -1,41 +1,45 @@
-import {Injectable} from "@angular/core";
-import {Headers, Http, Response} from "@angular/http";
-import {AuthenticationService} from "../authentication.service";
+import {Inject, Injectable} from "@angular/core";
+import {Http, Response} from "@angular/http";
+import {AuthenticationService} from "./authentication.service";
 import {Observable} from "rxjs/Observable";
-import MappingUtils from "../mapping-utils";
+import MappingUtils from "../model/mapping-utils";
 import {Proposal} from "../model/proposal";
+import {BaseHeadersService} from "./base-service";
+import {APP_CONFIG, AppConfig} from "../app.config";
+import {Logger} from "angular2-logger/core";
 
 @Injectable()
-export class ProposalService {
+export class ProposalService extends BaseHeadersService {
 
-  private baseUrl = "http://localhost:8181";
+  private baseUrl: string;
 
   constructor(private http: Http,
-              private authenticationService: AuthenticationService) {
-  }
-
-  private getHeaders() {
-    // I included these headers because otherwise FireFox
-    // will request text/html instead of application/json
-    let headers = new Headers();
-    headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Access-Control-Expose-Headers', 'Location');
-    headers.append('Authorization', 'Bearer ' + this.authenticationService.getToken());
-    return headers;
+              @Inject(APP_CONFIG) private config: AppConfig,
+              private _logger: Logger,
+              private _authenticationService: AuthenticationService) {
+    super(_authenticationService);
+    this.baseUrl = this.config.apiEndpoint + "proposal";
   }
 
 
   getById(proposal_id: any) {
     let proposal$ = this.http
-      .get(`${this.baseUrl}/proposal/${proposal_id}`,
+      .get(`${this.baseUrl}/${proposal_id}`,
         {headers: this.getHeaders()})
       .map(this.mapProposal)
       .catch(handleError);
     return proposal$;
   }
 
+  generateProposal(target_id: string) {
+    var url: string = this.baseUrl + '/target/' + target_id;
+
+    return this
+      .http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+  }
 
   private mapProposal(response: Response): Proposal {
     let proposal = MappingUtils.toProposal(response.json());
@@ -50,7 +54,7 @@ export class ProposalService {
   }
 
   selectDishForSlot(proposalId: string, slot_id: string, dish_id: string) {
-    let url = this.baseUrl + "/proposal/"
+    let url = this.baseUrl + "/"
       + proposalId
       + "/slot/"
       + slot_id
@@ -66,7 +70,7 @@ export class ProposalService {
   }
 
   clearDishFromSlot(proposalId: string, slot_id: string, dish_id: string) {
-    let url = this.baseUrl + "/proposal/"
+    let url = this.baseUrl + "/"
       + proposalId
       + "/slot/"
       + slot_id
@@ -80,20 +84,9 @@ export class ProposalService {
     return proposal$;
   }
 
-  generateMealPlan(proposalId: string) {
-    let url = this.baseUrl + "/mealplan/proposal/"
-      + proposalId;
-
-
-    let proposal$ = this.http
-      .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
-    return proposal$;
-  }
 
   refreshProposal(proposalId: string, direction: string) {
-    let url = this.baseUrl + "/proposal/"
+    let url = this.baseUrl + "/"
       + proposalId
       + "?direction="
       + direction;
@@ -107,7 +100,7 @@ export class ProposalService {
   }
 
   refreshProposalSlot(proposalId: string, slot_id: string) {
-    let url = this.baseUrl + "/proposal/"
+    let url = this.baseUrl + "/"
       + proposalId
       + "/slot/"
       + slot_id;

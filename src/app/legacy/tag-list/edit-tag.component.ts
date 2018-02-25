@@ -1,21 +1,22 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TagsService} from "../../services/tags.service";
-import {Tag} from "../../model/tag";
+import {ITag} from "../../model/tag";
 
 
 @Component({
   selector: 'edit-site-view',
   templateUrl: './edit-tag.template.html'
 })
-export class PocEditTagComponent implements OnInit, OnDestroy {
+export class EditTagComponent implements OnInit, OnDestroy {
   tagId: string;
   tagName: string;
-  tag: Tag = {
+  tag: ITag = {
     tag_id: "",
     name: "",
     description: "",
     tag_type: "",
+    parent_id: "",
     assign_select: false,
     search_select: false,
     power: null,

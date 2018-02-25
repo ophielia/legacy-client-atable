@@ -1,8 +1,8 @@
 import {TargetSlot} from "./target-slot";
-import {Tag} from "./tag";
+import {ITag} from "./tag";
 export interface Target {
   created: number;
-  target_tags: Tag[];
+  target_tags: ITag[];
   target_id: string;
   user_id: string;
   proposal_id: string;

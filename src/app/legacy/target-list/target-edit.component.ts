@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {Tag} from "../../model/tag";
+import {ITag} from "../../model/tag";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 import {Dish} from "../../model/dish";
 import {Target} from "../../model/target";
@@ -9,6 +9,7 @@ import {TagsService} from "../../services/tags.service";
 import TagType from "../../model/tag-type";
 import {DragulaService} from "ng2-dragula";
 import TagSelectType from "../../model/tag-select-type";
+import {ProposalService} from "app/services/proposal.service";
 
 @Component({
   selector: 'at-target-edit',
@@ -21,7 +22,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
   dishSlotTagIds: Map<string, string>;
   selectType: string = TagSelectType.Search;
 
-  filterTags: Tag[];
+  filterTags: ITag[];
   subTagEvent: any;
   tagCommService: TagCommService;
   targetDishIds: string[];
@@ -39,6 +40,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
   constructor(private targetService: TargetService,
               private dragulaService: DragulaService,
               private tagService: TagsService,
+              private proposalService: ProposalService,
               tagCommService: TagCommService,
               private route: ActivatedRoute,
               private router: Router,) {
@@ -87,7 +89,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
     this.showTagSelect = !this.showTagSelect;
   }
 
-  addTagToTarget(tag: Tag) {
+  addTagToTarget(tag: ITag) {
     this.targetService.addTagToTarget(this.targetId, tag.tag_id)
       .subscribe(p => {
         this.refreshTarget(this.targetId)
@@ -117,7 +119,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
   }
 
   generateProposal() {
-    this.targetService.generateProposal(this.targetId)
+    this.proposalService.generateProposal(this.targetId)
       .subscribe(r => {
         console.log(`added!!! mealPlan`)
         var headers = r.headers;
@@ -129,7 +131,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
       });
   }
 
-  private _fillSlots(rawlist: Tag[]) {
+  private _fillSlots(rawlist: ITag[]) {
     this.dishSlotTagIds = new Map();
     this.dishSlotTags = new Set();
 

@@ -1,38 +1,31 @@
-import {Injectable} from "@angular/core";
-import {AuthenticationService} from "../authentication.service";
-import {Headers, Http, Response} from "@angular/http";
+import {Inject, Injectable} from "@angular/core";
+import {AuthenticationService} from "./authentication.service";
+import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
-import {ShoppingList} from "../model/shoppinglist";
-import MappingUtils from "../mapping-utils";
-import ListLayoutType from "../model/list-layout-type";
-import {Item} from "../model/item";
-import ItemSourceType from "../model/item-source-type";
-import {Tag} from "../model/tag";
+import MappingUtils from "../model/mapping-utils";
+import {ITag} from "../model/tag";
 import {ListLayout} from "../model/listlayout";
 import {ListLayoutCategory} from "../model/listcategory";
+import {BaseHeadersService} from "./base-service";
+import {APP_CONFIG, AppConfig} from "../app.config";
+import {Logger} from "angular2-logger/core";
 
 @Injectable()
-export class ListLayoutService {
+export class ListLayoutService extends BaseHeadersService {
 
-  private baseUrl = 'http://localhost:8181';
+  private baseUrl: string;
 
   constructor(private http: Http,
-              private authenticationService: AuthenticationService) {
-  }
-
-  private getHeaders() {
-    let headers = new Headers();
-    headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Access-Control-Expose-Headers', 'Location');
-    headers.append('Authorization', 'Bearer ' + this.authenticationService.getToken());
-    return headers;
+              @Inject(APP_CONFIG) private config: AppConfig,
+              private _logger: Logger,
+              private _authenticationService: AuthenticationService) {
+    super(_authenticationService);
+    this.baseUrl = this.config.apiEndpoint + "listlayout";
   }
 
   getAll(): Observable<ListLayout[]> {
     let listLayouts$ = this.http
-      .get(`${this.baseUrl}/listlayout`, {headers: this.getHeaders()})
+      .get(`${this.baseUrl}`, {headers: this.getHeaders()})
       .map(this.mapListLayouts).catch(handleError);
     return listLayouts$;
   }
@@ -46,7 +39,7 @@ export class ListLayoutService {
 
     return this
       .http
-      .post(`${this.baseUrl}/listlayout`,
+      .post(`${this.baseUrl}`,
         JSON.stringify(newListLayout),
         {headers: this.getHeaders()});
 
@@ -54,7 +47,7 @@ export class ListLayoutService {
 
   getById(listLayout_id: string): Observable<ListLayout> {
     let listLayout$ = this.http
-      .get(`${this.baseUrl}/listlayout/${listLayout_id}`, {headers: this.getHeaders()})
+      .get(`${this.baseUrl}/${listLayout_id}`, {headers: this.getHeaders()})
       .map(this.mapListLayout)
       .catch(handleError);
     return listLayout$;
@@ -65,14 +58,15 @@ export class ListLayoutService {
     var category: ListLayoutCategory = <ListLayoutCategory>{name: category_name};
     return this
       .http
-      .post(`${this.baseUrl}/listlayout/${listLayout_id}/category`, category,
+      .post(`${this.baseUrl}/${listLayout_id}/category`, category,
         {headers: this.getHeaders()});
   }
+
 
   deleteCategoryFromListLayout(listLayout_id: string, category_id: string): Observable<Response> {
     return this
       .http
-      .delete(`${this.baseUrl}/listlayout/${listLayout_id}/category/${category_id}`,
+      .delete(`${this.baseUrl}/${listLayout_id}/category/${category_id}`,
         {headers: this.getHeaders()});
   }
 
@@ -85,10 +79,49 @@ export class ListLayoutService {
     };
     return this
       .http
-      .put(`${this.baseUrl}/listlayout/${listLayout_id}/category/${category.category_id}`, category,
+      .put(`${this.baseUrl}/${listLayout_id}/category/${category.category_id}`, category,
         {headers: this.getHeaders()});
   }
 
+
+  addTagsToLayoutCategory(layout_id: string, category_id: string, listofids: string) {
+    //"/{listLayoutId}/category/{layoutCategoryId}/tag" tags
+    var url = this.baseUrl + "/" + layout_id
+      + "/category/" + category_id + "/tag?tags=" + listofids;
+    return this
+      .http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+
+  }
+
+  removeTagsFromLayoutCategory(layout_id: string, category_id: string, listofids: string) {
+    var url = this.baseUrl + "/" + layout_id
+      + "/category/" + category_id + "/tag?tags=" + listofids;
+    return this
+      .http
+      .delete(`${url}`,
+        {headers: this.getHeaders()});
+  }
+
+  getUncategorizedTags(id: string) {
+    var url = this.baseUrl + "/" + id + "/tag";
+    let tags$ = this.http
+      .get(`${url}`, {headers: this.getHeaders()})
+      .map(this.mapTags).catch(handleError);
+    return tags$;
+  }
+
+
+  getTagsForLayoutCategory(layoutId: any, category_id: string) {
+    ///{listLayoutId}/category/{layoutCategoryId}/tag
+    var url = this.baseUrl + "/" + layoutId + "/category/" + category_id + "/tag";
+    let tags$ = this.http
+      .get(`${url}`, {headers: this.getHeaders()})
+      .map(this.mapTags).catch(handleError);
+    return tags$;
+  }
 
   mapListLayouts(response: Response): ListLayout[] {
     return response.json()._embedded.listLayoutResourceList.map(MappingUtils.toListLayout);
@@ -103,26 +136,13 @@ export class ListLayoutService {
 
   }
 
-  addTagsToLayoutCategory(layout_id: string, category_id: string, listofids: string) {
-    //"/{listLayoutId}/category/{layoutCategoryId}/tag" tags
-    var url = this.baseUrl + "/listlayout/" + layout_id
-      + "/category/" + category_id + "/tag?tags=" + listofids;
-    return this
-      .http
-      .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
-
+  mapTags(response: Response): ITag[] {
+    if (response.json()) {
+      return response.json()._embedded.tagResourceList.map(MappingUtils.toTag);
+    }
   }
 
-  removeTagsFromLayoutCategory(layout_id: string, category_id: string, listofids: string) {
-    var url = this.baseUrl + "/listlayout/" + layout_id
-      + "/category/" + category_id + "/tag?tags=" + listofids;
-    return this
-      .http
-      .delete(`${url}`,
-        {headers: this.getHeaders()});
-  }
+
 }
 
 function handleError(error: any) {

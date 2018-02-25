@@ -8,7 +8,7 @@ import TagType from "../../model/tag-type";
   selector: 'add-tag-view',
   templateUrl: './add-tag.component.html'
 })
-export class PocAddTagComponent {
+export class AddTagComponent {
   tagName: string;
   ingredientType: string = TagType.Ingredient;
   dishType: string = TagType.DishType;

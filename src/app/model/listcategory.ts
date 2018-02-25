@@ -1,7 +1,7 @@
-import {Tag} from "./tag";
+import {ITag} from "./tag";
 export interface ListLayoutCategory {
   category_id: string;
   name: string;
-  tags: Tag[];
+  tags: ITag[];
 }
 

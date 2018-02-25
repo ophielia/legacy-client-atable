@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angula
 import {Dish} from "../../model/dish";
 import {TagDrilldown} from "../../model/tag-drilldown";
 import {TagsService} from "../../services/tags.service";
-import {Tag} from "../../model/tag";
+import {ITag} from "../../model/tag";
 import TagType from "../../model/tag-type";
 import TagSelectType from "../../model/tag-select-type";
 
@@ -11,7 +11,7 @@ import TagSelectType from "../../model/tag-select-type";
   templateUrl: './dish-tag-select.component.html',
 })
 export class DishTagSelectComponent implements OnInit, OnDestroy {
-  @Output() tagSelected: EventEmitter<Tag> = new EventEmitter<Tag>();
+  @Output() tagSelected: EventEmitter<ITag> = new EventEmitter<ITag>();
   @Input() tagTypes: string;
   @Input() selectType: string = TagSelectType.Assign;
 
@@ -29,8 +29,8 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
   allTagTypes: string[];
   allDrilldowns: { [type: string]: TagDrilldown[] } = {};
   lastSelectedId: string = "";
-  alltags: Tag[];
-  filteredTags: Tag[];
+  alltags: ITag[];
+  filteredTags: ITag[];
 
   isSearch = true;
 
@@ -77,7 +77,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
     if (event.query) {
       if (this.alltags) {
         let filterBy = event.query.toLocaleLowerCase();
-        this.filteredTags = this.alltags.filter((tag: Tag) =>
+        this.filteredTags = this.alltags.filter((tag: ITag) =>
         tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
         this.showAddTags = this.filteredTags.length == 0;
       }
@@ -96,7 +96,7 @@ export class DishTagSelectComponent implements OnInit, OnDestroy {
 
   }
 
-  showSelected(tag: Tag) {
+  showSelected(tag: ITag) {
     if (this.lastSelectedId != tag.tag_id) {
       this.lastSelectedId = tag.tag_id;
       console.log('showing from drilldown select container-' + tag.tag_id);

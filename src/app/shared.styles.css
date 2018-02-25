@@ -1,9 +1,36 @@
+
+.main-color {
+  background-color: #4a6288;
+}
+
+.dish-color {
+  background-color: #e26279;
+}
+
+.list-color {
+  background-color: #fcd06d;
+}
+
+.plan-color {
+  background-color: #28b9b9;
+}
+
+.extra-color {
+  background-color: #4cc991;
+}
+
+
+
+
+
+
 .tagbox {
   text-align: center;
   background-color: darkblue;
   color: lightgrey;
 }
 
-.tagboxContainer {
-  padding-bottom: 10px;
-}
+
+
+
+

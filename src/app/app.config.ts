@@ -2,14 +2,14 @@ import {NgModule, InjectionToken} from '@angular/core';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
-// TODO: get rid of warnings by splitting interface out into separate file
-// export interface AppConfig {
 export class AppConfig {
   apiEndpoint: string;
+  defaultRatingPower: number;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
-  apiEndpoint: 'http://localhost:8000/api/v1'
+  apiEndpoint: 'http://localhost:8181/',
+  defaultRatingPower: 3
 };
 
 @NgModule({

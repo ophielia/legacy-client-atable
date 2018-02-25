@@ -1,5 +1,5 @@
-import {Tag} from "./tag";
-export interface TagDrilldown extends Tag {
+import {ITag} from "./tag";
+export interface TagDrilldown extends ITag {
   tag_id: string;
   name: string;
   description: string;

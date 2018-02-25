@@ -1,0 +1,21 @@
+<div class="row menubar justify-content-center">
+  <div class="container">
+    <div class="row dish-color dish-tag-element justify-content-center window-title-adjust">{{dish.name}}</div>
+    <ng-container *ngFor="let tag of getTags('DishType')">
+      <div class="row dish-outline-color dish-tag-element window-tag-adjust justify-content-center">{{tag.name}}</div>
+    </ng-container>
+    <ng-container *ngFor="let tag of getTags('Rating')">
+      <div class="row rating-outline-color dish-tag-element  window-tag-adjust  justify-content-center">{{tag.name}}
+      </div>
+    </ng-container>
+    <ng-container *ngFor="let tag of getTags('TagType')">
+      <div class="row tagtype-outline-color dish-tag-element  window-tag-adjust  justify-content-center">{{tag.name}}
+      </div>
+    </ng-container>
+    <ng-container *ngFor="let tag of getTags('Ingredient')">
+      <div class="row ingredient-outline-color dish-tag-element  window-tag-adjust  justify-content-center">
+        {{tag.name}}
+      </div>
+    </ng-container>
+  </div>
+</div>

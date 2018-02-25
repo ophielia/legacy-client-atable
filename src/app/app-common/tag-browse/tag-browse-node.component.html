@@ -1,0 +1,21 @@
+<div atTagBrowseStyle [tag]="node" [origClass]="'dish-tag-element-squished dish-tag-element '"
+     (dblclick)="notifyIsSelected(node)">{{node.name}}
+  <div *ngIf="node.children.length > 0" (click)="showHideChildren(node)" type="button"
+       class="expandToggle">
+    <div *ngIf="!node.expanded" class="expandButton">
+      <fa class="expandFont" [name]="'plus'"></fa>
+    </div>
+    <div *ngIf="node.expanded" class="expandButton">
+      <fa class="expandFont" [name]="'minus'"></fa>
+    </div>
+  </div>
+  <span *ngIf="showEdit" style="margin-left:3px" [routerLink]="['/edit', node.tag_id]"><fa
+    [name]="'pencil'"></fa></span>
+
+</div>
+<ul *ngIf="node.expanded" class="tagboxList">
+  <li *ngFor="let node of node.children">
+    <at-tag-browse-node atTagBrowseStyle [tag]="node" [node]="node" [showEdit]="showEdit"
+                        [selectType]="currentSelect"></at-tag-browse-node>
+  </li>
+</ul>

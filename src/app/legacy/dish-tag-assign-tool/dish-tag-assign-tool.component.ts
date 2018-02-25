@@ -3,7 +3,7 @@ import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DishService} from "../../services/dish-service.service";
 import {Dish} from "../../model/dish";
-import {Tag} from "../../model/tag";
+import {ITag} from "../../model/tag";
 import {TagsService} from "../../services/tags.service";
 import TagSelectType from "../../model/tag-select-type";
 
@@ -82,7 +82,7 @@ export class DishTagAssignToolComponent implements OnInit, OnDestroy {
     this.getAllDishes();
   }
 
-  setCurrentTag(tag: Tag) {
+  setCurrentTag(tag: ITag) {
     this.currentTag = tag;
     this.getAllDishes();
   }

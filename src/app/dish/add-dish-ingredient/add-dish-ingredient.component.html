@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row page-title dish-text-color">Add Ingredients</div>
+  <div class="row">
+    <div class="col-9" style="padding-left:0px;">
+      <div class="row menubar dish-menubar-text-color dish-menu-color justify-content-between">
+        <at-tag-select [tagTypes]="'Ingredient'"
+                       [selectType]="'Assign'"
+                       (tagSelected)="addTagToDish($event)"></at-tag-select>
+
+
+        <!--<div class="input-group" style="max-width:135px;">
+          <input type="text" class="form-control" aria-describedby="search-query">
+          <span class="input-group-addon" id="search-query"><span class="fa-empire fa"></span></span>
+        </div>-->
+        <div class="menubar-buttons">
+        <span class=" add-button-md" (click)="goToPrevious()">
+          <fa [name]="'chevron-left'"></fa>
+        </span>
+          <span class=" add-button-md" (click)="goToNext()">
+          <fa [name]="'chevron-right'"></fa>
+        </span>
+
+        </div>
+      </div>
+
+      <div class="row submenubar" style="margin-left:0px">
+        <div *ngFor="let tag of tagsToAdd" class=" dish-tag-element dish-tag-xl-squished ingredient-color col-4">
+          <div class="clearfix" *ngIf="i % 3 == 0"></div>
+          <div (dblclick)="removeFromSelected(tag)">{{tag.name}}</div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-left:0px">
+        <div *ngFor="let tag of ingredientList, let index = i" class="col-4" style="padding-left:0px">
+          <div class="clearfix" *ngIf="i % 3 == 0"></div>
+          <at-tag-browse [tagDrilldown]="tag" [showEdit]="false"></at-tag-browse>
+        </div>
+      </div>
+    </div>
+    <div class="col-3">
+      <at-dish-window *ngIf="dish" [dish]="dish" [tagTypes]="'DishType,Ratings,TagType'"></at-dish-window>
+    </div>
+  </div>
+</div>

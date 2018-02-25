@@ -1,38 +1,43 @@
-import {Tag} from "./model/tag";
-import {Dish} from "./model/dish";
-import {TagDrilldown} from "./model/tag-drilldown";
-import {MealPlan} from "./model/mealplan";
-import {Slot} from "./model/slot";
-import {Category} from "./model/category";
-import {Item} from "./model/item";
-import {ShoppingList} from "./model/shoppinglist";
-import {ListLayout} from "./model/listlayout";
-import {ListLayoutCategory} from "./model/listcategory";
-import {Target} from "./model/target";
-import {TargetSlot} from "./model/target-slot";
-import {Proposal} from "./model/proposal";
-import {ProposalSlot} from "./model/proposal-slot";
-import {ProposalDish} from "./model/proposal-dish";
+import {ITag} from "./tag";
+import {Dish} from "./dish";
+import {TagDrilldown} from "./tag-drilldown";
+import {MealPlan} from "./mealplan";
+import {Slot} from "./slot";
+import {Category} from "./category";
+import {Item} from "./item";
+import {ShoppingList} from "./shoppinglist";
+import {ListLayout} from "./listlayout";
+import {ListLayoutCategory} from "./listcategory";
+import {Target} from "./target";
+import {TargetSlot} from "./target-slot";
+import {Proposal} from "./proposal";
+import {ProposalSlot} from "./proposal-slot";
+import {ProposalDish} from "./proposal-dish";
 export default class MappingUtils {
 
-  static toTag(r: any): Tag {
+  static showConsoleLogs: boolean = true;
+
+  static toTag(r: any): ITag {
     return MappingUtils._toTag(r.tag);
   }
 
-  private static _toTag(r: any): Tag {
-    let tag = <Tag>({
+  static _toTag(r: any): ITag {
+    let tag = <ITag>({
       tag_id: r.tag_id,
       name: r.name,
       description: r.description,
       search_select: r.search_select,
       assign_select: r.assign_select,
       power: r.power,
+      parent_id: r.parent_id,
       dishes: r.dishes ? r.dishes.map(MappingUtils._toDish) : null,
       is_inverted: false,
       tag_type: r.tag_type
     });
 
-    console.log('Parsed tag:', tag);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed tag:', tag);
+    }
     return tag;
   }
 
@@ -58,7 +63,10 @@ export default class MappingUtils {
       slot_order: r.slot_order,
     });
 
-    console.log('Parsed target slot:', slot);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed target slot:', slot);
+    }
+
     return slot;
   }
 
@@ -68,7 +76,10 @@ export default class MappingUtils {
       dish: MappingUtils._toDish(r.dish)
     });
 
-    console.log('Parsed slot:', slot);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed slot:', slot);
+    }
+
     return slot;
   }
 
@@ -78,7 +89,11 @@ export default class MappingUtils {
       items: r.items.map(MappingUtils._toItem)
     });
 
-    console.log('Parsed category:', category);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed category:', category);
+
+    }
+
     return category;
   }
 
@@ -89,7 +104,11 @@ export default class MappingUtils {
       tags: r.tags.map(MappingUtils._toTag)
     });
 
-    console.log('Parsed category:', category);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed category:', category);
+
+    }
+
     return category;
   }
 
@@ -106,12 +125,14 @@ export default class MappingUtils {
       tag: MappingUtils._toTag(r.tag)
     });
 
-    console.log('Parsed tag:', item);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed tag:', item);
+
+    }
     return item;
   }
 
   static toTagDrilldown(r: any) {
-    console.log('in map drilldown');
     let drilldown = <TagDrilldown>({
       "tag_id": r.tag_id,
       "name": r.name,
@@ -126,15 +147,20 @@ export default class MappingUtils {
       "children": []
     });
 
-    console.log('Parsed drilldown:', drilldown);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed drilldown:', drilldown);
+
+    }
     return drilldown;
   }
 
   static toDish(r: any): Dish {
     let dish = MappingUtils._toDish(r.dish);
 
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed dish:', dish);
+    }
 
-    console.log('Parsed dish:', dish);
     return dish;
   }
 
@@ -149,7 +175,10 @@ export default class MappingUtils {
       })
     ;
 
-    console.log('Parsed mealplan:', mealplan);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed mealplan:', mealplan);
+    }
+
     return mealplan;
   }
 
@@ -163,7 +192,9 @@ export default class MappingUtils {
       categories: r.shopping_list.categories.map(MappingUtils._toCategory)
     });
 
-    console.log('Parsed dish:', shoppinglist);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed dish:', shoppinglist);
+    }
     return shoppinglist;
   }
 
@@ -175,7 +206,9 @@ export default class MappingUtils {
       listcategories: r.list_layout.categories.map(MappingUtils._toListLayoutCategory)
     });
 
-    console.log('Parsed listlayout:', listlayouts);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed listlayout:', listlayouts);
+    }
     return listlayouts;
   }
 
@@ -197,7 +230,10 @@ export default class MappingUtils {
   static toTarget(r: any): Target {
     let target = MappingUtils._toTarget(r.target);
 
-    console.log('Parsed target:', target);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed target:', target);
+    }
+
     return target;
   }
 
@@ -219,7 +255,10 @@ export default class MappingUtils {
   static toProposal(r: any): Proposal {
     let proposal = MappingUtils._toProposal(r.proposal);
 
-    console.log('Parsed proposal:', proposal);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed proposal:', proposal);
+    }
+
     return proposal;
   }
 
@@ -236,7 +275,10 @@ export default class MappingUtils {
 
     });
 
-    console.log('Parsed proposal slot:', slot);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed proposal slot:', slot);
+    }
+
     return slot;
   }
 
@@ -247,7 +289,10 @@ export default class MappingUtils {
       selected: false
     });
 
-    console.log('Parsed proposal dish:', dish);
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed proposal dish:', dish);
+    }
+
     return dish;
   }
 }

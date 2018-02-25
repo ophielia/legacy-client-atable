@@ -1,55 +1,50 @@
 import {Inject, Injectable} from "@angular/core";
-import {AuthenticationService} from "../authentication.service";
-import {Headers, Http, Response} from "@angular/http";
+import {AuthenticationService} from "./authentication.service";
+import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {ShoppingList} from "../model/shoppinglist";
-import MappingUtils from "../mapping-utils";
+import MappingUtils from "../model/mapping-utils";
 import ListLayoutType from "../model/list-layout-type";
 import {Item} from "../model/item";
 import ItemSourceType from "../model/item-source-type";
-import {Tag} from "../model/tag";
+import {ITag} from "../model/tag";
 import {APP_CONFIG, AppConfig} from "../app.config";
+import {Logger} from "angular2-logger/core";
+import {BaseHeadersService} from "app/services/base-service";
 
 @Injectable()
-export class ShoppingListService {
+export class ShoppingListService extends BaseHeadersService {
 
-  private shoppingListUrl = 'http://localhost:8181';
+  private shoppingListUrl: string;
 
   constructor(private http: Http,
               @Inject(APP_CONFIG) private config: AppConfig,
-              private authenticationService: AuthenticationService) {
-  }
-
-  private getHeaders() {
-    // I included these headers because otherwise FireFox
-    // will request text/html instead of application/json
-    let headers = new Headers();
-    headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Access-Control-Expose-Headers', 'Location');
-    headers.append('Authorization', 'Bearer ' + this.authenticationService.getToken());
-    return headers;
+              private _logger: Logger,
+              private _authenticationService: AuthenticationService) {
+    super(_authenticationService);
+    this.shoppingListUrl = this.config.apiEndpoint + "shoppinglist";
   }
 
   getAll(): Observable<ShoppingList[]> {
+    this._logger.debug("Retrieving all shopping lists for user.");
     let shoppingLists$ = this.http
-      .get(`${this.shoppingListUrl}/shoppinglist`, {headers: this.getHeaders()})
+      .get(`${this.shoppingListUrl}`, {headers: this.getHeaders()})
       .map(this.mapShoppingLists).catch(handleError);  // HERE: This is new!
     return shoppingLists$;
   }
 
   getById(shoppingList_id: string): Observable<ShoppingList> {
     let shoppingList$ = this.http
-      .get(`${this.shoppingListUrl}/shoppinglist/${shoppingList_id}`, {headers: this.getHeaders()})
+      .get(`${this.shoppingListUrl}/${shoppingList_id}`, {headers: this.getHeaders()})
       .map(this.mapShoppingList)
       .catch(handleError);
     return shoppingList$;
   }
 
   getByType(list_type: string): Observable<ShoppingList> {
+    this._logger.debug("Retrieving shopping lists by type [" + list_type + "] for user.");
     let shoppingList$ = this.http
-      .get(`${this.shoppingListUrl}/shoppinglist/type/${list_type}`, {headers: this.getHeaders()})
+      .get(`${this.shoppingListUrl}/type/${list_type}`, {headers: this.getHeaders()})
       .map(this.mapShoppingList)
       .catch(handleError);
     return shoppingList$;
@@ -65,12 +60,55 @@ export class ShoppingListService {
 
     return this
       .http
-      .post(`${this.shoppingListUrl}/shoppinglist`,
+      .post(`${this.shoppingListUrl}`,
         JSON.stringify(newShoppingList),
         {headers: this.getHeaders()});
 
   }
 
+  generateShoppingList(meal_plan_id: string) {
+    var url: string = this.shoppingListUrl + '/mealplan/' + meal_plan_id;
+    return this
+      .http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+  }
+
+
+  removeItemFromShoppingList(shoppingList_id: string, item_id: string): Observable<Response> {
+    return this
+      .http
+      .delete(`${this.shoppingListUrl}/${shoppingList_id}/item/${item_id}`,
+        {headers: this.getHeaders()});
+  }
+
+  addTagItemToShoppingList(shoppingList_id: string, tag: ITag): Observable<Response> {
+    var item: Item = <Item>{tag_id: tag.tag_id};
+    item.item_source = ItemSourceType.Manual;
+    return this
+      .http
+      .post(`${this.shoppingListUrl}/${shoppingList_id}/item`, item,
+        {headers: this.getHeaders()});
+  }
+
+  deleteShoppingList(shoppingListId: string) {
+    var url: string = this.shoppingListUrl + '/' + shoppingListId;
+
+    return this
+      .http
+      .delete(`${url}`, {headers: this.getHeaders()});
+  }
+
+
+  setListActive(shoppingListId: string) {
+    var url = this.shoppingListUrl + "/" + shoppingListId
+      + "?generateType=Add";
+    return this
+      .http
+      .put(`${url}`, null,
+        {headers: this.getHeaders()});
+  }
 
   mapShoppingLists(response: Response): ShoppingList[] {
     return response.json()._embedded.shoppingListResourceList.map(MappingUtils.toShoppingList);
@@ -83,40 +121,6 @@ export class ShoppingListService {
     }
     return null;
 
-  }
-
-  removeItemFromShoppingList(shoppingList_id: string, item_id: string): Observable<Response> {
-    return this
-      .http
-      .delete(`${this.shoppingListUrl}/shoppinglist/${shoppingList_id}/item/${item_id}`,
-        {headers: this.getHeaders()});
-  }
-
-  addTagItemToShoppingList(shoppingList_id: string, tag: Tag): Observable<Response> {
-    var item: Item = <Item>{tag_id: tag.tag_id};
-    item.item_source = ItemSourceType.Manual;
-    return this
-      .http
-      .post(`${this.shoppingListUrl}/shoppinglist/${shoppingList_id}/item`, item,
-        {headers: this.getHeaders()});
-  }
-
-  deleteShoppingList(shoppingListId: string) {
-    var url: string = this.shoppingListUrl + '/shoppinglist/' + shoppingListId;
-
-    return this
-      .http
-      .delete(`${url}`, {headers: this.getHeaders()});
-  }
-
-
-  setListActive(shoppingListId: string) {
-    var url = this.shoppingListUrl + "/shoppinglist/" + shoppingListId
-      + "?generateType=Add";
-    return this
-      .http
-      .put(`${url}`, null,
-        {headers: this.getHeaders()});
   }
 }
 

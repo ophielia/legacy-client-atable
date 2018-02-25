@@ -1,35 +1,30 @@
-import {Injectable} from '@angular/core';
-import {AuthenticationService} from "../authentication.service";
-import {Http, Headers, Response} from "@angular/http";
+import {Inject, Injectable} from "@angular/core";
+import {AuthenticationService} from "./authentication.service";
+import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {MealPlan} from "../model/mealplan";
-import MappingUtils from "app/mapping-utils";
+import MappingUtils from "app/model/mapping-utils";
 import MealPlanType from "../model/meal-plan-type";
+import {BaseHeadersService} from "./base-service";
+import {APP_CONFIG, AppConfig} from "../app.config";
+import {Logger} from "angular2-logger/core";
 
 @Injectable()
-export class MealPlanService {
+export class MealPlanService extends BaseHeadersService {
 
-  private baseUrl = "http://localhost:8181";
+  private baseUrl: string;
 
   constructor(private http: Http,
-              private authenticationService: AuthenticationService) {
-  }
-
-  private getHeaders() {
-    // I included these headers because otherwise FireFox
-    // will request text/html instead of application/json
-    let headers = new Headers();
-    headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Access-Control-Expose-Headers', 'Location');
-    headers.append('Authorization', 'Bearer ' + this.authenticationService.getToken());
-    return headers;
+              @Inject(APP_CONFIG) private config: AppConfig,
+              private _logger: Logger,
+              private _authenticationService: AuthenticationService) {
+    super(_authenticationService);
+    this.baseUrl = this.config.apiEndpoint + "mealplan";
   }
 
   getAll(): Observable<MealPlan[]> {
     let mealplans$ = this.http
-      .get(`${this.baseUrl}/mealplan`, {headers: this.getHeaders()})
+      .get(`${this.baseUrl}`, {headers: this.getHeaders()})
       .map(this.mapMealPlans).catch(handleError);
     return mealplans$;
   }
@@ -44,7 +39,7 @@ export class MealPlanService {
 
   getById(meal_plan_id: any) {
     let mealplan$ = this.http
-      .get(`${this.baseUrl}/mealplan/${meal_plan_id}`,
+      .get(`${this.baseUrl}/${meal_plan_id}`,
         {headers: this.getHeaders()})
       .map(this.mapMealPlan)
       .catch(handleError);
@@ -52,7 +47,7 @@ export class MealPlanService {
   }
 
   removeDishFromMealPlan(dish_id: string, meal_plan_id: string) {
-    var url: string = this.baseUrl + '/mealplan/' + meal_plan_id + "/dish/" + dish_id;
+    var url: string = this.baseUrl + '/' + meal_plan_id + "/dish/" + dish_id;
 
     return this
       .http
@@ -61,7 +56,7 @@ export class MealPlanService {
   }
 
   addDishToMealPlan(dish_id: string, meal_plan_id: string) {
-    var url: string = this.baseUrl + '/mealplan/' + meal_plan_id + "/dish/" + dish_id;
+    var url: string = this.baseUrl + '/' + meal_plan_id + "/dish/" + dish_id;
 
     return this
       .http
@@ -75,7 +70,7 @@ export class MealPlanService {
       meal_plan_type: MealPlanType.Manual
     });
 
-    var url: string = this.baseUrl + '/mealplan';
+    var url: string = this.baseUrl + '';
 
     return this
       .http
@@ -85,20 +80,24 @@ export class MealPlanService {
   }
 
   deleteMealPlan(mealPlanId: string) {
-    var url: string = this.baseUrl + '/mealplan/' + mealPlanId;
+    var url: string = this.baseUrl + '/' + mealPlanId;
 
     return this
       .http
       .delete(`${url}`, {headers: this.getHeaders()});
   }
 
-  generateShoppingList(meal_plan_id: string) {
-    var url: string = this.baseUrl + '/shoppinglist/mealplan/' + meal_plan_id;
-    return this
-      .http
+
+  generateMealPlan(proposalId: string) {
+    let url = this.baseUrl + "/proposal/"
+      + proposalId;
+
+
+    let proposal$ = this.http
       .post(`${url}`,
         null,
         {headers: this.getHeaders()});
+    return proposal$;
   }
 }
 

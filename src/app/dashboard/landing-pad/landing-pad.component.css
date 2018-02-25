@@ -1,0 +1,27 @@
+.landing-box {
+  width: 250px;
+  height: 250px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.main-box {
+  border-top-left-radius: 30px;
+}
+
+.list-box {
+  border-top-right-radius: 30px;
+}
+
+.dish-box {
+  border-bottom-right-radius: 30px;
+}
+
+.list-box {
+  border-top-right-radius: 30px;
+}
+
+.plan-box {
+  border-bottom-left-radius: 30px;
+}
+

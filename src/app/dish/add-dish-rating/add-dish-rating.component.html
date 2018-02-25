@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row page-title dish-text-color">Add Ratings</div>
+  <div class="row">
+    <div class="col-9">
+      <div class="row menubar dish-menubar-text-color dish-menu-color justify-content-end">
+        <div class=" add-button-md" (click)="goToNext()">
+          <fa [name]="'chevron-right'"></fa>
+        </div>
+      </div>
+      <ng-container *ngIf="ratingDictionary">
+        <div class="row" *ngFor="let tag of ratingTags" style="margin-left:0px;">
+
+          <div class="dish-tag-xl dish-tag-element rating-1 "> {{tag.name}}</div>
+          <div class="add-button-lg " (click)="incrementDown(tag)">
+            <fa [name]="'minus'"></fa>
+          </div>
+          <div class=" add-button-lg" (click)="incrementUp(tag)">
+            <fa [name]="'plus'"></fa>
+          </div>
+
+        </div>
+      </ng-container>
+    </div>
+    <div class="col-3">
+      <at-dish-window *ngIf="dish" [dish]="dish" [tagTypes]="'DishType,Ingredient,TagType'"></at-dish-window>
+    </div>
+  </div>
+</div>

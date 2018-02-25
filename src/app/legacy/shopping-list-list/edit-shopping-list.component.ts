@@ -3,7 +3,7 @@ import {ShoppingListService} from "../../services/shopping-list.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ShoppingList} from "../../model/shoppinglist";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
-import {Tag} from "../../model/tag";
+import {ITag} from "../../model/tag";
 import {Item} from "../../model/item";
 import TagSelectType from "../../model/tag-select-type";
 
@@ -19,7 +19,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   shoppingList: ShoppingList = <ShoppingList>{list_id: "", list_type: ""};
   private tagCommService: TagCommService;
   selectType: string = TagSelectType.Assign;
-  @Output() tagEvent: EventEmitter<Tag> = new EventEmitter<Tag>();
+  @Output() tagEvent: EventEmitter<ITag> = new EventEmitter<ITag>();
 
 
   constructor(private shoppingListService: ShoppingListService,
@@ -48,7 +48,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   }
 
 
-  addItem(tag: Tag) {
+  addItem(tag: ITag) {
     // add tag to list as item in back end
     this.shoppingListService.addTagItemToShoppingList(this.shoppingListId, tag)
       .subscribe(p => {

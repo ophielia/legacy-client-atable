@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 import {ProposalService} from "../../services/proposal.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Proposal} from "../../model/proposal";
-import {ProposalSlot} from "../../model/proposal-slot";
+import {MealPlanService} from "../../services/meal-plan.service";
 
 @Component({
   selector: 'at-proposal-edit',
@@ -21,6 +21,7 @@ export class ProposalEditComponent implements OnInit {
 
 
   constructor(private proposalService: ProposalService,
+              private mealPlanService: MealPlanService,
               private route: ActivatedRoute,
               private router: Router,) {
     this.proposalId = this.route.snapshot.params['id'];
@@ -106,7 +107,7 @@ export class ProposalEditComponent implements OnInit {
   }
 
   generateMealPlan() {
-    this.proposalService.generateMealPlan(this.proposalId)
+    this.mealPlanService.generateMealPlan(this.proposalId)
       .subscribe(r => {
         console.log(`added!!! target`)
         var headers = r.headers;

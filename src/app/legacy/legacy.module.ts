@@ -1,12 +1,11 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {PocTagListComponent} from "./poc-tag-list/tag-list.component";
-import {PocAddTagComponent} from "./poc-tag-list/add-tag.component";
-import {PocEditTagComponent} from "./poc-tag-list/edit-tag.component";
+import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {TagListComponent} from "./tag-list/tag-list.component";
+import {AddTagComponent} from "./tag-list/add-tag.component";
+import {EditTagComponent} from "./tag-list/edit-tag.component";
 import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
 import {HomeComponent} from "./home.component";
 import {LoginComponent} from "./login/login.component";
-import {TagListComponent} from "./tag-list/tag-list.component";
 import {DishListComponent} from "./dish-list/dish-list.component";
 import {EditDishComponent} from "./dish-list/edit-dish.component";
 import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
@@ -34,14 +33,15 @@ import {Angular2FontawesomeModule} from "angular2-fontawesome";
 import {DrilldownModule} from "./drilldown/drilldown.module";
 import {ProposalService} from "../services/proposal.service";
 import {TargetService} from "../services/target.service";
-import {AuthenticationService} from "../authentication.service";
+import {AuthenticationService} from "../services/authentication.service";
 import {ListLayoutService} from "../services/list-layout.service";
 import {TagCommService} from "./drilldown/tag-drilldown-select.service";
 import {ShoppingListService} from "../services/shopping-list.service";
 import {MealPlanService} from "../services/meal-plan.service";
 import {DishService} from "../services/dish-service.service";
 import {TagsService} from "../services/tags.service";
-import {APP_CONFIG, AppConfig, AppConfigModule} from "app/app.config";
+import {APP_CONFIG, APP_DI_CONFIG, AppConfigModule} from "app/app.config";
+import {Logger} from "angular2-logger/core";
 
 @NgModule({
   imports: [
@@ -57,12 +57,11 @@ import {APP_CONFIG, AppConfig, AppConfigModule} from "app/app.config";
     AppConfigModule
   ],
   declarations: [
-    PocTagListComponent,
-    PocAddTagComponent,
-    PocEditTagComponent,
+    TagListComponent,
+    AddTagComponent,
+    EditTagComponent,
     DishTagSelectComponent,
     HomeComponent,
-    TagListComponent,
     LoginComponent,
     DishListComponent,
     EditDishComponent,
@@ -84,8 +83,8 @@ import {APP_CONFIG, AppConfig, AppConfigModule} from "app/app.config";
   ],
   providers: [{
     provide: APP_CONFIG,
-    useValue: AppConfig
-  }, TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService, TargetService, ProposalService],
+    useValue: APP_DI_CONFIG
+  }, Logger, TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService, TargetService, ProposalService],
 })
 export class LegacyModule {
 }

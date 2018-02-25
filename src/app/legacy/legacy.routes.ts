@@ -1,10 +1,9 @@
 import {RouterModule, Routes} from "@angular/router";
-import {PocTagListComponent} from "./poc-tag-list/tag-list.component";
-import {PocAddTagComponent} from "./poc-tag-list/add-tag.component";
-import {PocEditTagComponent} from "./poc-tag-list/edit-tag.component";
+import {TagListComponent} from "./tag-list/tag-list.component";
+import {AddTagComponent} from "./tag-list/add-tag.component";
+import {EditTagComponent} from "./tag-list/edit-tag.component";
 import {HomeComponent} from "./home.component";
 import {LoginComponent} from "./login/login.component";
-import {TagListComponent} from "./tag-list/tag-list.component";
 import {EditDishComponent} from "./dish-list/edit-dish.component";
 import {DishListComponent} from "./dish-list/dish-list.component";
 import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
@@ -24,10 +23,9 @@ import {RatingTagAssignToolComponent} from "./rating-tag-assign-tool/rating-tag-
 const legacyRoutes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'drilldown', component: TagListComponent},
-  {path: 'list', component: PocTagListComponent},
-  {path: 'add', component: PocAddTagComponent},
-  {path: 'edit/:id', component: PocEditTagComponent},
+  {path: 'list', component: TagListComponent},
+  {path: 'add', component: AddTagComponent},
+  {path: 'edit/:id', component: EditTagComponent},
   {path: 'dish/list', component: DishListComponent},
   {path: 'dish/add', component: DishListComponent},
   {path: 'dish/edit/:id', component: EditDishComponent},

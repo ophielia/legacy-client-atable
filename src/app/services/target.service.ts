@@ -1,35 +1,31 @@
-import {Injectable} from '@angular/core';
-import {Http, Headers, Response} from "@angular/http";
-import {AuthenticationService} from "../authentication.service";
+import {Inject, Injectable} from "@angular/core";
+import {Http, Response} from "@angular/http";
+import {AuthenticationService} from "./authentication.service";
 import {Observable} from "rxjs/Observable";
 import {Target} from "../model/target";
-import MappingUtils from "../mapping-utils";
+import MappingUtils from "../model/mapping-utils";
 import {TargetSlot} from "../model/target-slot";
+import {BaseHeadersService} from "./base-service";
+import {APP_CONFIG, AppConfig} from "../app.config";
+import {Logger} from "angular2-logger/core";
 
 @Injectable()
-export class TargetService {
+export class TargetService extends BaseHeadersService {
 
   private baseUrl = "http://localhost:8181";
 
   constructor(private http: Http,
-              private authenticationService: AuthenticationService) {
+              @Inject(APP_CONFIG) private config: AppConfig,
+              private _logger: Logger,
+              private _authenticationService: AuthenticationService) {
+    super(_authenticationService);
+    this.baseUrl = this.config.apiEndpoint + "target";
   }
 
-  private getHeaders() {
-    // I included these headers because otherwise FireFox
-    // will request text/html instead of application/json
-    let headers = new Headers();
-    headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Access-Control-Expose-Headers', 'Location');
-    headers.append('Authorization', 'Bearer ' + this.authenticationService.getToken());
-    return headers;
-  }
 
   getAll(): Observable<Target[]> {
     let targets$ = this.http
-      .get(`${this.baseUrl}/target`, {headers: this.getHeaders()})
+      .get(`${this.baseUrl}`, {headers: this.getHeaders()})
       .map(this.mapTargets).catch(handleError);
     return targets$;
   }
@@ -37,7 +33,7 @@ export class TargetService {
 
   getById(target_id: any) {
     let target$ = this.http
-      .get(`${this.baseUrl}/target/${target_id}`,
+      .get(`${this.baseUrl}/${target_id}`,
         {headers: this.getHeaders()})
       .map(this.mapTarget)
       .catch(handleError);
@@ -45,7 +41,7 @@ export class TargetService {
   }
 
   removeDishFromTarget(dish_id: string, target_id: string) {
-    var url: string = this.baseUrl + '/target/' + target_id + "/dish/" + dish_id;
+    var url: string = this.baseUrl + '/' + target_id + "/dish/" + dish_id;
 
     return this
       .http
@@ -57,7 +53,7 @@ export class TargetService {
     var newTargetSlot: TargetSlot = <TargetSlot>({
       slot_dish_tag_id: tag_id,
     });
-    var url: string = this.baseUrl + '/target/' + target_id + "/slot";
+    var url: string = this.baseUrl + '/' + target_id + "/slot";
 
     return this
       .http
@@ -67,7 +63,7 @@ export class TargetService {
   }
 
   deleteSlotFromTarget(target_id: string, slot_id: string) {
-    var url: string = this.baseUrl + '/target/' + target_id + "/slot/" + slot_id;
+    var url: string = this.baseUrl + '/' + target_id + "/slot/" + slot_id;
 
     return this
       .http
@@ -80,7 +76,7 @@ export class TargetService {
       target_name: targetName,
     });
 
-    var url: string = this.baseUrl + '/target';
+    var url: string = this.baseUrl + '';
 
     return this
       .http
@@ -90,7 +86,7 @@ export class TargetService {
   }
 
   deleteTarget(targetId: string) {
-    var url: string = this.baseUrl + '/target/' + targetId;
+    var url: string = this.baseUrl + '/' + targetId;
 
     return this
       .http
@@ -98,7 +94,7 @@ export class TargetService {
   }
 
   addTagToTarget(target_id: string, tag_id: string) {
-    var url: string = this.baseUrl + '/target/' + target_id + "/tag/" + tag_id;
+    var url: string = this.baseUrl + '/' + target_id + "/tag/" + tag_id;
 
     return this
       .http
@@ -108,7 +104,7 @@ export class TargetService {
   }
 
   removeTagFromTarget(target_id: string, tag_id: string) {
-    var url: string = this.baseUrl + '/target/' + target_id + "/tag/" + tag_id;
+    var url: string = this.baseUrl + '/' + target_id + "/tag/" + tag_id;
 
     return this
       .http
@@ -117,9 +113,9 @@ export class TargetService {
   }
 
   moveTagToTarget(target_id: string, tag_id: string, source_slot_id: string) {
-    var addTagUrl: string = this.baseUrl + '/target/'
+    var addTagUrl: string = this.baseUrl + '/'
       + target_id + "/tag/" + tag_id;
-    var cleanupTagUrl: string = this.baseUrl + '/target/'
+    var cleanupTagUrl: string = this.baseUrl + '/'
       + target_id + "/slot/" + source_slot_id
       + "/tag/" + tag_id;
 
@@ -139,17 +135,17 @@ export class TargetService {
   }
 
   moveTagToTargetSlot(target_id: string, tag_id: string, source_slot_id: string, dest_slot_id: string) {
-    var addTagUrl: string = this.baseUrl + '/target/'
+    var addTagUrl: string = this.baseUrl + '/'
       + target_id + "/slot/" + dest_slot_id
       + "/tag/" + tag_id;
     var cleanupTagUrl: string;
     if (source_slot_id) {
-      cleanupTagUrl = this.baseUrl + '/target/'
+      cleanupTagUrl = this.baseUrl + '/'
         + target_id + "/slot/" + source_slot_id
         + "/tag/" + tag_id;
     } else {
       // no source id - this was from the target, and should be deleted from the target
-      cleanupTagUrl = this.baseUrl + '/target/' + target_id + "/tag/" + tag_id;
+      cleanupTagUrl = this.baseUrl + '/' + target_id + "/tag/" + tag_id;
     }
 
 
@@ -167,15 +163,6 @@ export class TargetService {
     return addTagCall.concat(cleanupTagCall);
   }
 
-  generateProposal(target_id: string) {
-    var url: string = this.baseUrl + '/proposal/target/' + target_id;
-
-    return this
-      .http
-      .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
-  }
 
   private mapTargets(response: Response): Target[] {
     if (response.json()._embedded && response.json()._embedded.targetResourceList) {

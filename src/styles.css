@@ -1,1 +1,336 @@
 /* You can add global styles to this file, and also import other style files */
+
+.main-color {
+  background-color: #4a6288;
+  color: white;
+}
+
+.dish-color {
+  background-color: #e26279;
+  border-color: #e26279;
+  color: white;
+  text-decoration: none;
+}
+
+.dish-text-color {
+  color: #e26279;
+  text-decoration: none;
+}
+
+.dish-menu-color {
+  color: white;
+  background-color: #d4d1d236;
+
+}
+
+.dish-outline-color {
+  background-color: white;
+  border-color: #e26279;
+  color: #e26279;
+
+}
+
+.dishtype-1 {
+  background-color: #e26279;
+  color: white;
+}
+
+.dish-menubar-text-color {
+  color: #4a6187cf;
+}
+
+.list-color {
+  background-color: #fcd06d;
+  color: white;
+}
+
+.plan-color {
+  background-color: #28b9b9;
+  color: white;
+}
+
+.extra-color {
+  background-color: #4cc991;
+  color: white;
+}
+
+.ingredient-color {
+  background-color: #28b9b9;
+  color: white;
+}
+
+.ingredient-outline-color {
+  background-color: white;
+  border-color: #28b9b9;
+  color: #28b9b9;
+
+}
+
+.ingredient-1 {
+  background-color: #28b9b9;
+  color: white;
+}
+
+.ingredient-2 {
+  background-color: #4FC5C3;
+  color: white;
+}
+
+.ingredient-3 {
+  background-color: #76D2D0;
+  color: white;
+}
+
+.ingredient-4 {
+  background-color: #76D2D0;
+  color: white;
+}
+
+.ingredient-5 {
+  background-color: #C4EBEB;
+  color: white;
+}
+
+.rating-outline-color {
+  background-color: white;
+  border-color: #fcd06d;
+  color: #fcd06d;
+
+}
+
+.rating-color {
+  background-color: #fcd06d;
+  color: white;
+}
+
+.rating-1 {
+  background-color: #fcd06d;
+  color: white;
+}
+
+.rating-2 {
+  background-color: rgba(252, 208, 109, 0.81);
+  color: white;
+}
+
+.rating-3 {
+  background-color: rgba(252, 208, 109, 0.61);
+  color: white;
+}
+
+.rating-4 {
+  background-color: rgba(253, 238, 194, 0.5);
+  color: white;
+}
+
+.rating-5 {
+  background-color: rgba(252, 208, 109, 0.41);
+  color: white;
+}
+
+.tagtype-color {
+  background-color: #4cc991;
+  color: white;
+}
+
+.tagtype-outline-color {
+  background-color: white;
+  border-color: #4cc991;
+  color: #4cc991;
+
+}
+
+.tagtype-1 {
+  background-color: #4cc991;
+  color: white;
+}
+
+.tagtype-2 {
+  background-color: #4cc991;
+  color: white;
+}
+
+.tagtype-3 {
+  background-color: #4cc991;
+  color: white;
+}
+
+.tagtype-4 {
+  background-color: #4cc991;
+  color: white;
+}
+
+.tagtype-5 {
+  background-color: #4cc991;
+  color: white;
+}
+
+/* links */
+
+a:hover {
+  color: white;
+  text-decoration: none;
+}
+
+.body-adjust {
+  margin-top: -10px;
+}
+
+/** headers ***/
+.page-title {
+  font-size: x-large;
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px #0000004d;
+}
+
+/** menu bar **/
+.menubar {
+  min-height: 40px;
+  padding-left: 15px;
+  padding-top: 3px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-left: 0px;
+  margin-bottom: 5px;
+
+}
+
+.menubar-buttons {
+  margin-top: 3px;
+}
+
+.submenubar {
+  border-bottom: 1px;
+  border-bottom-style: solid;
+  border-color: #4a6187;
+  padding-left: 0px;
+}
+
+/** dish tag buttons **/
+.dish-tag-element {
+  min-width: 150px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  text-align: center;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border: 1px;
+  border-style: solid;
+  text-transform: capitalize;
+
+}
+
+.dish-tag-element-spaced {
+  word-wrap: break-word;
+  max-width: 250px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.dish-tag-element-squished {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.dish-tag-element:disabled {
+  color: #cccccc;
+}
+
+.dish-tag-xl {
+  font-size: x-large;
+  min-width: 300px;
+}
+
+.dish-tag-xl-squished {
+  font-size: x-large;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+/** utility buttons **/
+.add-button-lg {
+  background-color: #e26178;
+  color: white;
+  font-size: 1.5em;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 5px;
+  margin: 3px;
+}
+
+.add-button-md {
+  background-color: #e26178;
+  color: white;
+  font-size: 1em;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 5px;
+  margin: 2px;
+}
+
+.filterbutton {
+  margin-top: 5px;
+  margin-right: 15px;
+  font-size: large;
+}
+
+/** inputs **/
+.atinput-dish:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #e26279;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(226, 98, 121, 0.25);
+}
+
+.atinput-dish {
+  color: #495057;
+  background-color: #fff;
+  width: 175px;
+  outline: none;
+}
+
+/** search box **/
+.searchbox-group {
+  max-height: 30px;
+  width: 175px;
+  margin-top: 3px;
+}
+
+.searchbox {
+  max-height: 30px;
+  width: 175px;
+  min-width: 175px;
+}
+
+.searchbox:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #ced4da;
+  outline: none;
+  box-shadow: 0 0 0 0rem white;
+}
+
+.searchbox-group-button {
+  color: white;
+  background-color: #4a6288;
+}
+
+/** icons / icon-buttons **/
+.iconbutton {
+  color: #4a6288;
+  font-size: large;
+  margin: 3px;
+}
