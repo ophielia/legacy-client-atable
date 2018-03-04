@@ -1,8 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 
+body {
+  font-family: 'Arvo';
+  /*font-family: 'Titillium Web', sans-serif;*/
+}
+
 .main-color {
   background-color: #4a6288;
   color: white;
+}
+
+.main-color-outline {
+  color: #4a6288;
+  background-color: white;
 }
 
 .dish-color {
@@ -23,11 +33,22 @@
 
 }
 
+.dish-menu-dropdown-color {
+  color: white;
+  background-color: #CBC8C9;
+
+}
+
 .dish-outline-color {
   background-color: white;
   border-color: #e26279;
   color: #e26279;
 
+}
+
+.dishtype-1-outline {
+  color: #e26279;
+  background-color: white;
 }
 
 .dishtype-1 {
@@ -36,7 +57,7 @@
 }
 
 .dish-menubar-text-color {
-  color: #4a6187cf;
+  color: #4a6187;
 }
 
 .list-color {
@@ -66,6 +87,10 @@
 
 }
 
+.ingredient-1-outline {
+  color: #28b9b9;
+  background-color: white;
+}
 .ingredient-1 {
   background-color: #28b9b9;
   color: white;
@@ -103,6 +128,11 @@
   color: white;
 }
 
+.rating-1-outline {
+  color: #fcd06d;
+  background-color: white;
+}
+
 .rating-1 {
   background-color: #fcd06d;
   color: white;
@@ -138,6 +168,11 @@
   border-color: #4cc991;
   color: #4cc991;
 
+}
+
+.tagtype-1-outline {
+  color: #4cc991;
+  background-color: white;
 }
 
 .tagtype-1 {
@@ -199,6 +234,49 @@ a:hover {
 
 }
 
+.menubar-flush {
+  min-height: 40px;
+  padding-left: 15px;
+  padding-right: 10px;
+  padding-top: 3px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-left: 0px;
+
+}
+
+.menubar-flush-top {
+  min-height: 40px;
+  padding-right: 10px;
+  padding-left: 15px;
+  padding-top: 3px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-left: 0px;
+
+}
+
+.menubar-flush-middle {
+  min-height: 40px;
+  padding-right: 10px;
+  padding-left: 15px;
+  padding-top: 3px;
+  margin-left: 0px;
+
+}
+
+.menubar-flush-bottom {
+  min-height: 40px;
+  padding-right: 10px;
+  padding-left: 15px;
+  padding-top: 3px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  margin-left: 0px;
+
+}
 .menubar-buttons {
   margin-top: 3px;
 }
@@ -210,6 +288,23 @@ a:hover {
   padding-left: 0px;
 }
 
+.filterbar {
+
+  padding-left: 2px;
+}
+
+.filterbar-tease {
+
+  padding-left: 0px;
+  margin-top: -10px;
+}
+
+.dropdown-inlinemenu {
+  background-color: #f6f5f5;
+  padding-left: 2px;
+  padding-left: 15px;
+  color: #4a6187;
+}
 /** dish tag buttons **/
 .dish-tag-element {
   min-width: 150px;
@@ -224,6 +319,35 @@ a:hover {
   border-style: solid;
   text-transform: capitalize;
 
+}
+
+.dish-tag-element-fill-teaser {
+  width: 100%;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  text-align: center;
+  /* border-bottom-left-radius: 4px; */
+  /* border-bottom-right-radius: 4px; */
+  /* border-top-left-radius: 4px; */
+  /* border-top-right-radius: 4px; */
+  border: 1px;
+}
+
+.dish-tag-element-fill {
+  width: 100%;
+  margin-bottom: 5px;
+  text-align: center;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border: 1px;
+  border-style: solid;
+  text-transform: capitalize;
+  border-style: solid;
+  text-transform: capitalize;
+  min-height: 35px;
+  padding-top: 2px;
 }
 
 .dish-tag-element-spaced {
@@ -280,10 +404,72 @@ a:hover {
   margin: 2px;
 }
 
+.icon-button {
+  color: #4a6288;
+  font-size: 1.5em;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
+  min-width: 25px;
+}
+
+.icon-button-sm {
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
+  min-width: 25px;
+  padding-top: 5px;
+}
+
+.standard-button-sm {
+  padding-right: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
+  min-width: 25px;
+  padding-top: 5px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.text-button-sm {
+  font-size: medium;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.main-button-color-invert {
+  color: #4a6288;
+}
+
+.main-button-color {
+  background-color: #4a6288;
+  color: white;
+}
 .filterbutton {
   margin-top: 5px;
   margin-right: 15px;
   font-size: large;
+}
+
+/** panels **/
+
+.inline-menu-panel {
+  min-width: 150px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  text-align: center;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border: 1px;
+  border-style: solid;
+  text-transform: capitalize;
 }
 
 /** inputs **/
@@ -302,11 +488,36 @@ a:hover {
   outline: none;
 }
 
+.menubar-input {
+  color: #495057;
+  background-color: #fff;
+  width: 175px;
+  outline: none;
+  height: 30px;
+  font-family: Arvo, sans-serif !important;
+}
+
+.menubar-input-centered {
+  color: #495057;
+  background-color: #fff;
+  width: 175px;
+  outline: none;
+  height: 30px;
+  font-family: Arvo, sans-serif !important;
+  /*margin-right: 5px;*/
+  float: right;
+  margin-bottom: 10px;
+}
+
+
+
 /** search box **/
 .searchbox-group {
   max-height: 30px;
-  width: 175px;
+  width: 230px;
   margin-top: 3px;
+  min-width: 230px;
+  margin-right: 5px;
 }
 
 .searchbox {
@@ -333,4 +544,43 @@ a:hover {
   color: #4a6288;
   font-size: large;
   margin: 3px;
+}
+
+.standalone-button {
+  font-size: larger;
+  padding: 5px;
+}
+
+/**
+text
+ */
+
+.text-menu-link {
+  font-weight: bold;
+}
+
+.menubar-header {
+  font-size: larger;
+  font-weight: bolder;
+}
+
+/** no gutters, and other utils **/
+.spacer {
+  height: 10px;
+  min-height: 10px;
+}
+
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+
+>
+.col,
+
+>
+[class*="col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
 }

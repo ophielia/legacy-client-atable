@@ -13,6 +13,7 @@ import {TagCommService} from "../legacy/drilldown/tag-drilldown-select.service";
 import {AddDishIngredientComponent} from './add-dish-ingredient/add-dish-ingredient.component';
 import {AddDishFinishComponent} from './add-dish-finish/add-dish-finish.component';
 import {ManageDishComponent} from './manage-dish/manage-dish.component';
+import {EditDishComponent} from './edit-dish/edit-dish.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,9 @@ import {ManageDishComponent} from './manage-dish/manage-dish.component';
     AppCommonModule
   ],
   providers: [DishService, TagCommService],
-  declarations: [AddDishRatingComponent, AddDishGeneralComponent, DishWindowComponent, AddDishIngredientComponent, AddDishFinishComponent, ManageDishComponent]
+  declarations: [AddDishRatingComponent, AddDishGeneralComponent,
+    DishWindowComponent, AddDishIngredientComponent,
+    AddDishFinishComponent, ManageDishComponent, EditDishComponent]
 })
 export class DishModule {
 }

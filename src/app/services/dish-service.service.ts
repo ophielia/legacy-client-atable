@@ -146,6 +146,19 @@ export class DishService extends BaseHeadersService {
     }
     return dishs$;
   }
+
+  addTagToDishes(dishList: Dish[], tag_id: string) {
+    if (!dishList || dishList.length == 0) {
+      return;
+    }
+    var dishrequest$ = this.addTagToDish(dishList[0].dish_id, tag_id);
+    for (var i = 1; i < dishList.length; i++) {
+      let nextDish$ = this.addTagToDish(dishList[i].dish_id, tag_id);
+      dishrequest$ = dishrequest$.merge(nextDish$);
+    }
+    return dishrequest$;
+  }
+
 }
 
 

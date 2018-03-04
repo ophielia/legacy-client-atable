@@ -1,0 +1,114 @@
+<div class="container">
+  <div class="row page-title dish-text-color">Edit Dish</div>
+  <div class="row">
+    <div class="col-9" style="padding-left:0px;">
+      <div class="row menubar dish-menubar-text-color dish-menu-color menubar-header justify-content-start">
+        <div>
+
+          <ng-container *ngIf="!isEditDishName">
+            <span style="padding-top:5px">{{dishName}}</span>
+            <span class="icon-button-sm" (click)="showEditDishName()"
+            ><span class="fa-edit fa"></span></span>
+          </ng-container>
+
+          <div *ngIf="isEditDishName" class="input-group searchbox-group" style="max-width:135px;">
+            <input type="text" class="form-control searchbox"
+                   aria-describedby="search-query"
+                   placeholder="{{dish.name}}"
+                   [(ngModel)]="dishName"
+                   (keyup.enter)="saveDishName()"
+            />
+            <span (click)="saveDishName()" class="input-group-addon searchbox-group-button" id="search-query"><span
+              class="fa-check fa"></span></span>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="row" style="margin-left:0px">
+
+        <div *ngFor="let tag of dishTags, let i = index" style="margin:5px">
+          <div class="clearfix" *ngIf="i % 3 == 0"></div>
+
+          <div atTagBrowseStyle [tag]="tag" [isOutline]="true"
+               [origClass]="'dish-tag-element dish-tag-element-spaced '"
+               (dblclick)="selectTag(tag)">{{tag.name}}
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <div class="col-3">
+      <div
+        class="row menubar-flush-top dish-menubar-text-color dish-menu-color justify-content-end">
+        <div class="">                <span (click)="goToList()"
+                                            class="fa-list fa standalone-button"></span></div>
+
+      </div>
+      <div class="row menubar-flush-middle dish-menubar-text-color dish-menu-dropdown-color justify-content-end">
+        <div class="col">
+          <div *ngIf="!isTagEntry" class="row justify-content-end text-menu-link" (click)="showTagEntry()">Add Tag</div>
+          <ng-container *ngIf="isTagEntry">
+            <div class="row justify-content-end text-menu-link border-bottom-1">
+              <div class="input-group searchbox-group" style="margin-bottom:10px;max-width:135px;">
+                <at-tag-select aria-describedby="filter-query"
+                               [tagTypes]="'Ingredient,Rating,DishType,TagType'"
+                               [selectType]="'Assign'"
+                               [showText]="'Select Tag To Add'"
+                               [passedInputStyle]="'menubar-input-centered'"
+                               (tagSelected)="addTagToDish($event)"></at-tag-select>
+                <span class="input-group-addon searchbox-group-button" id="filter-query"
+                      style="color:#cbc8c9;margin-left:-1px;'"
+                      (click)="toggleBrowse()"><span
+                  class="fa-filter fa"></span></span>
+                <span (click)="hideTagEntry()"
+                      class="fa-times fa standalone-button"></span>
+              </div>
+            </div>
+            <div>
+
+              <ng-container *ngIf="showBrowse">
+                <div *ngFor="let tagtype of browseTagTypes"
+                     class="{{ tagtype.toLocaleLowerCase() + '-1 dish-tag-element'}}">
+                  <span (click)="expandOrFoldBrowse(tagtype)">{{tagtype}}</span>
+                  <ng-container *ngIf="isExpanded(tagtype)">
+                    <ng-container *ngFor="let drilldown of browseAllDrilldowns[tagtype]">
+
+                      <at-tag-browse [tagDrilldown]="drilldown" [showEdit]="false"></at-tag-browse>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </ng-container>
+
+
+            </div>
+
+          </ng-container>
+          <div class="row justify-content-end text-menu-link">Add to Meal Plan</div>
+          <div class="row justify-content-end text-menu-link"> Add to List</div>
+          <div class="row justify-content-end spacer"></div>
+        </div>
+      </div>
+
+
+      <div *ngIf="selectedTags.length > 0" class="row menubar-flush inline-menu-panel main-color-outline">
+        <div class="col">
+          <div *ngFor="let seltag of selectedTags"
+               atTagBrowseStyle [tag]="seltag" [isOutline]="true"
+               [origClass]="'dish-tag-element dish-tag-element '"
+               (dblclick)="unselectTag(seltag)">
+            {{seltag.name}}
+          </div>
+          <div class="standard-button-sm main-button-color"
+               (click)="removeTagsFromDish()">Remove from Dish
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -15,11 +15,14 @@ export class TagSelectComponent implements OnInit, OnDestroy {
   @Input() tagTypes: string;
   @Input() showText: string;
   @Input() selectType: string = TagSelectType.Assign;
+  @Input() passedInputStyle: any;
+  @Input() showAsInputGroup: any = true;
 
 
   autoSelectedTag: any;
   filteredTags: ITag[];
   alltags: ITag[];
+  dispClass: string = 'atinput-dish';
 
   name: string;
   dish: Dish = <Dish>{dish_id: "", name: "", description: ""};
@@ -49,6 +52,9 @@ export class TagSelectComponent implements OnInit, OnDestroy {
 
     this.autoSelectedTag = null;
     this.currentSelect = this.selectType;
+    if (this.passedInputStyle) {
+      this.dispClass = this.passedInputStyle;
+    }
     this.getAllTags();
 
   }

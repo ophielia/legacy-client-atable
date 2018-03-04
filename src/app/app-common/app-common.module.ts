@@ -12,6 +12,7 @@ import {TagSelectComponent} from './tag-select/tag-select.component';
 import {AutoCompleteModule} from "primeng/primeng";
 import {HttpModule} from "@angular/http";
 import {FormsModule} from "@angular/forms";
+import {ModalComponent} from "./modal/modal";
 
 @NgModule({
   imports: [
@@ -24,8 +25,8 @@ import {FormsModule} from "@angular/forms";
     commonRouting
   ],
   providers: [TagsService, TagCommService],
-  declarations: [TagBrowseComponent, TagBrowseNodeComponent, TagBrowseStyleDirective, TagSelectComponent],
-  exports: [TagBrowseComponent, TagSelectComponent, TagBrowseStyleDirective]
+  declarations: [TagBrowseComponent, TagBrowseNodeComponent, TagBrowseStyleDirective, ModalComponent, TagSelectComponent],
+  exports: [TagBrowseComponent, TagSelectComponent, TagBrowseStyleDirective, ModalComponent]
 })
 export class AppCommonModule {
 }

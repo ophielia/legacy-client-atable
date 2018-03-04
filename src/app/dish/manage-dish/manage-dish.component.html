@@ -1,9 +1,8 @@
 <div class="container">
   <div class="row page-title dish-text-color">Manage Dishes</div>
   <div class="row">
-    <div class="col-9" style="padding-left:0px;">
+    <div class="{{hasSelectedDishes()?'col-9':'col-12'}}" style="padding-left:0px;">
       <div class="row menubar dish-menubar-text-color dish-menu-color justify-content-start">
-        <div class="filterbutton" (click)="toggleFilter()"><span class="fa-filter fa"></span></div>
         <div class="input-group searchbox-group" style="max-width:135px;">
           <input type="text" class="form-control searchbox"
                  aria-describedby="search-query"
@@ -15,21 +14,33 @@
           <span class="input-group-addon searchbox-group-button" id="search-query"><span
             class="fa-search fa"></span></span>
         </div>
-
+        <div class="input-group searchbox-group" style="max-width:135px;">
+          <at-tag-select aria-describedby="filter-query"
+                         [tagTypes]="'Ingredient,Rating,DishType,TagType'"
+                         [selectType]="'Search'"
+                         [showText]="'Filter by Tag'"
+                         [passedInputStyle]="'menubar-input'"
+                         (tagSelected)="addTagToFilter($event)"></at-tag-select>
+          <span class="input-group-addon searchbox-group-button" id="filter-query" style="margin-left:-1px;"
+                (click)="toggleBrowse()"><span
+            class="fa-filter fa"></span></span>
+        </div>
       </div>
 
-
-      <div *ngIf="showFilter" class="row submenubar" style="margin-left:0px">
-        <at-tag-select [tagTypes]="'Ingredient,Rating,DishType,TagType'"
-                       [selectType]="'Search'"
-                       [showText]="'Filter by Tag'"
-                       (tagSelected)="addTagToFilter($event)"></at-tag-select>
-        <div class="iconbutton" (click)="toggleBrowse()"><span class="fa-binoculars fa"></span></div>
-
-        <div *ngFor="let tag of filterTags"
-             atTagBrowseStyle [tag]="tag"
-             [origClass]="'dish-tag-element-squished dish-tag-element dish-tag-element-squished '"
-        >{{tag.name}}
+      <div class="row filterbar-tease" style="margin-left:0px">
+        <div class="col-sm">
+          <div class="row ">
+            <div *ngFor="let tag of filterTags" atTagBrowseStyle [tag]="tag"
+                 [origClass]="'col  dish-tag-element-fill-teaser'"
+                 (dblclick)="removeTagFromFilter(tag)"
+            >{{tag.name}}
+              <fa style="float:right; padding-left:5px;"
+                  [class.inverted]="tag.is_inverted"
+                  [class.notinverted]="!tag.is_inverted"
+                  (click)="toggleInvert(tag)"
+                  [name]="'ban'"></fa>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -37,9 +48,14 @@
 
         <div *ngIf="showBrowse" class="col-3">
           <div *ngFor="let tagtype of browseTagTypes" class="{{ tagtype.toLocaleLowerCase() + '-1 dish-tag-element'}}"
-               (click)="expandOrFoldBrowse(tagtype)">
-            {{tagtype}}
-            <!--<at-tag-browse [tagDrilldown]="tag" [showEdit]="false"></at-tag-browse>-->
+          >
+            <span (click)="expandOrFoldBrowse(tagtype)">{{tagtype}}</span>
+            <ng-container *ngIf="isExpanded(tagtype)">
+              <ng-container *ngFor="let drilldown of browseAllDrilldowns[tagtype]">
+
+                <at-tag-browse [tagDrilldown]="drilldown" [showEdit]="false"></at-tag-browse>
+              </ng-container>
+            </ng-container>
           </div>
         </div>
 
@@ -52,9 +68,66 @@
         </div>
 
       </div>
+
+
     </div>
-    <div class="col-3">
-      <div *ngFor="let selected of selectedDishes">{{selected.name}}</div>
+
+    <div *ngIf="hasSelectedDishes()" class="col-3">
+      <div
+        class="row {{showSelectedMenu?'menubar-flush-top':'menubar-flush'}} dish-menubar-text-color dish-menu-color justify-content-end">
+
+        <div class="icon-button"
+             (click)="toggleSelectedMenu()"><span class="fa-ellipsis-v fa"></span></div>
+      </div>
+      <div *ngIf="showSelectedMenu"
+           class="row menubar-flush-middle dish-menubar-text-color dish-menu-dropdown-color justify-content-end">
+        <div class="col">
+          <div *ngIf="!isShowTagEntry" class="row justify-content-end text-menu-link" (click)="showTagEntry()">Add Tag
+          </div>
+          <ng-container *ngIf="isShowTagEntry">
+            <div class="row justify-content-end text-menu-link">
+              <at-tag-select aria-describedby="filter-query"
+                             [tagTypes]="'Ingredient,Rating,DishType,TagType'"
+                             [selectType]="'Assign'"
+                             [showText]="'Select Tag to Add'"
+                             [passedInputStyle]="'menubar-input'"
+                             (tagSelected)="addTagToDishes($event)"></at-tag-select>
+            </div>
+
+
+          </ng-container>
+          <div class="row justify-content-end text-menu-link">Add to Meal Plan</div>
+          <div class="row justify-content-end text-menu-link"> Add to List</div>
+          <div class="row justify-content-end spacer"></div>
+        </div>
+      </div>
+      <div *ngIf="selectedDishes.length > 0" class="row main-color justify-content-center" style="margin-left:0px;">
+        <div *ngFor="let selected of selectedDishes" class="dish-tag-element dish-tag-element-spaced dish-color"
+             (dblclick)="unSelectDish(selected)"
+             (click)="toggleDishTags(selected.dish_id)"
+             (mouseover)="selectedDishMouseIn(selected)"
+             (mouseleave)="selectedDishMouseOut()">{{selected.name}}
+          <span *ngIf="selectHoverDetail == selected.dish_id"
+                class="icon-button"
+                (click)="goToDishEdit(selected.dish_id)"
+          ><span class="fa-edit fa"></span></span>
+          <ng-container *ngIf="isShowTags(selected.dish_id)">
+            <div *ngFor="let dishtag of selected.tags">
+              <div atTagBrowseStyle [tag]="dishtag" [origClass]="'dish-tag-element-squished dish-tag-element '">
+                {{dishtag.name}}
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <div class=" spacer"></div>
+      </div>
+
     </div>
   </div>
+
+  <app-modal #modal1 [autoHide]="2500">
+    <div class="app-modal-body">
+      Tag added to Dishes
+    </div>
+  </app-modal>
 </div>

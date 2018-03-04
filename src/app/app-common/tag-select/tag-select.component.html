@@ -1,10 +1,11 @@
-<div>
+<div *ngIf="this.showAsInputGroup">
   <p-autoComplete [(ngModel)]="autoSelectedTag"
                   [suggestions]="filteredTags"
                   (completeMethod)="filterTags($event)"
-                  field="name" [size]="30"
-                  [inputStyleClass]="'atinput-dish'"
+                  field="name"
+                  [inputStyleClass]="dispClass"
                   (onSelect)="bingo($event)"
                   (keyup.enter)="checkSearchEnter(focusanchor)"
                   placeholder="{{showText}}" [minLength]="1" #focusanchor></p-autoComplete>
+
 </div>
