@@ -6,6 +6,9 @@ import {dashboardRouting} from "./dashboard.routes";
 import {FormsModule} from "@angular/forms";
 import {DEBUG_LOGGER_PROVIDERS, Logger} from "angular2-logger/core";
 import {DishModule} from "../dish/dish.module";
+import {ShoppingListModule} from "../shopping-list/shopping-list.module";
+import {ShoppingListLandingComponent} from './shopping-list-landing/shopping-list-landing.component';
+import {EditShoppingListComponent} from '../shopping-list/edit-shopping-list/edit-shopping-list.component';
 
 @NgModule({
   imports: [
@@ -13,9 +16,10 @@ import {DishModule} from "../dish/dish.module";
     FormsModule,
     dashboardRouting,
     DishModule,
+    ShoppingListModule,
   ],
   providers: [Logger],
-  declarations: [LandingPadComponent, DishLandingComponent]
+  declarations: [LandingPadComponent, DishLandingComponent, ShoppingListLandingComponent]
 })
 export class DashboardModule {
 }

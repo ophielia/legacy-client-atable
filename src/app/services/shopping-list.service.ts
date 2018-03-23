@@ -2,7 +2,7 @@ import {Inject, Injectable} from "@angular/core";
 import {AuthenticationService} from "./authentication.service";
 import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
-import {ShoppingList} from "../model/shoppinglist";
+import {IShoppingList} from "../model/shoppinglist";
 import MappingUtils from "../model/mapping-utils";
 import ListLayoutType from "../model/list-layout-type";
 import {Item} from "../model/item";
@@ -25,7 +25,7 @@ export class ShoppingListService extends BaseHeadersService {
     this.shoppingListUrl = this.config.apiEndpoint + "shoppinglist";
   }
 
-  getAll(): Observable<ShoppingList[]> {
+  getAll(): Observable<IShoppingList[]> {
     this._logger.debug("Retrieving all shopping lists for user.");
     let shoppingLists$ = this.http
       .get(`${this.shoppingListUrl}`, {headers: this.getHeaders()})
@@ -33,7 +33,7 @@ export class ShoppingListService extends BaseHeadersService {
     return shoppingLists$;
   }
 
-  getById(shoppingList_id: string): Observable<ShoppingList> {
+  getById(shoppingList_id: string): Observable<IShoppingList> {
     let shoppingList$ = this.http
       .get(`${this.shoppingListUrl}/${shoppingList_id}`, {headers: this.getHeaders()})
       .map(this.mapShoppingList)
@@ -41,7 +41,7 @@ export class ShoppingListService extends BaseHeadersService {
     return shoppingList$;
   }
 
-  getByType(list_type: string): Observable<ShoppingList> {
+  getByType(list_type: string): Observable<IShoppingList> {
     this._logger.debug("Retrieving shopping lists by type [" + list_type + "] for user.");
     let shoppingList$ = this.http
       .get(`${this.shoppingListUrl}/type/${list_type}`, {headers: this.getHeaders()})
@@ -53,7 +53,7 @@ export class ShoppingListService extends BaseHeadersService {
   addShoppingList(listType: string): Observable<Response> {
     // MM hardcoding list layout type until there are 1) more or 2) defaults in backend
     var layoutType = ListLayoutType.All;
-    var newShoppingList: ShoppingList = <ShoppingList>({
+    var newShoppingList: IShoppingList = <IShoppingList>({
       list_type: listType,
       layout_type: layoutType
     });
@@ -110,11 +110,11 @@ export class ShoppingListService extends BaseHeadersService {
         {headers: this.getHeaders()});
   }
 
-  mapShoppingLists(response: Response): ShoppingList[] {
+  mapShoppingLists(response: Response): IShoppingList[] {
     return response.json()._embedded.shoppingListResourceList.map(MappingUtils.toShoppingList);
   }
 
-  mapShoppingList(response: Response): ShoppingList {
+  mapShoppingList(response: Response): IShoppingList {
     if (response.status == 200) {
       var beep = MappingUtils.toShoppingList(response.json());
       return beep;

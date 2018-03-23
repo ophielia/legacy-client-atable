@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Dish} from "../../model/dish";
 import {DishService} from "../../services/dish-service.service";
@@ -6,20 +6,23 @@ import {Tag} from "../../model/tag";
 import TagType from "app/model/tag-type";
 import {TagsService} from "../../services/tags.service";
 import {TagDrilldown} from "app/model/tag-drilldown";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'at-edit-dish',
   templateUrl: './edit-dish.component.html',
   styleUrls: ['./edit-dish.component.css']
 })
-export class EditDishComponent implements OnInit {
+export class EditDishComponent implements OnInit, OnDestroy {
+
+
 
   dishId: string;
   dish: Dish;
   dishName: string;
   dishTags: Tag[] = [];
 
-
+  unsubscribe: Subscription[] = [];
   isEditDishName: boolean = false;
   selectedTags: Tag[] = [];
   browseAllDrilldowns: { [type: string]: TagDrilldown[] } = {};
@@ -54,17 +57,21 @@ export class EditDishComponent implements OnInit {
     this.getTagsForBrowse();
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe.forEach(s => s.unsubscribe());
+  }
+
   getTagsForBrowse() {
 
     for (var i = 0; i < this.browseTagTypes.length; i++) {
       let ttype = this.browseTagTypes[i];
       // get / fill tag lists here from service
-      this.tagService
+      let sub$ = this.tagService
         .getTagDrilldownList(ttype)
         .subscribe(p => {
           this.browseAllDrilldowns[ttype] = p
         });
-
+      this.unsubscribe.push(sub$);
       this.expandFoldState[ttype] = false;
     }
 
@@ -72,13 +79,14 @@ export class EditDishComponent implements OnInit {
   }
 
   getDish(id: string) {
-    this.dishService
+    let sub$ = this.dishService
       .getById(id)
       .subscribe(p => {
         this.dish = p;
         this.dishName = p.name;
         this.setDishTags(p.tags);
       });
+    this.unsubscribe.push(sub$);
   }
 
   showEditDishName() {
@@ -93,12 +101,13 @@ export class EditDishComponent implements OnInit {
 
   saveDishName() {
     this.dish.name = this.dishName;
-    this.dishService.saveDish(this.dish)
+    let sub$ = this.dishService.saveDish(this.dish)
       .subscribe(d => {
         this.getDish(this.dishId);
         this.isEditDishName = false;
       });
 
+    this.unsubscribe.push(sub$);
   }
 
   selectTag(tag: Tag) {
@@ -117,9 +126,10 @@ export class EditDishComponent implements OnInit {
 
   removeTagsFromDish() {
     let removeIds = this.selectedTags.map(t => t.tag_id);
-    this.dishService.addAndRemoveTags(this.dish, [], removeIds, false)
+    let sub$ = this.dishService.addAndRemoveTags(this.dish, [], removeIds, false)
       .subscribe(f => this.getDish(this.dishId));
     this.selectedTags = [];
+    this.unsubscribe.push(sub$);
   }
 
   showTagEntry() {

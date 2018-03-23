@@ -2,7 +2,7 @@
   <div class="row page-title dish-text-color">Manage Dishes</div>
   <div class="row">
     <div class="{{hasSelectedDishes()?'col-9':'col-12'}}" style="padding-left:0px;">
-      <div class="row menubar dish-menubar-text-color dish-menu-color justify-content-start">
+      <div class="row menubar dish-menubar-text-color menu-color justify-content-start">
         <div class="input-group searchbox-group" style="max-width:135px;">
           <input type="text" class="form-control searchbox"
                  aria-describedby="search-query"
@@ -74,7 +74,7 @@
 
     <div *ngIf="hasSelectedDishes()" class="col-3">
       <div
-        class="row {{showSelectedMenu?'menubar-flush-top':'menubar-flush'}} dish-menubar-text-color dish-menu-color justify-content-end">
+        class="row {{showSelectedMenu?'menubar-flush-top':'menubar-flush'}} menu-color dish-menubar-text-color dish-menu-color justify-content-end">
 
         <div class="icon-button"
              (click)="toggleSelectedMenu()"><span class="fa-ellipsis-v fa"></span></div>

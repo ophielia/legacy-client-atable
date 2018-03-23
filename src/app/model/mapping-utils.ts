@@ -5,7 +5,7 @@ import {MealPlan} from "./mealplan";
 import {Slot} from "./slot";
 import {Category} from "./category";
 import {Item} from "./item";
-import {ShoppingList} from "./shoppinglist";
+import {IShoppingList} from "./shoppinglist";
 import {ListLayout} from "./listlayout";
 import {ListLayoutCategory} from "./listcategory";
 import {Target} from "./target";
@@ -182,18 +182,19 @@ export default class MappingUtils {
     return mealplan;
   }
 
-  static toShoppingList(r: any): ShoppingList {
-    let shoppinglist = <ShoppingList>({
+  static toShoppingList(r: any): IShoppingList {
+    let shoppinglist = <IShoppingList>({
       list_id: r.shopping_list.list_id,
       user_id: r.shopping_list.user_id,
       created: r.shopping_list.created,
       list_type: r.shopping_list.list_type,
+      item_count: r.shopping_list.item_count,
       layout_type: r.shopping_list.list_layout_type,
       categories: r.shopping_list.categories.map(MappingUtils._toCategory)
     });
 
     if (MappingUtils.showConsoleLogs) {
-      console.log('Parsed dish:', shoppinglist);
+      console.log('Parsed list:', shoppinglist);
     }
     return shoppinglist;
   }

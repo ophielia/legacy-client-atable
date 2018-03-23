@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {Router} from "@angular/router";
-import {ShoppingList} from "../../model/shoppinglist";
+import {IShoppingList} from "../../model/shoppinglist";
 import ListType from "../../model/list-type";
 
 @Component({
@@ -11,12 +11,12 @@ import ListType from "../../model/list-type";
 })
 export class ShoppingListListComponent implements OnInit {
   private shoppingListService: ShoppingListService;
-  private shoppingLists: ShoppingList[];
+  private shoppingLists: IShoppingList[];
   private errorMessage: string;
-  private baseList: ShoppingList;
-  private pickUpList: ShoppingList;
-  private inProcessList: ShoppingList;
-  private activeList: ShoppingList;
+  private baseList: IShoppingList;
+  private pickUpList: IShoppingList;
+  private inProcessList: IShoppingList;
+  private activeList: IShoppingList;
   private baseListLoaded: boolean = false;
   private pickUpListLoaded: boolean = false;
   private inProcessListLoaded: boolean = false;
@@ -37,7 +37,7 @@ export class ShoppingListListComponent implements OnInit {
           if (p) {
             this.baseList = p;
           } else {
-            this.baseList = <ShoppingList>{list_type: ListType.BaseList}
+            this.baseList = <IShoppingList>{list_type: ListType.BaseList}
           }
           this.baseListLoaded = true;
         },
@@ -49,7 +49,7 @@ export class ShoppingListListComponent implements OnInit {
           if (p) {
             this.activeList = p;
           } else {
-            this.activeList = <ShoppingList>{list_type: ListType.ActiveList}
+            this.activeList = <IShoppingList>{list_type: ListType.ActiveList}
           }
           this.activeListLoaded = true;
         },
@@ -61,7 +61,7 @@ export class ShoppingListListComponent implements OnInit {
           if (p) {
             this.inProcessList = p;
           } else {
-            this.inProcessList = <ShoppingList>{list_type: ListType.InProcess}
+            this.inProcessList = <IShoppingList>{list_type: ListType.InProcess}
           }
           this.inProcessListLoaded = true;
         },
@@ -73,7 +73,7 @@ export class ShoppingListListComponent implements OnInit {
           if (p) {
             this.pickUpList = p;
           } else {
-            this.pickUpList = <ShoppingList>{list_type: ListType.PickUpList}
+            this.pickUpList = <IShoppingList>{list_type: ListType.PickUpList}
           }
           this.pickUpListLoaded = true;
         },

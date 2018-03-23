@@ -4,11 +4,13 @@ import {AddDishCreateComponent} from "../dish/add-dish-create/add-dish-create.co
 import {DashboardManageDishesComponent} from "./dashboard-manage-dishes/dashboard-manage-dishes.component";
 import {AddDishRatingComponent} from "../dish/add-dish-rating/add-dish-rating.component";
 import {ManageDishComponent} from "../dish/manage-dish/manage-dish.component";
+import {ManageShoppingListComponent} from "app/shopping-list/shopping-list-manage/shopping-list-manage.component";
 
 const dashboardRoutes: Routes = [
   {path: 'home', component: LandingPadComponent},
   {path: 'adddish', component: AddDishCreateComponent},
   {path: 'managedishes', component: ManageDishComponent},
+  {path: 'manageshoppinglists', component: ManageShoppingListComponent},
   {path: 'adddish/ratings/:id', component: AddDishRatingComponent},
   {path: 'dishes', component: DashboardManageDishesComponent},
   {path: '', redirectTo: 'dish/list', pathMatch: 'full'}

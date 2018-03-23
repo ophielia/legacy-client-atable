@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="row page-title list-text-color">Edit {{shoppingList.list_type}}</div>
+  <div class="row">
+    <div class="col-9" style="padding-left:0px;">
+
+
+      <div class="row justify-content-between" style="margin-left:0px">
+        <div *ngFor="let category of shoppingList.categories, let i = index" class="col-6">
+          <div class="content-panel list-outline-color col " style="margin-right:2px">
+            <div class="clearfix" *ngIf="i % 2 == 0"></div>
+            <div class="row list-color justify-content-center"> {{category.name}}</div>
+            <div class="row">
+              <div class="col-6 dish-menubar-text-color content-panel-text" *ngFor="let item of category.items">
+                {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
+              </div>
+
+            </div>
+
+            <!--<ul>
+              <li *ngFor="let item of category.items" (dblclick)="removeItem(category.name,item)">
+                {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
+              </li>
+            </ul>-->
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="col-3">
+      <div
+        class="row menu-color menubar-flush-top justify-content-end">
+
+        <div class="icon-button" (click)="toggleMenu()"><span class="fa-ellipsis-v fa"></span></div>
+      </div>
+      <div *ngIf="showMenu"
+           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-conteønt-end">
+        <div class="col">
+
+          <div class="row justify-content-end text-menu-link">Delete List</div>
+          <div class="row justify-content-end text-menu-link">Change Layout</div>
+          <div class="row justify-content-end text-menu-link">Show Sources</div>
+          <div class="row justify-content-end spacer"></div>
+        </div>
+      </div>
+      <div>Shop</div>
+      <div>Add Items</div>
+      <div>Add Free Text</div>
+      <div>Recently Removed</div>
+    </div>
+  </div>
+
+
+</div>

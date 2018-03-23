@@ -12,7 +12,7 @@ export class SingleListComponent implements OnInit {
   @Input() shoppingList: ShoppingList;
   @Output() createList: EventEmitter<string> = new EventEmitter();
   @Output() deleteList: EventEmitter<string> = new EventEmitter();
-  currentList: ShoppingList = <ShoppingList>{list_id: "", list_type: ""};
+  currentList: ShoppingList;
 
   constructor(private router: Router) {
   }

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from "@angular/core";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ShoppingList} from "../../model/shoppinglist";
+import {IShoppingList} from "../../model/shoppinglist";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 import {ITag} from "../../model/tag";
 import {Item} from "../../model/item";
@@ -16,7 +16,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private shoppingListId: string;
   private subGetId: any;
   private subTagEvent: any;
-  shoppingList: ShoppingList = <ShoppingList>{list_id: "", list_type: ""};
+  shoppingList: IShoppingList = <IShoppingList>{list_id: "", list_type: ""};
   private tagCommService: TagCommService;
   selectType: string = TagSelectType.Assign;
   @Output() tagEvent: EventEmitter<ITag> = new EventEmitter<ITag>();
