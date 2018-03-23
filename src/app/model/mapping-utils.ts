@@ -190,7 +190,7 @@ export default class MappingUtils {
       list_type: r.shopping_list.list_type,
       item_count: r.shopping_list.item_count,
       layout_type: r.shopping_list.list_layout_type,
-      categories: r.shopping_list.categories.map(MappingUtils._toCategory)
+      categories: r.shopping_list.categories != null ? r.shopping_list.categories.map(MappingUtils._toCategory) : null
     });
 
     if (MappingUtils.showConsoleLogs) {
