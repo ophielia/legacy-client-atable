@@ -19,6 +19,7 @@ import {TargetListComponent} from "./target-list/target-list.component";
 import {TargetEditComponent} from "./target-list/target-edit.component";
 import {ProposalEditComponent} from "app/legacy/proposal-edit/proposal-edit.component";
 import {RatingTagAssignToolComponent} from "./rating-tag-assign-tool/rating-tag-assign-tool.component";
+import {LayoutSubcategoryToolComponent} from "./layout-subcategory-tool/layout-subcategory-tool.component";
 
 const legacyRoutes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -35,6 +36,7 @@ const legacyRoutes: Routes = [
   {path: 'listlayout/list', component: ListLayoutListComponent},
   {path: 'listlayout/edit/:id', component: EditListLayoutComponent},
   {path: 'listlayout/assign/:id', component: ListTagAssignToolComponent},
+  {path: 'listlayout/tools/category/:id', component: LayoutSubcategoryToolComponent},
   {path: 'tools/tagtotag', component: TagTagAssignToolComponent},
   {path: 'targets/list', component: TargetListComponent},
   {path: 'targets/edit/:id', component: TargetEditComponent},

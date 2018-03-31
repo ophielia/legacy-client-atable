@@ -35,9 +35,7 @@ export class RatingTagAssignToolComponent implements OnInit {
 
   private layoutId: string;
 
-  constructor(private tagCommService: TagCommService,
-              private tagService: TagsService,
-              private listLayoutService: ListLayoutService,
+  constructor(private tagService: TagsService,
               private dishService: DishService,
               private dragulaService: DragulaService,
               private route: ActivatedRoute) {
@@ -45,11 +43,6 @@ export class RatingTagAssignToolComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.subTagEvent = this.tagCommService.selectEvent
-      .subscribe(selectevent => {
-        this.selectEditTag(selectevent);
-      })
-    this.retrieveRatingTags();
     this.dragulaService.drop.subscribe((value) => {
       let [bagName, item, destination, source] = value;
       this.tagMoved(item, destination.dataset.id, source.dataset.id);
@@ -59,8 +52,7 @@ export class RatingTagAssignToolComponent implements OnInit {
 
     this.editTagList = [];
     this.categoryTags = [];
-    this.retrieveTagDrilldown();
-    this.retrieveParentTags();
+
   }
 
   ngOnDestroy() {

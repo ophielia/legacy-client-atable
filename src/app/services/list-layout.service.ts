@@ -71,12 +71,12 @@ export class ListLayoutService extends BaseHeadersService {
   }
 
   updateCategoryInListLayout(listLayout_id: string, category_id: string, category_name: string): Observable<Response> {
-    var category: ListLayoutCategory = <ListLayoutCategory>{
-      name: category_name,
-      category_id: category_id,
-      layout_id: listLayout_id,
-      tags: []
-    };
+    var category: ListLayoutCategory = new ListLayoutCategory();
+    category.name = category_name;
+    category.category_id = category_id;
+    category.layout_id = listLayout_id;
+    category.tags = [];
+
     return this
       .http
       .put(`${this.baseUrl}/${listLayout_id}/category/${category.category_id}`, category,
@@ -121,6 +121,37 @@ export class ListLayoutService extends BaseHeadersService {
       .get(`${url}`, {headers: this.getHeaders()})
       .map(this.mapTags).catch(handleError);
     return tags$;
+  }
+
+  moveCategory(layout_id: string, category: ListLayoutCategory, directionUp: boolean) {
+    var url = this.baseUrl + "/category/" + category.category_id + "?move=" + ( directionUp ? "up" : "down");
+    return this
+      .http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+  }
+
+  moveCategoryToParent(layout_id: string, category: ListLayoutCategory) {
+    var url = this.baseUrl
+      + "/category/" + category.category_id + "/parent/0";
+    return this
+      .http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+
+  }
+
+  setParentForCategory(layout_id: string, parentId: string, categoryId: string) {
+    var url = this.baseUrl
+      + "/category/" + categoryId
+      + "/parent/" + parentId;
+    return this
+      .http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
   }
 
   mapListLayouts(response: Response): ListLayout[] {

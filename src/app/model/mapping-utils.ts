@@ -86,7 +86,9 @@ export default class MappingUtils {
   private static _toCategory(r: any): Category {
     let category = <Category>({
       name: r.name,
-      items: r.items.map(MappingUtils._toItem)
+      items: r.items.map(MappingUtils._toItem),
+      subcategories: r.subcategories ? r.subcategories.map(MappingUtils._toCategory) : null
+
     });
 
     if (MappingUtils.showConsoleLogs) {
@@ -101,7 +103,8 @@ export default class MappingUtils {
     let category = <ListLayoutCategory>({
       name: r.name,
       category_id: r.category_id,
-      tags: r.tags.map(MappingUtils._toTag)
+      tags: r.tags.map(MappingUtils._toTag),
+      subcategories: r.subcategories ? r.subcategories.map(MappingUtils._toListLayoutCategory) : null
     });
 
     if (MappingUtils.showConsoleLogs) {
@@ -204,7 +207,7 @@ export default class MappingUtils {
       layout_id: r.list_layout.layout_id,
       list_layout_type: r.list_layout.list_layout_type,
       name: r.list_layout.name,
-      listcategories: r.list_layout.categories.map(MappingUtils._toListLayoutCategory)
+      listcategories: r.list_layout.categories ? r.list_layout.categories.map(MappingUtils._toListLayoutCategory) : null
     });
 
     if (MappingUtils.showConsoleLogs) {

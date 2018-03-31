@@ -42,6 +42,7 @@ import {DishService} from "../services/dish-service.service";
 import {TagsService} from "../services/tags.service";
 import {APP_CONFIG, APP_DI_CONFIG, AppConfigModule} from "app/app.config";
 import {Logger} from "angular2-logger/core";
+import {LayoutSubcategoryToolComponent} from './layout-subcategory-tool/layout-subcategory-tool.component';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import {Logger} from "angular2-logger/core";
     TargetEditComponent,
     ProposalEditComponent,
     ProposalSlotComponentComponent,
-    RatingTagAssignToolComponent
+    RatingTagAssignToolComponent,
+    LayoutSubcategoryToolComponent
   ],
   providers: [{
     provide: APP_CONFIG,

@@ -1,0 +1,123 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3>Rating Tags </h3>
+  </div>
+  <div class="col-sm-4">
+    <a class="btn btn-primary btn-lg"
+       [routerLink]="['/listlayout/assign', listLayout.layout_id]">
+      Assign Tags
+    </a>
+    <a class="btn btn-primary btn-lg"
+       [routerLink]="['/listlayout/edit', listLayout.layout_id]">
+      Back
+    </a>
+  </div>
+</div>
+<div class="row">
+  <div *ngFor="let category of listLayout.listcategories">
+    <div class="dish-tag-element list-color"
+         [dragula]='"first_bag"' [attr.data-id]="category.category_id">
+      <div [attr.data-id]="category.category_id" [attr.data-eligible]="category.subcategories.length == 0">
+      <span *ngIf="category.subcategories.length == 0" class="handle add-button">
+        <fa [name]="'plus'"></fa>
+      </span>
+        <span>{{category.name}}</span>
+        <span class="add-button">
+        <fa [name]="'arrow-up'" (click)="moveUp(category)"></fa>
+      </span>
+        <span class="add-button">
+        <fa [name]="'arrow-down'" (click)="moveDown(category)"></fa>
+      </span>
+      </div>
+      <div *ngIf="category.subcategories" [dragula]='"first_bag"'>
+        <div *ngFor="let subcategory of category.subcategories"
+             class="dish-tag-element list-outline-color"
+             [attr.data-id]="subcategory.category_id" [attr.data-eligible]="true"
+        >
+            <span class="handle add-button">
+        <fa [name]="'plus'"></fa>
+      </span>
+          <span>{{subcategory.name}}</span>
+          <span class="add-button">
+        <fa [name]="'arrow-up'" (click)="moveUp(subcategory)"></fa>
+      </span>
+          <span class="add-button">
+        <fa [name]="'arrow-down'" (click)="moveDown(subcategory)"></fa>
+      </span>
+          <span class="add-button">
+        <fa [name]="'arrow-right'" (click)="moveOut(subcategory)"></fa>
+      </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
+ <div class="border mx-auto  bg-warning text-white text-center rounded"
+      [dragula]='"first_bag"' [attr.data-id]="12" [attr.data-is-target]="false"><div [attr.data-id]="2" [attr.data-is-tag]="true">
+   <span class="handle">JACK</span><span >Two</span></div></div>
+
+ <div class="border mx-auto  bg-warning text-white text-center rounded"
+      [dragula]='"first_bag"' [attr.data-id]="13" [attr.data-is-target]="false"><div [attr.data-id]="3" [attr.data-is-tag]="true">
+   <span class="handle">JACK</span><span >Three</span></div></div>
+
+ <div class="border mx-auto  bg-warning text-white text-center rounded"
+      [dragula]='"first_bag"' [attr.data-id]="14" [attr.data-is-target]="false"><div [attr.data-id]="4" [attr.data-is-tag]="true">
+   <span class="handle">JACK</span><span >four</span></div></div>
+
+ <div class="border mx-auto  bg-warning text-white text-center rounded"
+      [dragula]='"first_bag"' [attr.data-id]="15" [attr.data-is-target]="false"><div [attr.data-id]="5" [attr.data-is-tag]="true">
+   <span class="handle">JACK</span><span >FIVE</span></div></div>
+
+</div>
+
+-->
+
+
+<!--
+<div class="row" style="margin-top:10px;">
+  <div class="col-md-10">
+    <div class="row ">
+
+      <div *ngFor="let tag of ratingSubTags, let i = index" class="col-md-6 mb-2">
+        <div class="clearfix" *ngIf="i % 2 == 0"></div>
+        <div class="">
+          <div class="border mx-auto  bg-warning text-white text-center rounded"
+               [dragula]='"first_bag"' [attr.data-is-target]="false"
+          >
+            <span [attr.data-id]="tag.tag_id" [attr.data-is-tag]="true">{{tag.name}}</span></div>
+          <div class="row">
+            <div class="col-md-4" *ngFor="let dish of tag.dishes, let j = index" [dragula]='"first_bag"'
+                 [attr.data-is-target]="false">
+              <div class="clearfix" *ngIf="j % 3 ==0"></div>
+              <div class="border text-truncate border-warning mb-1 rounded non-selected-dish"
+                   [attr.data-id]="dish.dish_id" [attr.data-is-tag]="false"> {{dish.name}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <div class="col-md-2 ">
+    <div class="row sticky-top ">
+      <div class="col-md-12 ">
+        <ng-container *ngFor="let tag of ratingSubTags">
+          <div *ngIf="tag.power > 0"
+               class="row border mb-3  bg-warning text-white text-center rounded"
+               [dragula]='"first_bag"' [attr.data-id]="tag.tag_id" [attr.data-is-target]="true">
+            {{tag.name}}
+          </div>
+        </ng-container>
+      </div>
+
+    </div>
+
+  </div>
+-->

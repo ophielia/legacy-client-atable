@@ -1,12 +1,18 @@
 now -
-dish management page
+edit list page -
+  change layout
+  show sources
+  add dish
+
 
 cleaning up behind
-  add dish tunnel
-    landing page
-    add ingredient tag button
-    ratings update all tags at once
-    autotag bugging
+  done  add dish tunnel
+  done        landing page
+  done        add ingredient tag button
+          ratings update all tags at once
+          autotag bugging
+
+
 
 
 older

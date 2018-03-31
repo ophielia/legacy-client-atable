@@ -10,8 +10,21 @@
             <div class="clearfix" *ngIf="i % 2 == 0"></div>
             <div class="row list-color justify-content-center"> {{category.name}}</div>
             <div class="row">
+              <ng-container *ngIf="category.subcategories && category.subcategories.length > 0">
+                <div *ngFor="let subcategory of category.subcategories"
+                     class="col-6 dish-menubar-text-color content-panel list-outline-color">
+                  <span style="font-weight: bolder;">{{subcategory.name}}</span>
+
+                  <div *ngFor="let item of subcategory.items"
+                       class="dish-menubar-text-color content-panel-text">
+                    {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
+                  </div>
+
+                </div>
+              </ng-container>
               <div class="col-6 dish-menubar-text-color content-panel-text" *ngFor="let item of category.items">
                 {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
+
               </div>
 
             </div>
