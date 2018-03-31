@@ -190,7 +190,7 @@ export default class MappingUtils {
       list_type: r.shopping_list.list_type,
       item_count: r.shopping_list.item_count,
       layout_type: r.shopping_list.list_layout_type,
-      categories: r.shopping_list.categories.map(MappingUtils._toCategory)
+      categories: r.shopping_list.categories ? r.shopping_list.categories.map(MappingUtils._toCategory) : null
     });
 
     if (MappingUtils.showConsoleLogs) {
@@ -204,7 +204,7 @@ export default class MappingUtils {
       layout_id: r.list_layout.layout_id,
       list_layout_type: r.list_layout.list_layout_type,
       name: r.list_layout.name,
-      listcategories: r.list_layout.categories.map(MappingUtils._toListLayoutCategory)
+      listcategories: r.list_layout.categories ? r.list_layout.categories.map(MappingUtils._toListLayoutCategory) : null
     });
 
     if (MappingUtils.showConsoleLogs) {
