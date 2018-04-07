@@ -14,12 +14,14 @@ import {AddDishIngredientComponent} from './add-dish-ingredient/add-dish-ingredi
 import {AddDishFinishComponent} from './add-dish-finish/add-dish-finish.component';
 import {ManageDishComponent} from './manage-dish/manage-dish.component';
 import {EditDishComponent} from './edit-dish/edit-dish.component';
+import {PlanModule} from "../plan/plan.module";
 
 @NgModule({
   imports: [
     CommonModule,
     BrowserModule,
     FormsModule,
+    PlanModule,
     dishRouting,
     Angular2FontawesomeModule,
     AppCommonModule

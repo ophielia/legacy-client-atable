@@ -16,13 +16,15 @@
                   <span style="font-weight: bolder;">{{subcategory.name}}</span>
 
                   <div *ngFor="let item of subcategory.items"
-                       class="dish-menubar-text-color content-panel-text">
+                       class="dish-menubar-text-color content-panel-text"
+                       (dblclick)="removeTagFromList(item)">
                     {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
                   </div>
 
                 </div>
               </ng-container>
-              <div class="col-6 dish-menubar-text-color content-panel-text" *ngFor="let item of category.items">
+              <div class="col-6 dish-menubar-text-color content-panel-text" *ngFor="let item of category.items"
+                   (dblclick)="removeTagFromList(item)">
                 {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
 
               </div>
@@ -50,16 +52,77 @@
            class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-conteønt-end">
         <div class="col">
 
-          <div class="row justify-content-end text-menu-link">Delete List</div>
-          <div class="row justify-content-end text-menu-link">Change Layout</div>
-          <div class="row justify-content-end text-menu-link">Show Sources</div>
+          <div *ngIf="!showPantryItems" class="row justify-content-end text-menu-link"
+               (click)="togglePantryItems()">Show Pantry Items
+          </div>
+          <div *ngIf="showPantryItems" class="row justify-content-end text-menu-link"
+               (click)="togglePantryItems()">Hide Pantry Items
+          </div>
+          <div class="row justify-content-end text-menu-link"
+               (click)="toggleLayoutList()">Change Layout
+          </div>
+        </div>
+      </div>
+      <div *ngIf="showListLayouts"
+           class="row {{showMenu?'menubar-flush-top':'menubar-flush'}} menu-color dish-menubar-text-color dish-menu-color justify-content-end">
+        <div class="col">
+          <div *ngFor="let listLayout of listLayoutList"
+               class="row justify-content-center" (click)="changeListLayout(listLayout.layout_id)">
+            {{listLayout.name}}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showMenu"
+           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-conteønt-end">
+        <div class="col">
+
+          <div class="row justify-content-end text-menu-link"
+               (click)="toggleShowDishSources()">Show Sources
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showSources"
+           class="row {{showMenu?'menubar-flush-top':'menubar-flush'}} menu-color dish-menubar-text-color dish-menu-color justify-content-end">
+        <div class="col">
+          <div *ngFor="let source of shoppingList.dish_sources"
+               class="row justify-content-center" (click)="highlightDish(source);">
+            {{source.display}}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showMenu"
+           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-conteønt-end">
+        <div class="col">
+          <div class="row justify-content-end text-menu-link">Add Items</div>
           <div class="row justify-content-end spacer"></div>
         </div>
       </div>
       <div>Shop</div>
-      <div>Add Items</div>
-      <div>Add Free Text</div>
-      <div>Recently Removed</div>
+
+      <div *ngIf="removedTags.length > 0" class="row main-color justify-content-center" style="margin-left:0px;">
+        <div *ngFor="let selected of selectedDishes" class="dish-tag-element dish-tag-element-spaced dish-color"
+             (dblclick)="unSelectDish(selected)"
+             (click)="toggleDishTags(selected.dish_id)"
+             (mouseover)="selectedDishMouseIn(selected)"
+             (mouseleave)="selectedDishMouseOut()">{{selected.name}}
+          <span *ngIf="selectHoverDetail == selected.dish_id"
+                class="icon-button"
+                (click)="goToDishEdit(selected.dish_id)"
+          ><span class="fa-edit fa"></span></span>
+          <ng-container *ngIf="isShowTags(selected.dish_id)">
+            <div *ngFor="let dishtag of selected.tags">
+              <div atTagBrowseStyle [tag]="dishtag" [origClass]="'dish-tag-element-squished dish-tag-element '">
+                {{dishtag.name}}
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <div class=" spacer"></div>
+      </div>
+
     </div>
   </div>
 

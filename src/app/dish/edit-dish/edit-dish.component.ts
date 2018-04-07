@@ -157,6 +157,7 @@ export class EditDishComponent implements OnInit, OnDestroy {
       .subscribe(t => this.getDish(this.dishId));
   }
 
+
   goToList(dish_id: string) {
     this.router.navigate(['managedishes']);
   }

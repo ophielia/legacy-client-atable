@@ -13,6 +13,7 @@ import {TargetSlot} from "./target-slot";
 import {Proposal} from "./proposal";
 import {ProposalSlot} from "./proposal-slot";
 import {ProposalDish} from "./proposal-dish";
+import {ItemSource} from "app/model/item-source";
 export default class MappingUtils {
 
   static showConsoleLogs: boolean = true;
@@ -193,6 +194,8 @@ export default class MappingUtils {
       list_type: r.shopping_list.list_type,
       item_count: r.shopping_list.item_count,
       layout_type: r.shopping_list.list_layout_type,
+      dish_sources: r.shopping_list.dish_sources != null ? r.shopping_list.dish_sources.map(MappingUtils._toItemSource) : null,
+      list_sources: r.shopping_list.list_sources != null ? r.shopping_list.list_sources.map(MappingUtils._toItemSource) : null,
       categories: r.shopping_list.categories != null ? r.shopping_list.categories.map(MappingUtils._toCategory) : null
     });
 
@@ -229,6 +232,17 @@ export default class MappingUtils {
     });
 
     return target;
+  }
+
+  static _toItemSource(r: any): ItemSource {
+    let source = <ItemSource>({
+      id: r.id,
+      display: r.display,
+      type: r.type,
+      disp_class: null,
+    });
+
+    return source;
   }
 
   static toTarget(r: any): Target {

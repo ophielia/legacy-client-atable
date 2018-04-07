@@ -96,7 +96,28 @@
 
 
           </ng-container>
-          <div class="row justify-content-end text-menu-link">Add to Meal Plan</div>
+          <div class="row justify-content-end text-menu-link" (click)="toggleMealPlanList()">Add to Meal Plan
+            <div *ngIf="showMealPlanList">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- add to meal plan submenu -->
+      <div *ngIf="showMealPlanList"
+           class="row {{showSelectedMenu?'menubar-flush-top':'menubar-flush'}} menu-color dish-menubar-text-color dish-menu-color justify-content-end">
+        <div class="col">
+          <div class="row justify-content-center" (click)="addDishesToNewMealPlan()">New Meal Plan</div>
+          <div *ngFor="let mealPlan of mealPlanList"
+               class="row justify-content-center" (click)="addDishesToMealPlan(mealPlan.meal_plan_id)">{{mealPlan.name}}
+          </div>
+          <div *ngIf="mealPlanMore" class="row justify-content-end" (click)="showAllMenuPlans()">more...</div>
+        </div>
+      </div>
+      <!-- menu cont -->
+      <div *ngIf="showSelectedMenu"
+           class="row menubar-flush-middle dish-menubar-text-color dish-menu-dropdown-color justify-content-end">
+        <div class="col">
           <div class="row justify-content-end text-menu-link"> Add to List</div>
           <div class="row justify-content-end spacer"></div>
         </div>

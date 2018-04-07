@@ -34,8 +34,26 @@ export class ShoppingListService extends BaseHeadersService {
   }
 
   getById(shoppingList_id: string): Observable<IShoppingList> {
+    return this.getByIdWithPantry(shoppingList_id, false);
+  }
+
+  getByIdWithPantry(shoppingList_id: string, showPantry: boolean): Observable<IShoppingList> {
+    var url = this.shoppingListUrl + "/" + shoppingList_id;
+    if (showPantry) {
+      url = url + "?showPantry=" + showPantry;
+    }
     let shoppingList$ = this.http
-      .get(`${this.shoppingListUrl}/${shoppingList_id}`, {headers: this.getHeaders()})
+      .get(url, {headers: this.getHeaders()})
+      .map(this.mapShoppingList)
+      .catch(handleError);
+    return shoppingList$;
+  }
+
+  getByIdWithHighlight(shoppingList_id: string, dish_id: string) {
+    var url = this.shoppingListUrl + "/" + shoppingList_id;
+    url = url + "?highlightDish=" + dish_id;
+    let shoppingList$ = this.http
+      .get(url, {headers: this.getHeaders()})
       .map(this.mapShoppingList)
       .catch(handleError);
     return shoppingList$;
@@ -92,6 +110,14 @@ export class ShoppingListService extends BaseHeadersService {
         {headers: this.getHeaders()});
   }
 
+  changeListLayout(list_id: string, layoutId: string) {
+    return this
+      .http
+      .post(`${this.shoppingListUrl}/${list_id}/layout/${layoutId}`,
+        null,
+        {headers: this.getHeaders()});
+  }
+
   deleteShoppingList(shoppingListId: string) {
     var url: string = this.shoppingListUrl + '/' + shoppingListId;
 
@@ -122,6 +148,8 @@ export class ShoppingListService extends BaseHeadersService {
     return null;
 
   }
+
+
 }
 
 

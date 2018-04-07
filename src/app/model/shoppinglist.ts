@@ -1,4 +1,5 @@
 import {Category} from "./category";
+import {IItemSource} from "./item-source";
 export interface IShoppingList {
   list_id: string;
   categories: Category[];
@@ -7,6 +8,8 @@ export interface IShoppingList {
   list_type: string;
   layout_type: string;
   item_count: number;
+  dish_sources: IItemSource[];
+  list_sources: IItemSource[];
 }
 
 export class ShoppingList implements IShoppingList {
@@ -20,5 +23,7 @@ export class ShoppingList implements IShoppingList {
   list_type: string;
   layout_type: string;
   item_count: number;
+  dish_sources: IItemSource[];
+  list_sources: IItemSource[];
 }
 

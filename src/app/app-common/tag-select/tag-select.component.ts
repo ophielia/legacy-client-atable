@@ -107,35 +107,6 @@ export class TagSelectComponent implements OnInit, OnDestroy {
 
   }
 
-  /*showSelected(tag: ITag) {
-   if (this.lastSelectedId != tag.tag_id) {
-   this.lastSelectedId = tag.tag_id;
-   console.log('showing from drilldown select container-' + tag.tag_id);
-   this.autoSelectedTag = null;
-   this.tagSelected.emit(tag);
-   }
-   }
-
-
-   add(tagType: string) {
-   var tagName = this.autoSelectedTag;
-   console.log("tag type is " + tagType);
-   this.tagService.addTag(tagName, tagType)
-   .subscribe(r => {
-   console.log(`added!!! this.tagName`);
-   this.autoSelectedTag = null;
-   var headers = r.headers;
-   var location = headers.get("Location");
-   var splitlocation = location.split("/");
-   var id = splitlocation[splitlocation.length - 1];
-   this.tagService.getById(id)
-   .subscribe(t => {
-   this.showSelected(t);
-   });
-
-   this.getAllTags();
-   });
-   }*/
 }
 
 

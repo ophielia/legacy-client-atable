@@ -1,5 +1,13 @@
-now -
+immediate usability release
+manage dish page
+  text - behavior for adding to meal plan (existing or new)
+  show meal plan after adding to mealplan
+  (updating name of meal plan)
+
+
+
 edit list page -
+  add / remove items
   change layout
   show sources
   add dish

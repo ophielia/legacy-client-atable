@@ -64,6 +64,27 @@ export class MealPlanService extends BaseHeadersService {
         {headers: this.getHeaders()});
   }
 
+
+  addDishesToMealPlan(dish_ids: string[], meal_plan_id: string) {
+    // check if this will be a new mealplan (meal_plan_id empty or null)
+    var mealPlan
+    if (meal_plan_id == null || meal_plan_id.length == 0) {
+
+    }
+
+    var chain: any = this.addDishToMealPlan(dish_ids[0], meal_plan_id);
+
+    if (dish_ids.length == 1) {
+      return chain;
+    }
+
+    for (var i = 1; i < dish_ids.length; i++) {
+      chain = chain.concat(this.addDishToMealPlan(dish_ids[i], meal_plan_id));
+    }
+    return chain;
+
+  }
+
   addMealPlan(mealPlanName: string) {
     var newMealPlan: MealPlan = <MealPlan>({
       name: mealPlanName,

@@ -32,6 +32,7 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
   private initializeShoppingListTypes() {
     this.shoppingListTypes = [];
     this.shoppingListTypes.push(ListType.BaseList);
+    this.shoppingListTypes.push(ListType.InProcess);
     this.shoppingListTypes.push(ListType.PickUpList);
     this.shoppingListTypes.push(ListType.ActiveList);
   }

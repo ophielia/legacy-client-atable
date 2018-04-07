@@ -9,6 +9,9 @@ import {TagDrilldown} from "../../model/tag-drilldown";
 import {TagsService} from "../../services/tags.service";
 import TagType from "../../model/tag-type";
 import {TimerObservable} from "rxjs/observable/TimerObservable";
+import {MealPlanService} from "../../services/meal-plan.service";
+import {MealPlan} from "../../model/mealplan";
+import {Subscription} from "rxjs/Subscription";
 
 
 @Component({
@@ -23,6 +26,9 @@ export class ManageDishComponent implements OnInit {
   selectedDishes: Dish[] = [];
   searchValue: string;
   hoverTimer: any;
+  mealPlanList: MealPlan[];
+  mealPlanMore: boolean;
+  showMealPlanList: boolean;
 
   allDishes: Dish[];
   filteredDishes: Dish[];
@@ -40,10 +46,11 @@ export class ManageDishComponent implements OnInit {
   private showSelectedMenu: boolean = false;
   private hoverDish: Dish;
   private selectShowTags: string;
-
+  unsubscribe: Subscription[] = [];
 
   constructor(private dishService: DishService,
               private tagCommService: TagCommService,
+              private mealPlanService: MealPlanService,
               private tagService: TagsService,
               private route: ActivatedRoute,
               private router: Router,) {
@@ -65,6 +72,7 @@ export class ManageDishComponent implements OnInit {
 
     this.getAllDishes();
     this.getTagsForBrowse();
+    this.getMealPlanForSelect(5);
     this.tagSelectEvent = this.tagCommService.selectEvent
       .subscribe(selectevent => {
         this.addTagToFilter(selectevent);
@@ -73,6 +81,20 @@ export class ManageDishComponent implements OnInit {
 
   ngOnDestroy() {
     this.tagSelectEvent.unsubscribe();
+    this.unsubscribe.forEach(s => s.unsubscribe());
+  }
+
+  getMealPlanForSelect(limit: number) {
+    let $sub = this.mealPlanService.getAll().subscribe(l => {
+      if (l && l.length > limit) {
+        this.mealPlanMore = true;
+        this.mealPlanList = l.slice(0, limit - 1);
+      } else {
+        this.mealPlanList = l;
+        this.mealPlanMore = false;
+      }
+    })
+    this.unsubscribe.push($sub);
   }
 
   getTagsForBrowse() {
@@ -80,11 +102,11 @@ export class ManageDishComponent implements OnInit {
     for (var i = 0; i < this.browseTagTypes.length; i++) {
       let ttype = this.browseTagTypes[i];
       // get / fill tag lists here from service
-      this.tagService
-        .getTagDrilldownList(ttype)
-        .subscribe(p => {
+      let $sub = this.tagService
+        .getTagDrilldownList(ttype).subscribe(p => {
           this.browseAllDrilldowns[ttype] = p
         });
+      this.unsubscribe.push($sub);
 
       this.expandFoldState[ttype] = false;
     }
@@ -105,13 +127,14 @@ export class ManageDishComponent implements OnInit {
     } else {
       var includeTagList = this.filterTags.filter(t => t.is_inverted == false).map(t => t.tag_id);
       var excludeTagList = this.filterTags.filter(t => t.is_inverted == true).map(t => t.tag_id);
-      this.dishService
+      let $sub = this.dishService
         .findByTags(includeTagList, excludeTagList)
         .subscribe(p => {
             this.allDishes = p;
             this.filteredDishes = p;
           },
           e => this.errorMessage = e);
+      this.unsubscribe.push($sub);
     }
   }
 
@@ -141,6 +164,8 @@ export class ManageDishComponent implements OnInit {
     this.showSelectedMenu = !this.showSelectedMenu;
     if (!this.showSelectedMenu) {
       this.isShowTagEntry = false;
+      this.showMealPlanList = false;
+      this.getMealPlanForSelect(5);
     }
 
   }
@@ -168,8 +193,9 @@ export class ManageDishComponent implements OnInit {
   selectDish(dish: Dish) {
     let match = this.selectedDishes.filter(t => dish.dish_id == t.dish_id);
     if (!match || match.length == 0) {
-      this.dishService.getById(dish.dish_id)
+      let $sub = this.dishService.getById(dish.dish_id)
         .subscribe(d => this.selectedDishes.push(d));
+      this.unsubscribe.push($sub);
     }
   }
 
@@ -180,9 +206,10 @@ export class ManageDishComponent implements OnInit {
   selectedDishMouseIn(dish: Dish) {
     this.hoverDish = dish;
     let timer = TimerObservable.create(500);
-    this.hoverTimer = timer.subscribe(t => {
+    let $sub = this.hoverTimer = timer.subscribe(t => {
       this.selectHoverDetail = dish.dish_id;
     });
+    this.unsubscribe.push($sub);
   }
 
   selectedDishMouseOut() {
@@ -241,13 +268,55 @@ export class ManageDishComponent implements OnInit {
 
   addTagToDishes(tag: Tag) {
     console.log("adding tag to dishes");
-    this.dishService.addTagToDishes(this.selectedDishes, tag.tag_id)
+    let $sub = this.dishService.addTagToDishes(this.selectedDishes, tag.tag_id)
       .subscribe(t => {
         this.input.show();
         this.isShowTagEntry = false;
         this.showSelectedMenu = false;
       })
     ;
+    this.unsubscribe.push($sub);
+  }
+
+  addDishesToNewMealPlan() {
+    var dishIds: string[];
+    dishIds = this.selectedDishes.map(i => i.dish_id);
+
+    var newMealPlan: any = this.mealPlanService.addMealPlan('');
+    newMealPlan = newMealPlan.flatMap(
+      (r) => {
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        this.mealPlanService.addDishesToMealPlan(dishIds, id)
+          .subscribe((t) => {
+            this.goToMealPlanEdit(id);
+          });
+      }
+    );
+    let $sub = newMealPlan.subscribe();
+    this.unsubscribe.push($sub);
+  }
+
+  addDishesToMealPlan(meal_plan_id: string) {
+    var dishIds: string[];
+    dishIds = this.selectedDishes.map(i => i.dish_id);
+
+    let $sub = this.mealPlanService.addDishesToMealPlan(dishIds, meal_plan_id)
+      .subscribe((t) => {
+        this.goToMealPlanEdit(meal_plan_id);
+      });
+    this.unsubscribe.push($sub);
+
+  }
+
+  toggleMealPlanList() {
+    this.showMealPlanList = !this.showMealPlanList;
+  }
+
+  showAllMenuPlans() {
+    this.getMealPlanForSelect(999);
   }
 
   showTagEntry() {
@@ -256,6 +325,10 @@ export class ManageDishComponent implements OnInit {
 
   goToDishEdit(dish_id: string) {
     this.router.navigate(["editdish/edit/", dish_id])
+  }
+
+  goToMealPlanEdit(dish_id: string) {
+    this.router.navigate(["plan/edit/", dish_id])
   }
 
 }
