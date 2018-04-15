@@ -73,7 +73,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   removeItem(categoryname: string, item: Item) {
 
     // remove Item from shopping list
-    this.shoppingListService.removeItemFromShoppingList(this.shoppingListId, item.item_id)
+    this.shoppingListService.removeItemFromShoppingList(this.shoppingListId, item.item_id, true, null)
       .subscribe(t => this.refreshList(this.shoppingListId));
     return false;
   }

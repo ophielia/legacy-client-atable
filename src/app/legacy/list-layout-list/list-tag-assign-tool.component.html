@@ -71,11 +71,23 @@
       <div class="row">
         <div class="col-md-12">Select Category</div>
       </div>
-      <div class="row card" style="margin:5px"
-           *ngFor="let category of listLayout.listcategories"
-           (click)="selectCategory(category)">
-        {{category.name}}
-      </div>
+      <ng-container *ngFor="let category of listLayout.listcategories">
+
+        <div class="row card" style="margin:5px"
+             (click)="selectCategory(category)">
+          {{category.name}}
+
+        </div>
+
+        <ng-container *ngIf="category.subcategories.length > 0">
+          <div *ngFor="let subcategory of category.subcategories" class="row card" style="margin:5px"
+               (click)="selectCategory(subcategory)">
+            {{subcategory.name}}
+          </div>
+
+        </ng-container>
+
+      </ng-container>
     </ng-container>
     <ng-container *ngIf="selectedCategory">
       <div class="row">

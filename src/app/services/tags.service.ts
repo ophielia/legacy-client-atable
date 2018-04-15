@@ -74,75 +74,16 @@ export class TagsService extends BaseHeadersService {
     return tagType;
   }
 
-  processTagDrilldownList(response: Response): TagDrilldown[] {
-    let tagList: Object[] = response.json().tagInfo.tagList;
-    let baseList: string[] = response.json().tagInfo.baseIds.map(x => x + "");
-
-    // convert all tagList to TagDrilldown objects
-    //  (which will have their children filled with populateChildren
-    let drilldownMaster: TagDrilldown[] = tagList.map(MappingUtils.toTagDrilldown);
-    this.populateChildren(baseList, drilldownMaster);
-
-    return baseList.map(x => drilldownMaster.find(y => y.tag_id == x));
-  }
-
   getTagDrilldownList(tagtype: string): Observable<TagDrilldown[]> {
     var filter: string = "";
     if (tagtype) {
       filter = "?tag_type=" + tagtype;
     }
     let tags$ = this.http
-      .get(`${this.tagInfoUrl}${filter}`, {headers: this.getHeaders()})
-      .map(r => this.processTagDrilldownList(r)).catch(handleError);  // HERE: This is new!
+      .get(`${this.tagInfoUrl}/new${filter}`, {headers: this.getHeaders()})
+      .map(this.mapFilledTags).catch(handleError);  // HERE: This is new!
     return tags$;
 
-  }
-
-  private populateChildren(tagList: string[], drilldownMaster: TagDrilldown[]) {
-    // loop through all elements
-    tagList.forEach(x => {
-      this.fillChildren(x, 1, drilldownMaster);
-    })
-  }
-
-  private fillChildren(drilldown_id: string, level: number, master: TagDrilldown[]): TagDrilldown {
-    // get index for drilldown
-    var drilldownIndex = master.findIndex(x => x.tag_id == drilldown_id);
-
-    // may not be found (in tagtype case) - so return directly if not found
-    if (drilldownIndex == -1) {
-      return null;
-    }
-
-    // get drilldown from master
-    let toFill: TagDrilldown = master[drilldownIndex];
-
-    // if children filled in, return
-    if (toFill.children.length > 0) {
-      return toFill;
-    }
-    toFill.level = level;
-    // if doesn't contain ids to fill, return
-    if (toFill.children_ids.length == 0) {
-      toFill.children = [];
-      return toFill;
-    } else {
-      // get children list
-      //    for each child, fillchildren
-      for (var i = 0; i < toFill.children_ids.length; i++) {
-        let child: TagDrilldown = this.fillChildren(toFill.children_ids[i], level + 1, master);
-        //child.level = toFill.level+1;
-        //    put drilldown in children lst
-        if (child) {
-          // fill parent id
-          //    child.parent_id = toFill.tag_id;
-          toFill.children.push(child);
-        }
-      }
-    }
-    // put drilldown in master
-    master[drilldownIndex] = toFill;
-    return toFill;
   }
 
   getById(tag_id: string): Observable<ITag> {
@@ -152,7 +93,6 @@ export class TagsService extends BaseHeadersService {
       .catch(handleError);
     return tag$;
   }
-
 
   addTag(newTagName: string, tagType: string): Observable<Response> {
     var newTag: ITag = <ITag>({
@@ -174,6 +114,12 @@ export class TagsService extends BaseHeadersService {
       .put(`${this.tagUrl}/${tag.tag_id}`,
         JSON.stringify(tag),
         {headers: this.getHeaders()});
+  }
+
+  mapFilledTags(response: Response): TagDrilldown[] {
+    if (response.json()) {
+      return response.json().map(MappingUtils._toNewTagDrilldown);
+    }
   }
 
   mapTags(response: Response): ITag[] {

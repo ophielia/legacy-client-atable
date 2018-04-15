@@ -88,6 +88,7 @@ export default class MappingUtils {
     let category = <Category>({
       name: r.name,
       items: r.items.map(MappingUtils._toItem),
+      category_type: r.category_type,
       subcategories: r.subcategories ? r.subcategories.map(MappingUtils._toCategory) : null
 
     });
@@ -120,7 +121,8 @@ export default class MappingUtils {
     let item = <Item>({
       list_id: r.list_id,
       item_id: r.item_id,
-      item_source: r.item_source,
+      dish_sources: r.dish_sources != null ? r.dish_sources.map(MappingUtils._toItemSource) : null,
+      list_sources: r.list_sources != null ? r.list_sources.map(MappingUtils._toItemSource) : null,
       added: r.added,
       tag_id: r.tag_id,
       used_count: r.used_count,
@@ -136,7 +138,13 @@ export default class MappingUtils {
     return item;
   }
 
-  static toTagDrilldown(r: any) {
+  static _toNewTagDrilldown(r: any) {
+
+    return MappingUtils.toNewTagDrilldown(r.tagDrilldown);
+  }
+
+  static toNewTagDrilldown(r: any) {
+    let children = r.children != null ? r.children.map(MappingUtils.toNewTagDrilldown) : null;
     let drilldown = <TagDrilldown>({
       "tag_id": r.tag_id,
       "name": r.name,
@@ -148,7 +156,7 @@ export default class MappingUtils {
       "search_select": r.search_select,
       "expanded": false,
       "level": 1,
-      "children": []
+      "children": children,
     });
 
     if (MappingUtils.showConsoleLogs) {

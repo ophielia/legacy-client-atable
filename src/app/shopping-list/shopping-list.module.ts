@@ -10,6 +10,8 @@ import {ShoppingListService} from "../services/shopping-list.service";
 import {TagCommService} from "../legacy/drilldown/tag-drilldown-select.service";
 import {shoppingListRouting} from "./shopping-list.routes";
 import {EditShoppingListComponent} from "./edit-shopping-list/edit-shopping-list.component";
+import {SourceLegendService} from "../services/source-legend.service";
+import {ShoppingListItemsComponent} from './shopping-list-items/shopping-list-items.component';
 
 @NgModule({
   imports: [
@@ -21,8 +23,8 @@ import {EditShoppingListComponent} from "./edit-shopping-list/edit-shopping-list
     AppCommonModule
 
   ],
-  providers: [ShoppingListService, TagCommService],
-  declarations: [ManageShoppingListComponent, EditShoppingListComponent]
+  providers: [ShoppingListService, TagCommService, SourceLegendService],
+  declarations: [ManageShoppingListComponent, EditShoppingListComponent, ShoppingListItemsComponent]
 })
 export class ShoppingListModule {
 }

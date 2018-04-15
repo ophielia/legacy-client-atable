@@ -6,36 +6,15 @@
 
       <div class="row justify-content-between" style="margin-left:0px">
         <div *ngFor="let category of shoppingList.categories, let i = index" class="col-6">
-          <div class="content-panel list-outline-color col " style="margin-right:2px">
+          <div class="content-panel legend-1-outline category-light col " style="margin-right:2px">
             <div class="clearfix" *ngIf="i % 2 == 0"></div>
-            <div class="row list-color justify-content-center"> {{category.name}}</div>
-            <div class="row">
-              <ng-container *ngIf="category.subcategories && category.subcategories.length > 0">
-                <div *ngFor="let subcategory of category.subcategories"
-                     class="col-6 dish-menubar-text-color content-panel list-outline-color">
-                  <span style="font-weight: bolder;">{{subcategory.name}}</span>
-
-                  <div *ngFor="let item of subcategory.items"
-                       class="dish-menubar-text-color content-panel-text"
-                       (dblclick)="removeTagFromList(item)">
-                    {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
-                  </div>
-
-                </div>
-              </ng-container>
-              <div class="col-6 dish-menubar-text-color content-panel-text" *ngFor="let item of category.items"
-                   (dblclick)="removeTagFromList(item)">
-                {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
-
-              </div>
-
+            <div class="row {{getCategoryDispClass('list-color',category)}} justify-content-center"> {{category.name}}
             </div>
 
-            <!--<ul>
-              <li *ngFor="let item of category.items" (dblclick)="removeItem(category.name,item)">
-                {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
-              </li>
-            </ul>-->
+            <at-shopping-list-items [category]="category" [legendMap]="listLegend"
+                                    [showItemLegends]="showItemLegends" [listId]="shoppingList.list_id"
+                                    (listUpdated)="getShoppingList(shoppingList.list_id)"></at-shopping-list-items>
+
           </div>
         </div>
       </div>
@@ -83,44 +62,51 @@
         </div>
       </div>
 
-      <div *ngIf="showSources"
-           class="row {{showMenu?'menubar-flush-top':'menubar-flush'}} menu-color dish-menubar-text-color dish-menu-color justify-content-end">
-        <div class="col">
-          <div *ngFor="let source of shoppingList.dish_sources"
-               class="row justify-content-center" (click)="highlightDish(source);">
-            {{source.display}}
-          </div>
-        </div>
-      </div>
 
       <div *ngIf="showMenu"
-           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-conteønt-end">
+           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end broken-list-fix">
         <div class="col">
           <div class="row justify-content-end text-menu-link">Add Items</div>
-          <div class="row justify-content-end spacer"></div>
         </div>
       </div>
-      <div>Shop</div>
+      <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">Shop
+      </div>
 
-      <div *ngIf="removedTags.length > 0" class="row main-color justify-content-center" style="margin-left:0px;">
-        <div *ngFor="let selected of selectedDishes" class="dish-tag-element dish-tag-element-spaced dish-color"
-             (dblclick)="unSelectDish(selected)"
-             (click)="toggleDishTags(selected.dish_id)"
-             (mouseover)="selectedDishMouseIn(selected)"
-             (mouseleave)="selectedDishMouseOut()">{{selected.name}}
-          <span *ngIf="selectHoverDetail == selected.dish_id"
-                class="icon-button"
-                (click)="goToDishEdit(selected.dish_id)"
-          ><span class="fa-edit fa"></span></span>
-          <ng-container *ngIf="isShowTags(selected.dish_id)">
-            <div *ngFor="let dishtag of selected.tags">
-              <div atTagBrowseStyle [tag]="dishtag" [origClass]="'dish-tag-element-squished dish-tag-element '">
-                {{dishtag.name}}
+
+      <div *ngIf="shoppingList.dish_sources.length > 0" class="row menubar-flush-bottom main-color justify-content-end">
+        <div class="col" style="padding:0px;">
+
+
+          <div class="row justify-content-center">
+            <div class="legend-table">
+
+              <div *ngFor="let source of shoppingList.dish_sources"
+                   class="legend-row">
+                <div class="legend-cell" (click)="highlightDish(source);">
+                  <span class="legend-box {{source.disp_class}}"></span>
+
+                </div>
+                <div class="legend-cell text-capitalize" (click)="highlightDish(source);">
+                  <span>{{source.display}}</span>
+
+                </div>
+                <div class="legend-cell text-capitalize" (click)="removeDish(source);">
+                  <span class="fa-trash fa"></span>
+
+                </div>
               </div>
+
             </div>
-          </ng-container>
+          </div>
+          <div *ngIf="!showItemLegends" class="row justify-content-end" style="padding-right:10px;"
+               (click)="toggleShowItemLegends()">show sources
+          </div>
+          <div *ngIf="showItemLegends" class="row justify-content-end" style="padding-right:10px;"
+               (click)="toggleShowItemLegends()">hide sources
+          </div>
+
+
         </div>
-        <div class=" spacer"></div>
       </div>
 
     </div>

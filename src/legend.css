@@ -1,0 +1,215 @@
+.legend-box {
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+}
+
+.legend-combined-box-element {
+  border-color: #4a6187;
+  border-width: 1px;
+  border-style: solid;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  margin-left: -5px;
+}
+
+.legend-combined-box {
+  margin-left: 10px;
+}
+
+.legend-table {
+  display: table;
+}
+
+.legend-row {
+  display: table-row;
+}
+
+.legend-cell {
+  display: table-cell;
+  padding-left: 5px; /*  border: solid; border-width: thin; padding-right: 5px;*/
+}
+
+.legend-1 {
+  background-color: #28b9b9;
+}
+
+.legend-2 {
+  background-color: #e26178;
+}
+
+.legend-3 {
+  background-color: #fcd06d;
+}
+
+.legend-4 {
+  background-color: #4a6288;
+}
+
+.legend-5 {
+  background-color: #4cc991;
+}
+
+.legend-6 {
+  background-color: #C53EA1;
+}
+
+.legend-7 {
+  background-color: #B9D469;
+}
+
+.legend-8 {
+  background-color: #3A8DAF;
+}
+
+.legend-9 {
+  background-color: #237C54;
+}
+
+.legend-10 {
+  background-color: #86FCCC;
+}
+
+.legend-11 {
+  background-color: #A743C9;
+}
+
+.legend-12 {
+  background-color: #956660;
+}
+
+.legend-13 {
+  background-color: #953143;
+}
+
+.legend-14 {
+  background-color: #848D9C;
+}
+
+.legend-15 {
+  background-color: #E05BEF;
+}
+
+.legend-16 {
+  background-color: #66C5C5;
+}
+
+.legend-17 {
+  background-color: #1C4935;
+}
+
+.legend-18 {
+  background-color: #B3C0D4;
+}
+
+.legend-19 {
+  background-color: #E7A8B3;
+}
+
+.legend-20 {
+  background-color: #1D8686;
+}
+
+.legend-1-outline {
+  border-color: #28b9b9;
+  color: white;
+}
+
+.legend-2-outline {
+  border-color: #e26178;
+  color: white;
+}
+
+.legend-3-outline {
+  border-color: #fcd06d;
+  color: white;
+}
+
+.legend-4-outline {
+  border-color: #4a6288;
+  color: white;
+}
+
+.legend-5-outline {
+  border-color: #4cc991;
+  color: white;
+}
+
+.legend-6-outline {
+  border-color: #C53EA1;
+  color: white;
+}
+
+.legend-7-outline {
+  border-color: #B9D469;
+  color: white;
+}
+
+.legend-8-outline {
+  border-color: #3A8DAF;
+  color: white;
+}
+
+.legend-9-outline {
+  border-color: #237C54;
+  color: white;
+}
+
+.legend-10-outline {
+  border-color: #86FCCC;
+  color: white;
+}
+
+.legend-11-outline {
+  border-color: #A743C9;
+  color: white;
+}
+
+.legend-12-outline {
+  border-color: #956660;
+  color: white;
+}
+
+.legend-13-outline {
+  border-color: #953143;
+  color: white;
+}
+
+.legend-14-outline {
+  border-color: #848D9C;
+  color: white;
+}
+
+.legend-15-outline {
+  border-color: #E05BEF;
+  color: white;
+}
+
+.legend-16-outline {
+  border-color: #66C5C5;
+  color: white;
+}
+
+.legend-17-outline {
+  border-color: #1C4935;
+  color: white;
+}
+
+.legend-18-outline {
+  border-color: #B3C0D4;
+  color: white;
+}
+
+.legend-19-outline {
+  border-color: #E7A8B3;
+  color: white;
+}
+
+.legend-20-outline {
+  border-color: #1D8686;
+  color: white;
+}

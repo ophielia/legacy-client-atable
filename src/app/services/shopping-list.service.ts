@@ -94,16 +94,39 @@ export class ShoppingListService extends BaseHeadersService {
   }
 
 
-  removeItemFromShoppingList(shoppingList_id: string, item_id: string): Observable<Response> {
+  removeItemFromShoppingList(shoppingList_id: string,
+                             item_id: string,
+                             remove_all: boolean,
+                             dish_id: string): Observable<Response> {
+    var url = this.shoppingListUrl + "/" + shoppingList_id + "/item/" + item_id;
+    var params: string[] = new Array();
+    if (dish_id) {
+      params.push("sourceId=" + dish_id);
+    }
+    if (remove_all) {
+      params.push("removeEntireItem=true");
+    }
+
+    if (params.length > 0) {
+      var paramstr = params.join("&");
+      url = url + "?" + paramstr;
+    }
     return this
       .http
-      .delete(`${this.shoppingListUrl}/${shoppingList_id}/item/${item_id}`,
+      .delete(url,
+        {headers: this.getHeaders()});
+  }
+
+  removeDishItemsFromShoppingList(list_id: string, dish_id: string) {
+    var url = this.shoppingListUrl + "/" + list_id + "/dish/" + dish_id;
+    return this
+      .http
+      .delete(url,
         {headers: this.getHeaders()});
   }
 
   addTagItemToShoppingList(shoppingList_id: string, tag: ITag): Observable<Response> {
     var item: Item = <Item>{tag_id: tag.tag_id};
-    item.item_source = ItemSourceType.Manual;
     return this
       .http
       .post(`${this.shoppingListUrl}/${shoppingList_id}/item`, item,
