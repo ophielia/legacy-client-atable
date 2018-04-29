@@ -190,9 +190,10 @@ export class ShoppingListService extends BaseHeadersService {
   }
 
 
-  setListActive(shoppingListId: string) {
+  setListActive(shoppingListId: string, replaceList: boolean) {
+    var generateType = replaceList ? 'Replace' : 'Add';
     var url = this.shoppingListUrl + "/" + shoppingListId
-      + "?generateType=Add";
+      + "?generateType=" + generateType;
     return this
       .http
       .put(`${url}`, null,

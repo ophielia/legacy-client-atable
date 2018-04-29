@@ -60,7 +60,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   }
 
   generateActiveList() {
-    this.shoppingListService.setListActive(this.shoppingListId)
+    this.shoppingListService.setListActive(this.shoppingListId, false)
       .subscribe(r => {
         var headers = r.headers;
         var location = headers.get("Location");

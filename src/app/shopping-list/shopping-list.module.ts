@@ -14,6 +14,7 @@ import {SourceLegendService} from "../services/source-legend.service";
 import {ShoppingListItemsComponent} from './shopping-list-items/shopping-list-items.component';
 import {AutoCompleteModule} from "primeng/primeng";
 import {SingleListComponentComponent} from './single-list-component/single-list-component.component';
+import {ShoppingListComponent} from './shopping-list/shopping-list.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,7 @@ import {SingleListComponentComponent} from './single-list-component/single-list-
 
   ],
   providers: [ShoppingListService, TagCommService, SourceLegendService],
-  declarations: [ManageShoppingListComponent, EditShoppingListComponent, ShoppingListItemsComponent, SingleListComponentComponent]
+  declarations: [ManageShoppingListComponent, EditShoppingListComponent, ShoppingListItemsComponent, SingleListComponentComponent, ShoppingListComponent]
 })
 export class ShoppingListModule {
 }

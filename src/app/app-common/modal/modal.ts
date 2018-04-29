@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 
 @Component({
@@ -8,15 +8,10 @@ import {Component, Input} from '@angular/core';
          [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
       <div class="modal-dialog modal-dialog-centered" style="margin-top:100px;">
         <div class="modal-content">
-          <!--  <div class="modal-header">
-              <ng-content select=".app-modal-header"></ng-content>
-            </div>-->
+
           <div class="modal-body">
             <ng-content select=".app-modal-body"></ng-content>
           </div>
-          <!--  <div class="modal-footer">
-              <ng-content select=".app-modal-footer"></ng-content>
-            </div> -->
         </div>
       </div>
     </div>
@@ -32,6 +27,7 @@ export class ModalComponent {
   public visible = false;
   private visibleAnimate = false;
   @Input() autoHide: number = 0;
+  @Output() modalResult: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {
   }
@@ -51,6 +47,10 @@ export class ModalComponent {
 
   public onContainerClicked(event: MouseEvent): void {
     if ((<HTMLElement>event.target).classList.contains('modal')) {
+      this.hide();
+    } else if ((<HTMLElement>event.target).classList.contains('buttonclick')) {
+      var result = (<HTMLButtonElement>event.target).value;
+      this.modalResult.emit(result);
       this.hide();
     }
   }

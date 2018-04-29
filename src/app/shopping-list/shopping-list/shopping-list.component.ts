@@ -1,37 +1,31 @@
 import {Component, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.service";
+import {IDish} from "../../model/dish";
 import {IShoppingList, ShoppingList} from "../../model/shoppinglist";
+import {ITag, Tag} from "../../model/tag";
+import ListType from "../../model/list-type";
+import {ListLayout} from "../../model/listlayout";
+import {Subscription} from "rxjs/Subscription";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ShoppingListService} from "../../services/shopping-list.service";
-import {TagsService} from "../../services/tags.service";
-import {ITag, Tag} from "../../model/tag";
-import {Subscription} from "rxjs/Subscription";
-import {ListLayout} from "../../model/listlayout";
-import {ListLayoutService} from "app/services/list-layout.service";
-import {ItemSource} from "../../model/item-source";
-import {SourceLegendService} from "../../services/source-legend.service";
-import {ICategory} from "../../model/category";
-import CategoryType from "../../model/category-type";
-import TagType from "../../model/tag-type";
-import {IDish} from "../../model/dish";
+import {ListLayoutService} from "../../services/list-layout.service";
 import {DishService} from "../../services/dish-service.service";
-import ListType from "../../model/list-type";
+import {TagsService} from "../../services/tags.service";
+import {SourceLegendService} from "../../services/source-legend.service";
+import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.service";
+import {ICategory} from "../../model/category";
+import {ItemSource} from "../../model/item-source";
+import CategoryType from "../../model/category-type";
 
 @Component({
-  selector: 'at-edit-shopping-list',
-  templateUrl: './edit-shopping-list.component.html',
-  styleUrls: ['./edit-shopping-list.component.css']
+  selector: 'at-shopping-list',
+  templateUrl: './shopping-list.component.html',
+  styleUrls: ['./shopping-list.component.css']
 })
-export class EditShoppingListComponent implements OnInit, OnDestroy {
+export class ShoppingListComponent implements OnInit, OnDestroy {
   @ViewChild('modal1') input;
   private shoppingListId: any = ShoppingList;
   private allDishes: IDish[];
-  private alltags: ITag[];
-  private PICK_UP_LIST: string = ListType.PickUpList;
-  private BASE_LIST: string = ListType.BaseList;
 
-  private tagTypes: string;
-  private tagSelectEvent: any;
   private shoppingList: IShoppingList;
   private listLayoutList: ListLayout[];
   private listLegend: Map<string, string>;
@@ -40,10 +34,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private highlightListId: string;
   private showListLayouts: boolean;
   private showSources: boolean = false;
-  private showAddDish: boolean;
-  private showAddItem: boolean;
   private showMenu: boolean;
-  private showPantryItems: boolean = true;
   private showItemLegends: boolean = true;
   private unsubscribe: Subscription[] = [];
   errorMessage: any;
@@ -59,7 +50,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
               private legendService: SourceLegendService,
               private tagCommService: TagCommService) {
     this.shoppingListId = this.route.snapshot.params['id'];
-    this.tagTypes = TagType.Ingredient + "," + TagType.NonEdible;
 
   }
 
@@ -70,12 +60,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       this.getShoppingList(id);
     });
     this.getListLayouts();
-    this.tagSelectEvent = this.tagCommService.selectEvent
-      .subscribe(selectevent => {
-        this.addTagToList(selectevent);
-      })
-    this.getAllTags()
-    this.getAllDishes();
   }
 
   ngOnDestroy(): void {
@@ -85,7 +69,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   getShoppingList(id: string) {
     if (this.highlightDishId || this.highlightListId) {
       var $sub = this.shoppingListService
-        .getByIdWithHighlight(id, this.highlightDishId, this.highlightListId, this.showPantryItems)
+        .getByIdWithHighlight(id, this.highlightDishId, this.highlightListId, false)
         .subscribe(p => {
           this.shoppingList = p;
           this.generateLegend();
@@ -94,7 +78,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       this.unsubscribe.push($sub);
     } else {
       var $sub = this.shoppingListService
-        .getByIdWithPantry(id, this.showPantryItems)
+        .getByIdWithPantry(id, false)
         .subscribe(p => {
           this.shoppingList = p;
           this.generateLegend();
@@ -113,16 +97,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.unsubscribe.push($sub);
   }
 
-  getAllTags() {
-    this.tagService
-      .getAllSelectable(this.tagTypes, 'Search')
-      .subscribe(p => {
-          this.alltags = p;
-        },
-        e => this.errorMessage = e);
-
-  }
-
   getListLayouts() {
     var $sub = this.listLayoutService
       .getAll()
@@ -130,16 +104,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
         this.listLayoutList = r;
       })
   }
-
-  private addTagToList(tag: Tag) {
-    // add tag to list as item in back end
-    var $sub = this.shoppingListService.addTagItemToShoppingList(this.shoppingList.list_id, tag)
-      .subscribe(p => {
-        this.getShoppingList(this.shoppingList.list_id);
-      });
-    this.unsubscribe.push($sub);
-  }
-
 
   changeListLayout(layoutId: string) {
     var $sub = this.shoppingListService
@@ -248,37 +212,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.getShoppingList(this.shoppingList.list_id);
   }
 
-
-  removeDish(source: ItemSource) {
-    var $sub = this.shoppingListService.removeDishItemsFromShoppingList(this.shoppingList.list_id, source.id)
-      .subscribe(r => {
-        this.getShoppingList(this.shoppingList.list_id)
-      });
-    this.unsubscribe.push($sub);
-    if (this.highlightDishId == source.id) {
-      this.highlightDishId = null;
-    }
-  }
-
-  removeList(listSource: ItemSource) {
-    var $sub = this.shoppingListService.removeListItemsFromShoppingList(this.shoppingList.list_id, listSource.display)
-      .subscribe(r => {
-        this.getShoppingList(this.shoppingList.list_id)
-      });
-    this.unsubscribe.push($sub);
-  }
-
-  addDishToList(dish: any) {
-    this.listLegend = null;
-    var $sub = this.shoppingListService.addDishToShoppingList(this.shoppingList.list_id, dish.dish_id)
-      .subscribe(t => {
-        this.highlightDishId = dish.dish_id;
-        this.getShoppingList(this.shoppingList.list_id);
-        this.showAddDish = false;
-      });
-    this.unsubscribe.push($sub);
-  }
-
   getAllDishes() {
     this.dishService.getAll()
       .subscribe(p => {
@@ -297,55 +230,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.unsubscribe.push($sub);
     this.highlightDishId = null;
   }
-
-  addFromList(listType: string) {
-    this.listLegend = null;
-    var $sub = this.shoppingListService.addListToShoppingList(this.shoppingList.list_id, listType)
-      .subscribe(r => {
-        this.highlightListId = listType;
-        this.highlightDishId = null;
-        this.getShoppingList(this.shoppingList.list_id);
-      });
-    this.unsubscribe.push($sub);
-  }
-
-  shopWithThisList() {
-
-    // determine if modal should be shown
-    if (this.activeListExists) {
-      // show modal
-      this.input.show();
-    } else {
-      // set list active directly
-      this.setListActive(false);
-    }
-
-
-  }
-
-  processModalSelection(modal_result: string) {
-    console.log(modal_result + 'modal result');
-    if (modal_result == 'replace') {
-      console.log('replace');
-      this.setListActive(true);
-    } else {
-      console.log('active');
-      this.setListActive(false);
-    }
-  }
-
-  setListActive(replaceList: boolean) {
-    this.shoppingListService.setListActive(this.shoppingList.list_id, replaceList)
-      .subscribe(r => {
-        var headers = r.headers;
-        var location = headers.get("Location");
-        var splitlocation = location.split("/");
-        var id = splitlocation[splitlocation.length - 1];
-        this.shoppingListId = id;
-        this.router.navigate(["list/shop/", id]);
-      });
-  }
-
 
   showLegend() {
     if (this.shoppingList.dish_sources.length > 0) {
@@ -366,36 +250,8 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.showListLayouts = !this.showListLayouts;
   }
 
-  togglePantryItems() {
-    this.showPantryItems = !this.showPantryItems;
-    this.getShoppingList(this.shoppingList.list_id);
-  }
-
   toggleShowItemLegends() {
     this.showItemLegends = !this.showItemLegends;
   }
-
-  toggleAddItem() {
-    this.showAddItem = !this.showAddItem;
-    if (this.showAddItem) {
-      this.showAddDish = false;
-    }
-  }
-
-  toggleAddDish() {
-    this.showAddDish = !this.showAddDish;
-    if (this.showAddDish) {
-      this.showAddItem = false;
-    }
-  }
-
-  toggleShowDishSources() {
-    this.showSources = !this.showSources;
-    if (!this.showSources) {
-      this.highlightDishId = null;
-      this.getShoppingList(this.shoppingList.list_id);
-    }
-  }
-
 
 }
