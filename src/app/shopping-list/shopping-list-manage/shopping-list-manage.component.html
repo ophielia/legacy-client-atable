@@ -8,19 +8,28 @@
       </div>
 
       <div class="row justify-content-between" style="margin-left:0px">
-        <div *ngFor="let type of shoppingListTypes"
-             class="dish-tag-element-wide list-color">
-          {{allShoppingLists[type]?type:'nada'}}
-          <span *ngIf="allShoppingLists[type]"
-                class="icon-button"
-                (click)="goToEdit(type)"
-          ><span class="fa-edit fa"></span></span>
-          <div class="dish-tag-element list-outline-color">edit</div>
-          <div>delete</div>
-          <div class="dish-tag-element list-outline-color">
-            {{allShoppingLists[type]?allShoppingLists[type].item_count:0}} Items
-          </div>
-        </div>
+
+        <at-single-list-component
+          [list]="activeList"
+          [displayText]="'Active List'">
+        </at-single-list-component>
+
+        <at-single-list-component
+          [list]="baseList"
+          [displayText]="'Base List'">
+        </at-single-list-component>
+
+
+        <at-single-list-component
+          [list]="pickupList"
+          [displayText]="'Pickup List'">
+        </at-single-list-component>
+
+        <ng-container *ngFor="let list of generalLists">
+          <at-single-list-component
+            [list]="list">
+          </at-single-list-component>
+        </ng-container>
 
       </div>
 

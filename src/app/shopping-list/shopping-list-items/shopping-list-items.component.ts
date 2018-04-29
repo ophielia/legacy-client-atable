@@ -28,7 +28,14 @@ export class ShoppingListItemsComponent implements OnInit {
   removeTagFromList(item: Item) {
 
     var $sub = this.shoppingListService.removeItemFromShoppingList(this.listId, item.item_id,
-      this.category.is_frequent, this.category.dish_id)
+      true, this.category.dish_id)  // note - always remove entire item
       .subscribe(t => this.listUpdated.emit(true));
+  }
+
+  showLegends(item: Item) {
+    if (!this.showItemLegends) {
+      return false;
+    }
+    return item.dish_sources.length > 0 || item.list_sources.length > 0;
   }
 }

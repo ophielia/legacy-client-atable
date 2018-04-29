@@ -59,6 +59,7 @@
                                [tagTypes]="'Ingredient,Rating,DishType,TagType'"
                                [selectType]="'Assign'"
                                [showText]="'Select Tag To Add'"
+                               [tagList]="alltags"
                                [passedInputStyle]="'menubar-input-centered'"
                                (tagSelected)="addTagToDish($event)"></at-tag-select>
                 <span class="input-group-addon searchbox-group-button" id="filter-query"

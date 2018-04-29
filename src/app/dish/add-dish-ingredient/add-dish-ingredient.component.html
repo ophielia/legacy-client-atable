@@ -5,14 +5,14 @@
       <div class="row menubar dish-menubar-text-color menu-color justify-content-between">
         <at-tag-select [tagTypes]="'Ingredient'"
                        [selectType]="'Assign'"
+                       [showText]="'Select Ingredient'"
                        [passedInputStyle]="'beep'"
+                       [tagList]="alltags"
+                       [allowAdd]="true"
+                       [passedInputStyle]="'menubar-input'"
                        (tagSelected)="addTagToDish($event)"></at-tag-select>
 
 
-        <!--<div class="input-group" style="max-width:135px;">
-          <input type="text" class="form-control" aria-describedby="search-query">
-          <span class="input-group-addon" id="search-query"><span class="fa-empire fa"></span></span>
-        </div>-->
         <div class="menubar-buttons">
         <span class=" add-button-md" (click)="goToPrevious()">
           <fa [name]="'chevron-left'"></fa>

@@ -43,6 +43,7 @@ import {TagsService} from "../services/tags.service";
 import {APP_CONFIG, APP_DI_CONFIG, AppConfigModule} from "app/app.config";
 import {Logger} from "angular2-logger/core";
 import {LayoutSubcategoryToolComponent} from './layout-subcategory-tool/layout-subcategory-tool.component';
+import {EditDisplayCategoryComponent} from './list-layout-list/edit-display-category/edit-display-category.component';
 
 @NgModule({
   imports: [
@@ -81,12 +82,14 @@ import {LayoutSubcategoryToolComponent} from './layout-subcategory-tool/layout-s
     ProposalEditComponent,
     ProposalSlotComponentComponent,
     RatingTagAssignToolComponent,
-    LayoutSubcategoryToolComponent
+    LayoutSubcategoryToolComponent,
+    EditDisplayCategoryComponent
   ],
   providers: [{
     provide: APP_CONFIG,
     useValue: APP_DI_CONFIG
-  }, Logger, TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService, AuthenticationService, TargetService, ProposalService],
+  }, Logger, TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService,
+    AuthenticationService, TargetService, ProposalService],
 })
 export class LegacyModule {
 }

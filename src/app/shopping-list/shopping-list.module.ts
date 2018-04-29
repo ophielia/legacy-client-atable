@@ -12,6 +12,8 @@ import {shoppingListRouting} from "./shopping-list.routes";
 import {EditShoppingListComponent} from "./edit-shopping-list/edit-shopping-list.component";
 import {SourceLegendService} from "../services/source-legend.service";
 import {ShoppingListItemsComponent} from './shopping-list-items/shopping-list-items.component';
+import {AutoCompleteModule} from "primeng/primeng";
+import {SingleListComponentComponent} from './single-list-component/single-list-component.component';
 
 @NgModule({
   imports: [
@@ -20,11 +22,12 @@ import {ShoppingListItemsComponent} from './shopping-list-items/shopping-list-it
     FormsModule,
     shoppingListRouting,
     Angular2FontawesomeModule,
-    AppCommonModule
+    AppCommonModule,
+    AutoCompleteModule
 
   ],
   providers: [ShoppingListService, TagCommService, SourceLegendService],
-  declarations: [ManageShoppingListComponent, EditShoppingListComponent, ShoppingListItemsComponent]
+  declarations: [ManageShoppingListComponent, EditShoppingListComponent, ShoppingListItemsComponent, SingleListComponentComponent]
 })
 export class ShoppingListModule {
 }

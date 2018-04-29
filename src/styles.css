@@ -216,6 +216,9 @@ body {
   color: white;
 }
 
+.darker-menu-color {
+  background-color: #cbc8c9;
+}
 /* links */
 
 a:hover {
@@ -302,6 +305,19 @@ a:hover {
   border-bottom-style: solid;
   border-color: #4a6187;
   padding-left: 0px;
+}
+
+.dropdown-overlay {
+  text-align: right;
+  position: absolute;
+  background-color: #cbc8c9;
+  z-index: 1;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.at-tag-select-style {
+  width: 100%;
 }
 
 .filterbar {
@@ -631,3 +647,13 @@ text
 }
 
 }
+
+/*
+
+    text-align: right;
+    position: absolute;
+    background-color: #cbc8c9;
+    z-index: 1;
+    padding-right: 5px;
+    padding-left: 5px;
+ */

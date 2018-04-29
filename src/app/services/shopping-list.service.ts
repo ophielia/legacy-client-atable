@@ -6,7 +6,6 @@ import {IShoppingList} from "../model/shoppinglist";
 import MappingUtils from "../model/mapping-utils";
 import ListLayoutType from "../model/list-layout-type";
 import {Item} from "../model/item";
-import ItemSourceType from "../model/item-source-type";
 import {ITag} from "../model/tag";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {Logger} from "angular2-logger/core";
@@ -49,9 +48,17 @@ export class ShoppingListService extends BaseHeadersService {
     return shoppingList$;
   }
 
-  getByIdWithHighlight(shoppingList_id: string, dish_id: string) {
+  getByIdWithHighlight(shoppingList_id: string, dish_id: string, list_type: string, show_pantry: boolean) {
     var url = this.shoppingListUrl + "/" + shoppingList_id;
-    url = url + "?highlightDish=" + dish_id;
+    if (dish_id) {
+      url = url + "?highlightDish=" + dish_id;
+
+    }
+    else if (list_type) {
+      url = url + "?highlightListType=" + list_type;
+    } else if (show_pantry) {
+      url = url + "?showPantry=true";
+    }
     let shoppingList$ = this.http
       .get(url, {headers: this.getHeaders()})
       .map(this.mapShoppingList)
@@ -125,11 +132,44 @@ export class ShoppingListService extends BaseHeadersService {
         {headers: this.getHeaders()});
   }
 
+  removeListItemsFromShoppingList(list_id: string, listSource: string) {
+    var url = this.shoppingListUrl + "/" + list_id + "/listtype/" + listSource;
+    return this
+      .http
+      .delete(url,
+        {headers: this.getHeaders()});
+  }
+
+  removeAllItemsFromList(shoppinglist_id: string) {
+    var url = this.shoppingListUrl + "/" + shoppinglist_id + "/item";
+    return this
+      .http
+      .delete(url,
+        {headers: this.getHeaders()});
+  }
+
   addTagItemToShoppingList(shoppingList_id: string, tag: ITag): Observable<Response> {
     var item: Item = <Item>{tag_id: tag.tag_id};
     return this
       .http
       .post(`${this.shoppingListUrl}/${shoppingList_id}/item`, item,
+        {headers: this.getHeaders()});
+  }
+
+  addListToShoppingList(shoppingList_id: string, list_type: string): Observable<Response> {
+    var url = this.shoppingListUrl + "/" + shoppingList_id + "/listtype/" + list_type;
+    return this
+      .http
+      .post(url,
+        null,
+        {headers: this.getHeaders()});
+  }
+
+  addDishToShoppingList(shoppingList_id: string, dish_id: string): Observable<Response> {
+    return this
+      .http
+      .post(`${this.shoppingListUrl}/${shoppingList_id}/dish/${dish_id}`,
+        null,
         {headers: this.getHeaders()});
   }
 

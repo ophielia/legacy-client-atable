@@ -19,6 +19,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   shoppingList: IShoppingList = <IShoppingList>{list_id: "", list_type: ""};
   private tagCommService: TagCommService;
   selectType: string = TagSelectType.Assign;
+  autoSelectedTag: any;
   @Output() tagEvent: EventEmitter<ITag> = new EventEmitter<ITag>();
 
 

@@ -47,6 +47,8 @@ export class ManageDishComponent implements OnInit {
   private hoverDish: Dish;
   private selectShowTags: string;
   unsubscribe: Subscription[] = [];
+  private alltags: ITag[];
+  private alltagsSearch: ITag[];
 
   constructor(private dishService: DishService,
               private tagCommService: TagCommService,
@@ -77,6 +79,7 @@ export class ManageDishComponent implements OnInit {
       .subscribe(selectevent => {
         this.addTagToFilter(selectevent);
       })
+    this.getAllTags();
   }
 
   ngOnDestroy() {
@@ -299,6 +302,22 @@ export class ManageDishComponent implements OnInit {
     this.unsubscribe.push($sub);
   }
 
+  getAllTags() {
+    this.tagService
+      .getAllSelectable('Ingredient,Rating,DishType,TagType', TagSelectType.Assign)
+      .subscribe(p => {
+          this.alltags = p;
+        },
+        e => this.errorMessage = e);
+    this.tagService
+      .getAllSelectable('Ingredient,Rating,DishType,TagType', TagSelectType.Search)
+      .subscribe(p => {
+          this.alltagsSearch = p;
+        },
+        e => this.errorMessage = e);
+
+  }
+
   addDishesToMealPlan(meal_plan_id: string) {
     var dishIds: string[];
     dishIds = this.selectedDishes.map(i => i.dish_id);
@@ -319,8 +338,8 @@ export class ManageDishComponent implements OnInit {
     this.getMealPlanForSelect(999);
   }
 
-  showTagEntry() {
-    this.isShowTagEntry = true;
+  toggleTagEntry() {
+    this.isShowTagEntry = !this.isShowTagEntry;
   }
 
   goToDishEdit(dish_id: string) {

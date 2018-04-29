@@ -140,11 +140,15 @@ export default class MappingUtils {
 
   static _toNewTagDrilldown(r: any) {
 
-    return MappingUtils.toNewTagDrilldown(r.tagDrilldown);
+    return MappingUtils.toNewTagDrilldown(r.tagDrilldown, 1);
   }
 
-  static toNewTagDrilldown(r: any) {
-    let children = r.children != null ? r.children.map(MappingUtils.toNewTagDrilldown) : null;
+  static toNewTagDrilldown(r: any, level: number) {
+    let children = r.children != null ? r.children.map(
+      function (x) {
+        return MappingUtils.toNewTagDrilldown(x, level + 1);
+      }
+    ) : null;
     let drilldown = <TagDrilldown>({
       "tag_id": r.tag_id,
       "name": r.name,
@@ -155,7 +159,7 @@ export default class MappingUtils {
       "assign_select": r.assign_select,
       "search_select": r.search_select,
       "expanded": false,
-      "level": 1,
+      "level": level,
       "children": children,
     });
 

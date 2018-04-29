@@ -2,8 +2,9 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {ITag} from "../../model/tag";
 import TagSelectType from "../../model/tag-select-type";
 import {Dish} from "../../model/dish";
-import {TagsService} from "../../services/tags.service";
 import TagType from "../../model/tag-type";
+import {TagsService} from "../../services/tags.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'at-tag-select',
@@ -11,28 +12,30 @@ import TagType from "../../model/tag-type";
   styleUrls: ['./tag-select.component.css']
 })
 export class TagSelectComponent implements OnInit, OnDestroy {
+  unsubscribe: Subscription[] = [];
   @Output() tagSelected: EventEmitter<ITag> = new EventEmitter<ITag>();
+  @Output() cancelAddTag: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() tagTypes: string;
   @Input() showText: string;
+  @Input() addOverlayClass: string;
+  @Input() showCancelButton: boolean = false;
+  @Input() allowAdd: boolean = false;
   @Input() selectType: string = TagSelectType.Assign;
   @Input() passedInputStyle: any;
   @Input() showAsInputGroup: any = true;
-
+  @Input() tagList: ITag[];
 
   autoSelectedTag: any;
   filteredTags: ITag[];
-  alltags: ITag[];
   dispClass: string = 'atinput-dish';
 
   name: string;
   dish: Dish = <Dish>{dish_id: "", name: "", description: ""};
   private errorMessage: string;
   currentSelect: string;
-  includedTypes: Map<string, boolean> = new Map<string, boolean>();
   showAddTags: boolean;
 
   allTagTypes: string[];
-  lastSelectedId: string = "";
 
 
   constructor(private tagService: TagsService) {
@@ -40,35 +43,28 @@ export class TagSelectComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    for (var i = 0; i < this.allTagTypes.length; i++) {
-      let ttype = this.allTagTypes[i];
-      // get / fill tag lists here from service
-      if (this.tagTypes.includes(ttype)) {
-        this.includedTypes[ttype] = true;
-      } else {
-        this.includedTypes[ttype] = false;
-      }
-    }
-
     this.autoSelectedTag = null;
+    this.showAddTags = false;
+
     this.currentSelect = this.selectType;
     if (this.passedInputStyle) {
       this.dispClass = this.passedInputStyle;
     }
-    this.getAllTags();
 
   }
 
   filterTags(event) {
+    console.log('query:' + event.query);
     if (event.query) {
-      if (this.alltags) {
+      if (this.tagList) {
         let filterBy = event.query.toLocaleLowerCase();
-        this.filteredTags = this.alltags.filter((tag: ITag) =>
+        this.filteredTags = this.tagList.filter((tag: ITag) =>
         tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
-        this.showAddTags = this.filteredTags.length == 0;
+        this.showAddTags = this.filteredTags.length == 0 && this.allowAdd;
       }
     } else {
       this.filteredTags = null;
+      this.showAddTags = false;
     }
   }
 
@@ -79,6 +75,12 @@ export class TagSelectComponent implements OnInit, OnDestroy {
     if (event) {
       event.panelVisible = false;
     }
+  }
+
+  cancelAdd() {
+    this.showAddTags = false;
+    this.autoSelectedTag = null;
+    this.filteredTags = null;
   }
 
   checkSearchEnter(el) {
@@ -92,18 +94,40 @@ export class TagSelectComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllTags() {
-    this.tagService
-      .getAllSelectable(this.tagTypes, this.selectType)
-      .subscribe(p => {
-          this.alltags = p;
-          this.showAddTags = (this.alltags.length == 0);
-        },
-        e => this.errorMessage = e);
+  isIncluded(tagtype: string) {
+    if (!this.allowAdd) {
+      return false;
+    }
+    return this.tagTypes.indexOf(tagtype) >= 0;
 
   }
 
+  cancelSelectTag() {
+    this.cancelAddTag.emit(true);
+  }
+
+  add(tagtype: string) {
+    var $sub = this.tagService.addTag(this.autoSelectedTag, tagtype)
+      .subscribe(r => {
+        this.autoSelectedTag = null;
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        this.tagService.getById(id)
+          .subscribe(t => {
+            this.showAddTags = false;
+            this.autoSelectedTag = null;
+            this.tagSelected.emit(t);
+          });
+
+
+      });
+    this.unsubscribe.push($sub);
+  }
+
   ngOnDestroy() {
+    this.unsubscribe.forEach(s => s.unsubscribe());
 
   }
 

@@ -10,11 +10,16 @@
            class="dish-menubar-text-color content-panel-text"
            (dblclick)="removeTagFromList(item)">
         {{item.tag.name}}
-        <ng-container *ngIf="(category.is_frequent)">
+        <ng-container>
           <span *ngIf="item.used_count > 1 && !showItemLegends">({{item.used_count}})</span>
-          <span *ngIf="showItemLegends && item.dish_sources.length > 0" class="legend-combined-box">
+          <span *ngIf="showLegends(item)" class="legend-combined-box">
+
         <ng-container *ngFor="let dishSource of item.dish_sources">
           <span class="{{legendLookup(dishSource.id)}} legend-combined-box-element"></span>
+        </ng-container>
+          <ng-container *ngFor="let listSource of item.list_sources">
+              <span class="{{legendLookup(listSource.display)}} legend-combined-box-element"></span>
+
         </ng-container>
     </span>
         </ng-container>
@@ -29,10 +34,15 @@
       {{item.tag.name}}
       <ng-container *ngIf="!(category.is_frequent)">
         <span *ngIf="item.used_count > 1 && !showItemLegends">({{item.used_count}})</span>
-        <span *ngIf="showItemLegends && item.dish_sources.length > 0" class="legend-combined-box">
-      <ng-container *ngFor="let dishSource of item.dish_sources">
-        <span class="{{legendLookup(dishSource.id)}} legend-combined-box-element"></span>
-      </ng-container>
+        <span *ngIf="showLegends(item)" class="legend-combined-box">
+
+        <ng-container *ngFor="let dishSource of item.dish_sources">
+          <span class="{{legendLookup(dishSource.id)}} legend-combined-box-element"></span>
+        </ng-container>
+          <ng-container *ngFor="let listSource of item.list_sources">
+              <span class="{{legendLookup(listSource.display)}} legend-combined-box-element"></span>
+
+        </ng-container>
     </span>
       </ng-container>
     </div>
@@ -40,27 +50,4 @@
 
 </div>
 
-<!--
-<div class="row">
-  <ng-container *ngIf="category.subcategories && category.subcategories.length > 0">
-    <div *ngFor="let subcategory of category.subcategories"
-         class="col-6 dish-menubar-text-color content-panel list-outline-color">
-      <span style="font-weight: bolder;">{{subcategory.name}}</span>
 
-      <div *ngFor="let item of subcategory.items"
-           class="dish-menubar-text-color content-panel-text"
-           (dblclick)="removeTagFromList(item)">
-        {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
-      </div>
-
-    </div>
-  </ng-container>
-  <div class="col-6 dish-menubar-text-color content-panel-text" *ngFor="let item of category.items"
-       (dblclick)="removeTagFromList(item)">
-    {{item.tag.name}} <span *ngIf="item.used_count > 1">({{item.used_count}})</span>
-
-  </div>
-
-</div>
-
--->

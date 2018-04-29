@@ -51,29 +51,68 @@
           </div>
         </div>
       </div>
-
       <div *ngIf="showMenu"
            class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-conteønt-end">
         <div class="col">
-
           <div class="row justify-content-end text-menu-link"
-               (click)="toggleShowDishSources()">Show Sources
+               (click)="clearList()">Clear List
+          </div>
+          <div class="row justify-content-end text-menu-link"
+               (click)="addFromList(PICK_UP_LIST)">Add From Pick-Up List
+          </div>
+          <div class="row justify-content-end text-menu-link"
+               (click)="addFromList(BASE_LIST)">Add From Base List
           </div>
         </div>
       </div>
 
-
       <div *ngIf="showMenu"
-           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end broken-list-fix">
+           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end {{showAddDish?'':'broken-list-fix'}}">
         <div class="col">
-          <div class="row justify-content-end text-menu-link">Add Items</div>
+          <div *ngIf="!showAddDish" class="row justify-content-end text-menu-link" (click)="toggleAddDish()">Add Dish
+          </div>
+          <div *ngIf="showAddDish" class="row justify-content-end text-menu-link">
+            <at-dish-select class="at-tag-select-style"
+                            [showCancelButton]="true"
+                            [showText]="'Select Dish'"
+                            [passedInputStyle]="'menubar-input'"
+                            [dishList]="allDishes"
+                            (dishSelected)="addDishToList($event)"
+                            (cancelSelectDish)="toggleAddDish()"></at-dish-select>
+          </div>
+
         </div>
       </div>
+
+      <div *ngIf="showMenu"
+           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end {{showAddItem?'':'broken-list-fix'}}">
+        <div class="col">
+          <div *ngIf="!showAddItem" class="row justify-content-end text-menu-link" (click)="toggleAddItem()">Add Item
+          </div>
+          <div *ngIf="showAddItem" class="row justify-content-end text-menu-link">
+            <at-tag-select class="at-tag-select-style"
+                           [tagTypes]="'Ingredient,NonEdible'"
+                           [selectType]="'Assign'"
+                           [allowAdd]="true"
+                           [showCancelButton]="true"
+                           [addOverlayClass]="darker-menu-color"
+                           [showText]="'Filter by Tag'"
+                           [passedInputStyle]="'menubar-input'"
+                           [tagList]="alltags"
+                           (tagSelected)="addTagToList($event)"
+                           (cancelAddTag)="toggleAddItem(true)"></at-tag-select>
+          </div>
+
+        </div>
+
+
+      </div>
+
       <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">Shop
       </div>
 
 
-      <div *ngIf="shoppingList.dish_sources.length > 0" class="row menubar-flush-bottom main-color justify-content-end">
+      <div *ngIf="showLegend()" class="row menubar-flush-bottom main-color justify-content-end">
         <div class="col" style="padding:0px;">
 
 
@@ -91,6 +130,22 @@
 
                 </div>
                 <div class="legend-cell text-capitalize" (click)="removeDish(source);">
+                  <span class="fa-trash fa"></span>
+
+                </div>
+              </div>
+
+              <div *ngFor="let source of shoppingList.list_sources"
+                   class="legend-row">
+                <div class="legend-cell" (click)="highlightList(source)">
+                  <span class="legend-box {{source.disp_class}}"></span>
+
+                </div>
+                <div class="legend-cell text-capitalize" (click)="highlightList(source)">
+                  <span>{{source.display}}</span>
+
+                </div>
+                <div class="legend-cell text-capitalize" (click)="removeList(source);">
                   <span class="fa-trash fa"></span>
 
                 </div>

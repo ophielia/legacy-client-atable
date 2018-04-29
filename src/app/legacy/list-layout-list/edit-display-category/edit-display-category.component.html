@@ -1,0 +1,31 @@
+<div class="col-sm-8">
+  <h4 *ngIf="!isEdit">{{category.category_id}}: {{category.name}}</h4>
+  <input *ngIf="isEdit" #categoryNameBox class="form-control input-lg" type="text"
+         placeholder="tag name"
+         (keyup.enter)="doEditListLayoutCategory(category.category_id,categoryNameBox.value)"/>
+</div>
+<div class="col-sm-4" style="margin-top: 5px;">
+  <div class="pull-right">
+    <ng-container *ngIf="!isEdit">
+      <a class="btn btn-warning btn-sm"
+         (click)="editListLayoutCategory(category.category_id)">
+        Edit
+      </a>
+      <a class="btn btn-danger btn-sm"
+         (click)="deleteListLayoutCategory(category.category_id)">
+        Delete
+      </a>
+    </ng-container>
+    <ng-container *ngIf="isEdit">
+      <a class="btn btn-warning btn-sm"
+         (click)="doEditListLayoutCategory(category.category_id, categoryNameBox.value)">
+        Save
+      </a>
+      <a class="btn btn-danger btn-sm"
+         (click)="cancelEditCategory()">
+        Cancel
+      </a>
+    </ng-container>
+  </div>
+</div>
+

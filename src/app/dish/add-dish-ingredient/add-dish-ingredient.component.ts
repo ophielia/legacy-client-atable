@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {TagDrilldown} from "../../model/tag-drilldown";
 import {Dish} from "../../model/dish";
-import {Tag} from "../../model/tag";
+import {ITag, Tag} from "../../model/tag";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DishService} from "../../services/dish-service.service";
 import {TagsService} from "../../services/tags.service";
@@ -21,6 +21,7 @@ export class AddDishIngredientComponent implements OnInit {
   tagsToAdd: Tag[] = [];
   private tagSelectEvent: any;
   originalTags: Tag[];
+  alltags: ITag[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -43,6 +44,7 @@ export class AddDishIngredientComponent implements OnInit {
       .subscribe(selectevent => {
         this.addTagToDish(selectevent);
       })
+    this.getAllTags();
   }
 
 
@@ -53,6 +55,15 @@ export class AddDishIngredientComponent implements OnInit {
         this.dish = p;
         this.pullIngredientTags();
       });
+  }
+
+  getAllTags() {
+    this.tagService
+      .getAllSelectable('Ingredient', 'Assign')
+      .subscribe(p => {
+        this.alltags = p;
+      });
+
   }
 
   getIngredientTags() {

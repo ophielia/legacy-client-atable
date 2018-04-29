@@ -13,6 +13,7 @@ import {AutoCompleteModule} from "primeng/primeng";
 import {HttpModule} from "@angular/http";
 import {FormsModule} from "@angular/forms";
 import {ModalComponent} from "./modal/modal";
+import {DishSelectComponent} from './dish-select/dish-select.component';
 
 @NgModule({
   imports: [
@@ -25,8 +26,8 @@ import {ModalComponent} from "./modal/modal";
     commonRouting
   ],
   providers: [TagsService, TagCommService],
-  declarations: [TagBrowseComponent, TagBrowseNodeComponent, TagBrowseStyleDirective, ModalComponent, TagSelectComponent],
-  exports: [TagBrowseComponent, TagSelectComponent, TagBrowseStyleDirective, ModalComponent]
+  declarations: [TagBrowseComponent, TagBrowseNodeComponent, TagBrowseStyleDirective, ModalComponent, TagSelectComponent, DishSelectComponent],
+  exports: [TagBrowseComponent, DishSelectComponent, TagSelectComponent, TagBrowseStyleDirective, ModalComponent]
 })
 export class AppCommonModule {
 }

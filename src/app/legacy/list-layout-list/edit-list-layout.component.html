@@ -1,3 +1,4 @@
+<ng-container *ngIf="loaded">
 <div class="row">
   <div class="col-sm-6">
     <h2>Edit ListLayout - {{listLayout.list_layout_type}}</h2>
@@ -33,50 +34,36 @@
 
 </div>
 
-<!-- list categories in layout section -->
+  <!-- list categories in layout section -->
 
-<section *ngIf="errorMessage">
-  {{errorMessage}}
+  <section *ngIf="errorMessage">
+    {{errorMessage}}
 </section>
-<div class="row" *ngFor="let category of listLayout.listcategories; let e=even; let f=first; let l=last"
-     ywActionable="#aaaaaa"
-     [ngClass]="{ evenRow: e }"
-     [class.topRow]="f"
-     [class.bottomRow]="l">
-  <ng-container *ngIf="showEdit != category.category_id">
-    <div class="col-sm-8">
-      <h4>{{category.category_id}}: {{category.name}}</h4>
-    </div>
-    <div class="col-sm-4" style="margin-top: 5px;">
-      <div class="pull-right">
-        <a class="btn btn-warning btn-sm"
-           (click)="editListLayoutCategory(category.category_id)">
-          Edit
-        </a>
-        <a class="btn btn-danger btn-sm"
-           (click)="deleteListLayoutCategory(category.category_id)">
-          Delete
-        </a>
-      </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="showEdit == category.category_id">
-    <div class="col-sm-8">
-      <input #categoryNameBox class="form-control input-lg" type="text"
-             placeholder="tag name"
-             (keyup.enter)="doEditListLayoutCategory(category.category_id,categoryNameBox.value)"/>
-    </div>
-    <div class="col-sm-4" style="margin-top: 5px;">
-      <div class="pull-right">
-        <a class="btn btn-warning btn-sm"
-           (click)="doEditListLayoutCategory(category.category_id, categoryNameBox.value)">
-          Save
-        </a>
-        <a class="btn btn-danger btn-sm"
-           (click)="cancelEditCategory()">
-          Cancel
-        </a>
-      </div>
-    </div>
-  </ng-container>
-</div>
+  <div *ngFor="let category of listLayout.listcategories; let e=even; let f=first; let l=last">
+
+
+    <at-edit-display-category class="row"
+                              [isEdit]="showEdit == category.category_id"
+                              [layoutId]="listLayout.layout_id"
+                              [category]="category"
+                              (showEdit)="setShowEdit($event)"
+                              (doRefresh)="refreshLayout(layoutId)"
+    >
+
+    </at-edit-display-category>
+
+    <ng-container *ngFor="let subcategory of category.subcategories">
+      <at-edit-display-category class="row"
+                                [isEdit]="showEdit == subcategory.category_id"
+                                [layoutId]="listLayout.layout_id"
+                                [category]="subcategory"
+                                (showEdit)="setShowEdit($event)"
+                                (doRefresh)="refreshLayout(layoutId)"
+      >
+      </at-edit-display-category>
+
+    </ng-container>
+
+  </div>
+
+</ng-container>

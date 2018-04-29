@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Dish} from "../../model/dish";
 import {DishService} from "../../services/dish-service.service";
-import {Tag} from "../../model/tag";
+import {ITag, Tag} from "../../model/tag";
 import TagType from "app/model/tag-type";
 import {TagsService} from "../../services/tags.service";
 import {TagDrilldown} from "app/model/tag-drilldown";
@@ -14,8 +14,7 @@ import {Subscription} from "rxjs/Subscription";
   styleUrls: ['./edit-dish.component.css']
 })
 export class EditDishComponent implements OnInit, OnDestroy {
-
-
+  alltags: ITag[];
 
   dishId: string;
   dish: Dish;
@@ -55,6 +54,7 @@ export class EditDishComponent implements OnInit, OnDestroy {
       this.getDish(id);
     });
     this.getTagsForBrowse();
+    this.getAllTags();
   }
 
   ngOnDestroy(): void {
@@ -75,6 +75,15 @@ export class EditDishComponent implements OnInit, OnDestroy {
       this.expandFoldState[ttype] = false;
     }
 
+
+  }
+
+  getAllTags() {
+    this.tagService
+      .getAllSelectable('Ingredient,Rating,DishType,TagType', 'Assign')
+      .subscribe(p => {
+        this.alltags = p;
+      });
 
   }
 

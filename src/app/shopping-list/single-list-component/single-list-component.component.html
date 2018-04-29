@@ -1,0 +1,21 @@
+<div class="dish-tag-element-wide list-color">
+  <ng-container *ngIf="list">
+    {{list.list_type}}
+    <span class="icon-button"
+          (click)="goToEdit(type)"
+    ><span class="fa-edit fa"></span></span>
+    <div class="dish-tag-element list-outline-color" (click)="goToEdit(type)">edit</div>
+    <div>delete</div>
+    <div class="dish-tag-element list-outline-color">
+      {{list.item_count}} Items
+    </div>
+
+  </ng-container>
+  <ng-container *ngIf="!list">
+    {{displayText}}
+    <div class="dish-tag-element list-outline-color">
+      0 Items
+    </div>
+  </ng-container>
+
+</div>

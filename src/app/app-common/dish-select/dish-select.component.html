@@ -1,0 +1,21 @@
+<div *ngIf="this.showAsInputGroup" style="text-align:right">
+  <span class="ui-inputgroup" style="float:right;">
+  <p-autoComplete
+    [(ngModel)]="autoSelectedDish"
+    [suggestions]="filteredDishList"
+    (completeMethod)="filterDishes($event)"
+    field="name"
+    [inputStyleClass]="dispClass"
+    (onSelect)="bingo($event)"
+    (keyup.enter)="checkSearchEnter(focusanchor)"
+    placeholder="{{showText}}" [minLength]="1" #focusanchor></p-autoComplete>
+  <span *ngIf="showCancelButton" class="searchbox-group-button ui-inputgroup-addon searchbox-group-button"
+        style="color: white;
+    background-color: #4a6288;"
+        (click)="cancelDishInput()"> <span
+    class="fa-times fa"></span></span>
+</span>
+</div>
+
+
+

@@ -19,8 +19,11 @@
                          [tagTypes]="'Ingredient,Rating,DishType,TagType'"
                          [selectType]="'Search'"
                          [showText]="'Filter by Tag'"
+                         [allowAdd]="false"
+                         [tagList]="alltagsSearch"
                          [passedInputStyle]="'menubar-input'"
-                         (tagSelected)="addTagToFilter($event)"></at-tag-select>
+                         (tagSelected)="addTagToFilter($event)">
+          </at-tag-select>
           <span class="input-group-addon searchbox-group-button" id="filter-query" style="margin-left:-1px;"
                 (click)="toggleBrowse()"><span
             class="fa-filter fa"></span></span>
@@ -82,7 +85,7 @@
       <div *ngIf="showSelectedMenu"
            class="row menubar-flush-middle dish-menubar-text-color dish-menu-dropdown-color justify-content-end">
         <div class="col">
-          <div *ngIf="!isShowTagEntry" class="row justify-content-end text-menu-link" (click)="showTagEntry()">Add Tag
+          <div *ngIf="!isShowTagEntry" class="row justify-content-end text-menu-link" (click)="toggleTagEntry()">Add Tag
           </div>
           <ng-container *ngIf="isShowTagEntry">
             <div class="row justify-content-end text-menu-link">
@@ -90,8 +93,12 @@
                              [tagTypes]="'Ingredient,Rating,DishType,TagType'"
                              [selectType]="'Assign'"
                              [showText]="'Select Tag to Add'"
+                             [tagList]="alltags"
+                             [allowAdd]="true"
+                             [showCancelButton]="true"
                              [passedInputStyle]="'menubar-input'"
-                             (tagSelected)="addTagToDishes($event)"></at-tag-select>
+                             (tagSelected)="addTagToDishes($event)"
+                             (cancelAddTag)="toggleTagEntry(true)"></at-tag-select>
             </div>
 
 

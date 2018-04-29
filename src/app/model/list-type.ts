@@ -4,6 +4,7 @@ export default class ListType {
   static PickUpList: string = "PickUpList";
   static InProcess: string = "InProcess";
   static ActiveList: string = "ActiveList";
+  static General: string = "General";
 
   public static listAll(): string[] {
     let all = [
@@ -11,6 +12,7 @@ export default class ListType {
       ListType.PickUpList,
       ListType.InProcess,
       ListType.ActiveList,
+      ListType.General,
     ];
 
     return all;

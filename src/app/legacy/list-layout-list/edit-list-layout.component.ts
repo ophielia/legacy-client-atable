@@ -14,6 +14,7 @@ export class EditListLayoutComponent implements OnInit, OnDestroy {
   private subGetId: any;
   private showAdd: boolean = false;
   private showEdit: string;
+  private loaded: boolean = false;
 
   constructor(private listLayoutService: ListLayoutService,
               private route: ActivatedRoute,
@@ -38,11 +39,18 @@ export class EditListLayoutComponent implements OnInit, OnDestroy {
     this.showAdd = true;
   }
 
+  setShowEdit(edit_id: string) {
+    this.showEdit = edit_id;
+  }
+
   refreshLayout(id: string) {
-    this.cancelEditCategory();
+    this.showEdit = "0";
     this.listLayoutService
       .getById(id)
-      .subscribe(p => this.listLayout = p);
+      .subscribe(p => {
+        this.listLayout = p;
+        this.loaded = true;
+      });
   }
 
   addCategory(categoryname: string) {
@@ -54,28 +62,4 @@ export class EditListLayoutComponent implements OnInit, OnDestroy {
       })
   }
 
-  editListLayoutCategory(category_id: string) {
-    this.showEdit = category_id;
-  }
-
-  cancelEditCategory() {
-    this.showEdit = "0";
-  }
-
-  deleteListLayoutCategory(category_id: string) {
-    this.listLayoutService
-      .deleteCategoryFromListLayout(this.layoutId, category_id)
-      .subscribe(p => {
-        this.refreshLayout(this.layoutId);
-      })
-  }
-
-  doEditListLayoutCategory(category_id: string, category_name: string) {
-    this.listLayoutService
-      .updateCategoryInListLayout(this.layoutId, category_id, category_name)
-      .subscribe(p => {
-        this.refreshLayout(this.layoutId);
-        this.cancelEditCategory();
-      })
-  }
 }
