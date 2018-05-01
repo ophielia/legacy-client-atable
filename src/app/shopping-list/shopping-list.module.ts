@@ -12,9 +12,12 @@ import {shoppingListRouting} from "./shopping-list.routes";
 import {EditShoppingListComponent} from "./edit-shopping-list/edit-shopping-list.component";
 import {SourceLegendService} from "../services/source-legend.service";
 import {ShoppingListItemsComponent} from './shopping-list-items/shopping-list-items.component';
-import {AutoCompleteModule} from "primeng/primeng";
+import {AutoCompleteModule, CheckboxModule} from "primeng/primeng";
 import {SingleListComponentComponent} from './single-list-component/single-list-component.component';
 import {ShoppingListComponent} from './shopping-list/shopping-list.component';
+import {CrossOffItemComponent} from './cross-off-item/cross-off-item.component';
+import {ColorTagsComponent} from './color-tags/color-tags.component';
+import {WordTagsComponent} from './word-tags/word-tags.component';
 
 @NgModule({
   imports: [
@@ -24,11 +27,12 @@ import {ShoppingListComponent} from './shopping-list/shopping-list.component';
     shoppingListRouting,
     Angular2FontawesomeModule,
     AppCommonModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    CheckboxModule
 
   ],
   providers: [ShoppingListService, TagCommService, SourceLegendService],
-  declarations: [ManageShoppingListComponent, EditShoppingListComponent, ShoppingListItemsComponent, SingleListComponentComponent, ShoppingListComponent]
+  declarations: [ManageShoppingListComponent, EditShoppingListComponent, ShoppingListItemsComponent, SingleListComponentComponent, ShoppingListComponent, CrossOffItemComponent, ColorTagsComponent, WordTagsComponent]
 })
 export class ShoppingListModule {
 }

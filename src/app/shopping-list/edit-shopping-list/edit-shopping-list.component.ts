@@ -38,6 +38,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   private highlightDishId: string;
   private highlightListId: string;
+
   private showListLayouts: boolean;
   private showSources: boolean = false;
   private showAddDish: boolean;
@@ -354,6 +355,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     return this.shoppingList.list_sources.length > 0;
   }
 
+
   toggleMenu() {
     this.showMenu = !this.showMenu;
     if (!this.showMenu) {
@@ -389,13 +391,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleShowDishSources() {
-    this.showSources = !this.showSources;
-    if (!this.showSources) {
-      this.highlightDishId = null;
-      this.getShoppingList(this.shoppingList.list_id);
-    }
-  }
 
 
 }

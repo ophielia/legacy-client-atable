@@ -7,7 +7,8 @@ export interface IItem {
   list_sources: IItemSource[];
   added: number;
   free_text: string;
-  crossed_off: number;
+  crossed_off: boolean;
+  crossed_off_ts: number;
   tag_id: string;
   used_count: number;
   tag: ITag;
@@ -23,7 +24,8 @@ export class Item implements IItem {
   list_sources: IItemSource[];
   added: number;
   free_text: string;
-  crossed_off: number;
+  crossed_off: boolean;
+  crossed_off_ts: number;
   tag_id: string;
   used_count: number;
   tag: ITag;

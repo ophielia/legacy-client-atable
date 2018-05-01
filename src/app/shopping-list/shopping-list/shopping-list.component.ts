@@ -12,9 +12,10 @@ import {DishService} from "../../services/dish-service.service";
 import {TagsService} from "../../services/tags.service";
 import {SourceLegendService} from "../../services/source-legend.service";
 import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.service";
-import {ICategory} from "../../model/category";
+import {Category, ICategory} from "../../model/category";
 import {ItemSource} from "../../model/item-source";
 import CategoryType from "../../model/category-type";
+import {Item} from "../../model/item";
 
 @Component({
   selector: 'at-shopping-list',
@@ -22,6 +23,7 @@ import CategoryType from "../../model/category-type";
   styleUrls: ['./shopping-list.component.css']
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
+
   @ViewChild('modal1') input;
   private shoppingListId: any = ShoppingList;
   private allDishes: IDish[];
@@ -30,13 +32,15 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   private listLayoutList: ListLayout[];
   private listLegend: Map<string, string>;
 
+  private sourceDisplayType: any = 'color';
   private highlightDishId: string;
   private highlightListId: string;
   private showListLayouts: boolean;
-  private showSources: boolean = false;
-  private showMenu: boolean;
   private showItemLegends: boolean = true;
   private unsubscribe: Subscription[] = [];
+  private crossOffAll: boolean = true;
+  private hideCrossedOff: boolean = false;
+
   errorMessage: any;
   private activeListExists: boolean = false;
 
@@ -115,6 +119,15 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
     this.unsubscribe.push($sub);
   }
 
+  crossOffItem(item: Item) {
+    var $sub = this.shoppingListService.toggleCrossedOffForItem(this.shoppingList.list_id, item.item_id, item.crossed_off)
+      .subscribe();
+  }
+
+  setSourceDisplay(display_type) {
+    this.sourceDisplayType = display_type;
+  }
+
   generateLegend() {
     if (!this.listLegend) {
       this.listLegend = this.legendService.createLegendForSources(this.shoppingList.dish_sources, this.shoppingList.list_sources);
@@ -131,13 +144,6 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
         s.disp_class = classname;
       }
     });
-  }
-
-  getCategoryDispClass(defaultClass: string, category: ICategory) {
-    if (category.override_class) {
-      return category.override_class;
-    }
-    return defaultClass;
   }
 
   checkSpecialCategories() {
@@ -184,6 +190,33 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
     }
   }
 
+  hasActiveItems(category: Category) {
+    if (!this.hideCrossedOff) {
+      return true;
+    }
+    if (!category) {
+      return false;
+    }
+    if ((category.items == null || category.items.length < 1)
+      && (category.subcategories == null || category.subcategories.length < 1)) {
+      return false;
+    }
+    var empty_subcats = true;
+    if (category.subcategories != null) {
+      for (var i = 0; i < category.subcategories.length; i++) {
+        if (this.hasActiveItems(category.subcategories[i])) {
+          empty_subcats = false;
+          break;
+        }
+      }
+    }
+
+    var hasActive = category.items.filter(i => !i.crossed_off);
+
+    return hasActive.length > 0 || !empty_subcats;
+
+  }
+
   highlightDish(source: ItemSource) {
     if (!source) {
       return;
@@ -222,13 +255,13 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
 
   }
 
-  clearList() {
-    var $sub = this.shoppingListService.removeAllItemsFromList(this.shoppingList.list_id)
+  crossOffAllItems() {
+    var $sub = this.shoppingListService.crossOffAllItemsFromList(this.shoppingList.list_id, this.crossOffAll)
       .subscribe(r => {
         this.getShoppingList(this.shoppingList.list_id)
       });
     this.unsubscribe.push($sub);
-    this.highlightDishId = null;
+    this.crossOffAll = !this.crossOffAll;
   }
 
   showLegend() {
@@ -239,11 +272,12 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   }
 
   toggleMenu() {
+    /*
     this.showMenu = !this.showMenu;
     if (!this.showMenu) {
       this.showListLayouts = false;
       this.showSources = false;
-    }
+     }*/
   }
 
   toggleLayoutList() {
@@ -252,6 +286,10 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
 
   toggleShowItemLegends() {
     this.showItemLegends = !this.showItemLegends;
+  }
+
+  toggleHideCrossedOff() {
+    this.hideCrossedOff = !this.hideCrossedOff;
   }
 
 }

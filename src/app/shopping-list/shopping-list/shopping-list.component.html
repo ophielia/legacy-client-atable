@@ -5,16 +5,16 @@
 
 
       <div class="row justify-content-between" style="margin-left:0px">
-        <div *ngFor="let category of shoppingList.categories, let i = index" class="col-6">
+        <div *ngFor="let category of shoppingList.categories, let i = index" class="col-12">
           <div class="content-panel legend-1-outline category-light col " style="margin-right:2px">
-            <div class="clearfix" *ngIf="i % 2 == 0"></div>
-            <div class="row {{getCategoryDispClass('list-color',category)}} justify-content-center"> {{category.name}}
-            </div>
-
-            <at-shopping-list-items [category]="category" [legendMap]="listLegend"
-                                    [showItemLegends]="showItemLegends" [listId]="shoppingList.list_id"
-                                    (listUpdated)="getShoppingList(shoppingList.list_id)"></at-shopping-list-items>
-
+            <at-cross-off-item
+              [category]="category"
+              [legendMap]="listLegend"
+              [hideCrossedOff]="hideCrossedOff"
+              [legendType]="sourceDisplayType"
+              [listId]="shoppingList.list_id"
+              (itemCrossedOff)="crossOffItem($event)">
+            </at-cross-off-item>
           </div>
         </div>
       </div>
@@ -27,8 +27,7 @@
 
         <div class="icon-button" (click)="toggleMenu()"><span class="fa-ellipsis-v fa"></span></div>
       </div>
-      <div *ngIf="showMenu"
-           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-conteønt-end">
+      <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">
         <div class="col">
           <div class="row justify-content-end text-menu-link"
                (click)="toggleLayoutList()">Change Layout
@@ -44,17 +43,40 @@
           </div>
         </div>
       </div>
-      <div *ngIf="showMenu"
-           class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-conteønt-end">
+      <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">
+        <div class="col">
+          <div class="row justify-content-end text-menu-link">
+            Source Display
+          </div>
+        </div>
+      </div>
+      <div class="row menubar-flush menu-color dish-menubar-text-color dish-menu-color justify-content-end">
+        <div class="col">
+          <div class="row justify-content-center" (click)="setSourceDisplay('none')">
+            None
+          </div>
+          <div class="row justify-content-center" (click)="setSourceDisplay('word')">
+            Dish Name
+          </div>
+          <div class="row justify-content-center" (click)="setSourceDisplay('color')">
+            Colors
+          </div>
+        </div>
+      </div>
+      <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">
         <div class="col">
           <div class="row justify-content-end text-menu-link"
-               (click)="clearList()">Cross Off All
+               (click)="crossOffAllItems()">{{crossOffAll?'Cross Off All':'Un-cross off all'}}
+          </div>
+          <div class="row justify-content-end text-menu-link"
+               (click)="toggleHideCrossedOff()">{{hideCrossedOff?'Show Crossed Off':'Hide Crossed Off'}}
           </div>
           <div class="row justify-content-end text-menu-link"
           >Print
           </div>
         </div>
       </div>
+
 
       <div *ngIf="showLegend()" class="row menubar-flush-bottom main-color justify-content-end">
         <div class="col" style="padding:0px;">
@@ -88,12 +110,6 @@
               </div>
 
             </div>
-          </div>
-          <div *ngIf="!showItemLegends" class="row justify-content-end" style="padding-right:10px;"
-               (click)="toggleShowItemLegends()">show sources
-          </div>
-          <div *ngIf="showItemLegends" class="row justify-content-end" style="padding-right:10px;"
-               (click)="toggleShowItemLegends()">hide sources
           </div>
 
 

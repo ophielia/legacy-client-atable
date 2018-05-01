@@ -10,6 +10,7 @@ import {ITag} from "../model/tag";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {Logger} from "angular2-logger/core";
 import {BaseHeadersService} from "app/services/base-service";
+import ListType from "app/model/list-type";
 
 @Injectable()
 export class ShoppingListService extends BaseHeadersService {
@@ -75,12 +76,9 @@ export class ShoppingListService extends BaseHeadersService {
     return shoppingList$;
   }
 
-  addShoppingList(listType: string): Observable<Response> {
-    // MM hardcoding list layout type until there are 1) more or 2) defaults in backend
-    var layoutType = ListLayoutType.All;
+  addShoppingList(): Observable<Response> {
     var newShoppingList: IShoppingList = <IShoppingList>({
-      list_type: listType,
-      layout_type: layoutType
+      list_type: ListType.General
     });
 
     return this
@@ -121,6 +119,48 @@ export class ShoppingListService extends BaseHeadersService {
     return this
       .http
       .delete(url,
+        {headers: this.getHeaders()});
+  }
+
+  toggleCrossedOffForItem(shoppingList_id: string,
+                          item_id: string,
+                          crossOff: boolean): Observable<Response> {
+    var url = this.shoppingListUrl + "/" + shoppingList_id + "/item/shop/" + item_id;
+    var params: string[] = new Array();
+    if (crossOff) {
+      params.push("crossOff=true");
+    } else {
+      params.push("crossOff=false");
+    }
+
+    if (params.length > 0) {
+      var paramstr = params.join("&");
+      url = url + "?" + paramstr;
+    }
+    return this
+      .http
+      .post(url,
+        null,
+        {headers: this.getHeaders()});
+  }
+
+  crossOffAllItemsFromList(shoppingList_id: string, crossOff): Observable<Response> {
+    var url = this.shoppingListUrl + "/" + shoppingList_id + "/item/shop";
+    var params: string[] = new Array();
+    if (crossOff) {
+      params.push("crossOff=true");
+    } else {
+      params.push("crossOff=false");
+    }
+
+    if (params.length > 0) {
+      var paramstr = params.join("&");
+      url = url + "?" + paramstr;
+    }
+    return this
+      .http
+      .post(url,
+        null,
         {headers: this.getHeaders()});
   }
 

@@ -3,6 +3,7 @@ import ListType from "../../model/list-type";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {IShoppingList, ShoppingList} from "../../model/shoppinglist";
 import {Subscription} from "rxjs/Subscription";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -18,7 +19,8 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
 
   unsubscribe: Subscription[] = [];
 
-  constructor(private shoppingListService: ShoppingListService) {
+  constructor(private shoppingListService: ShoppingListService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -56,6 +58,18 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
 
       }
     }
+  }
+
+  createShoppingList() {
+    var $sub = this.shoppingListService.addShoppingList()
+      .subscribe(r => {
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        this.router.navigate(['/list/edit', id]);
+      });
+    this.unsubscribe.push($sub);
   }
 
 

@@ -127,7 +127,8 @@ export default class MappingUtils {
       tag_id: r.tag_id,
       used_count: r.used_count,
       free_text: r.free_text,
-      crossed_off: r.crossed_off,
+      crossed_off_ts: r.crossed_off,
+      crossed_off: (r.crossed_off != null),
       tag: MappingUtils._toTag(r.tag)
     });
 
