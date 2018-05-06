@@ -80,7 +80,7 @@ export class TagsService extends BaseHeadersService {
       filter = "?tag_type=" + tagtype;
     }
     let tags$ = this.http
-      .get(`${this.tagInfoUrl}/new${filter}`, {headers: this.getHeaders()})
+      .get(`${this.tagInfoUrl}${filter}`, {headers: this.getHeaders()})
       .map(this.mapFilledTags).catch(handleError);  // HERE: This is new!
     return tags$;
 
