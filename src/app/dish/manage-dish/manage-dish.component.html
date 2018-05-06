@@ -28,6 +28,9 @@
                 (click)="toggleBrowse()"><span
             class="fa-filter fa"></span></span>
         </div>
+        <div class=" add-button-md dish-color" (click)="goToAddDish()">
+          <fa [name]="'plus'"></fa>
+        </div>
       </div>
 
       <div class="row filterbar-tease" style="margin-left:0px">
@@ -125,9 +128,14 @@
       <div *ngIf="showSelectedMenu"
            class="row menubar-flush-middle dish-menubar-text-color dish-menu-dropdown-color justify-content-end">
         <div class="col">
-          <div class="row justify-content-end text-menu-link"> Add to List</div>
+          <div class="row justify-content-end text-menu-link" (click)="toggleGenerateLists()"> Generate List</div>
           <div class="row justify-content-end spacer"></div>
         </div>
+      </div>
+      <!-- add to meal plan submenu -->
+      <div *ngIf="showGenerateLists"
+           class="row {{showSelectedMenu?'menubar-flush-top':'menubar-flush'}} menu-color dish-menubar-text-color dish-menu-color justify-content-end">
+        <at-generate-list (generateProperties)="addDishesToNewList($event)"></at-generate-list>
       </div>
       <div *ngIf="selectedDishes.length > 0" class="row main-color justify-content-center" style="margin-left:0px;">
         <div *ngFor="let selected of selectedDishes" class="dish-tag-element dish-tag-element-spaced dish-color"

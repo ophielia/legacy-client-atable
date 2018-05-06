@@ -82,7 +82,7 @@ export class ShoppingListListComponent implements OnInit {
   }
 
   createList(listType: string) {
-    this.shoppingListService.addShoppingList()
+    this.shoppingListService.addShoppingListNew(null, null, false, false, false, ListType.General)
       .subscribe(r => {
         this.baseListLoaded = false;
         this.activeListLoaded = false;

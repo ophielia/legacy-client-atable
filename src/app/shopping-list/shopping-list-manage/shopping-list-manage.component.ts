@@ -42,6 +42,7 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
   }
 
   sortOutShoppingLists(lists: IShoppingList[]) {
+    this.generalLists = new Array();
     for (var i = 0; i < lists.length; i++) {
       var list = lists[i];
       if (list.list_type == ListType.BaseList) {
@@ -60,8 +61,11 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
     }
   }
 
-  createShoppingList() {
-    var $sub = this.shoppingListService.addShoppingList()
+  createShoppingList(listType) {
+    if (!listType) {
+      listType = ListType.General;
+    }
+    var $sub = this.shoppingListService.addShoppingListNew(null, null, false, false, false, listType)
       .subscribe(r => {
         var headers = r.headers;
         var location = headers.get("Location");
@@ -70,6 +74,11 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
         this.router.navigate(['/list/edit', id]);
       });
     this.unsubscribe.push($sub);
+  }
+
+  deleteShoppingList(list_id: string) {
+    this.shoppingListService.deleteList(list_id)
+      .subscribe(l => this.getShoppingLists());
   }
 
 

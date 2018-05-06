@@ -1,0 +1,13 @@
+<div class="col">
+  <div class="row">Add Base List Items
+    <input type="checkbox" [checked]="addFromBase"
+           class="george" (change)="addFromBase = !addFromBase"/>
+  </div>
+  <div class="row">Add Pickup List Items
+    <input type="checkbox" [checked]="addFromPickUp"
+           class="george" (change)="addFromPickUp = !addFromPickUp"/></div>
+  <div class="row">Save as Meal Plan
+    <input type="checkbox" [checked]="saveMealPlan"
+           class="george" (change)="saveMealPlan = !saveMealPlan"/></div>
+  <div class="row justify-content-end" (click)="propertiesSelected()">Generate</div>
+</div>

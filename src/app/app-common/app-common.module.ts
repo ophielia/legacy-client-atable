@@ -14,6 +14,7 @@ import {HttpModule} from "@angular/http";
 import {FormsModule} from "@angular/forms";
 import {ModalComponent} from "./modal/modal";
 import {DishSelectComponent} from './dish-select/dish-select.component';
+import {GenerateListComponent} from "./generate-list/generate-list.component";
 
 @NgModule({
   imports: [
@@ -26,8 +27,8 @@ import {DishSelectComponent} from './dish-select/dish-select.component';
     commonRouting
   ],
   providers: [TagsService, TagCommService],
-  declarations: [TagBrowseComponent, TagBrowseNodeComponent, TagBrowseStyleDirective, ModalComponent, TagSelectComponent, DishSelectComponent],
-  exports: [TagBrowseComponent, DishSelectComponent, TagSelectComponent, TagBrowseStyleDirective, ModalComponent]
+  declarations: [TagBrowseComponent, TagBrowseNodeComponent, GenerateListComponent, TagBrowseStyleDirective, ModalComponent, TagSelectComponent, DishSelectComponent],
+  exports: [TagBrowseComponent, GenerateListComponent, DishSelectComponent, TagSelectComponent, TagBrowseStyleDirective, ModalComponent]
 })
 export class AppCommonModule {
 }

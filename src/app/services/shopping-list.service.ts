@@ -4,13 +4,13 @@ import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {IShoppingList} from "../model/shoppinglist";
 import MappingUtils from "../model/mapping-utils";
-import ListLayoutType from "../model/list-layout-type";
 import {Item} from "../model/item";
 import {ITag} from "../model/tag";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {Logger} from "angular2-logger/core";
 import {BaseHeadersService} from "app/services/base-service";
-import ListType from "app/model/list-type";
+import {IListGenerateProperties} from "../model/listgenerateproperties";
+import ListType from "../model/list-type";
 
 @Injectable()
 export class ShoppingListService extends BaseHeadersService {
@@ -76,15 +76,39 @@ export class ShoppingListService extends BaseHeadersService {
     return shoppingList$;
   }
 
-  addShoppingList(): Observable<Response> {
-    var newShoppingList: IShoppingList = <IShoppingList>({
-      list_type: ListType.General
-    });
+  addShoppingListNew(dishIds: string[], mealPlanId: string[],
+                     addBase: boolean, addPickup: boolean,
+                     generatePlan: boolean, listType: string): Observable<Response> {
 
+    if (!listType) {
+      listType = ListType.General;
+    }
+    var properties: IListGenerateProperties = <IListGenerateProperties>({
+      dish_sources: dishIds,
+      meal_plan_source: mealPlanId,
+      add_from_base: addBase,
+      add_from_pickup: addPickup,
+      generate_mealplan: generatePlan,
+      list_type: listType,
+
+    });
+    var url = this.shoppingListUrl + '/new';
+    return this
+      .http
+      .post(url,
+        JSON.stringify(properties),
+        {headers: this.getHeaders()});
+
+  }
+
+  addShoppingList(): Observable<Response> {
+    var properties: IListGenerateProperties = <IListGenerateProperties>({
+      add_from_base: false,
+    });
     return this
       .http
       .post(`${this.shoppingListUrl}`,
-        JSON.stringify(newShoppingList),
+        JSON.stringify(properties),
         {headers: this.getHeaders()});
 
   }
@@ -254,6 +278,13 @@ export class ShoppingListService extends BaseHeadersService {
   }
 
 
+  deleteList(list_id: string) {
+    var url = this.shoppingListUrl + "/" + list_id;
+    return this
+      .http
+      .delete(url,
+        {headers: this.getHeaders()});
+  }
 }
 
 

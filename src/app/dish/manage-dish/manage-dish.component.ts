@@ -12,6 +12,9 @@ import {TimerObservable} from "rxjs/observable/TimerObservable";
 import {MealPlanService} from "../../services/meal-plan.service";
 import {MealPlan} from "../../model/mealplan";
 import {Subscription} from "rxjs/Subscription";
+import {IListGenerateProperties} from "../../model/listgenerateproperties";
+import ListType from "../../model/list-type";
+import {ShoppingListService} from "../../services/shopping-list.service";
 
 
 @Component({
@@ -29,6 +32,8 @@ export class ManageDishComponent implements OnInit {
   mealPlanList: MealPlan[];
   mealPlanMore: boolean;
   showMealPlanList: boolean;
+  showGenerateLists: boolean;
+
 
   allDishes: Dish[];
   filteredDishes: Dish[];
@@ -54,6 +59,7 @@ export class ManageDishComponent implements OnInit {
               private tagCommService: TagCommService,
               private mealPlanService: MealPlanService,
               private tagService: TagsService,
+              private shoppingListService: ShoppingListService,
               private route: ActivatedRoute,
               private router: Router,) {
     this.tagCommService = tagCommService;
@@ -249,9 +255,23 @@ export class ManageDishComponent implements OnInit {
     if (!this.filterTags) {
       this.filterTags = [];
     }
+
     this.filterTags.push(tag);
 
     this.getAllDishes();
+  }
+
+  addDishesToNewList(listProperties: IListGenerateProperties) {
+    var dishIdList = this.selectedDishes.map(d => d.dish_id);
+    this.shoppingListService.addShoppingListNew(dishIdList, null, listProperties.add_from_base,
+      listProperties.add_from_pickup, listProperties.generate_mealplan, ListType.General)
+      .subscribe(r => {
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var id = splitlocation[splitlocation.length - 1];
+        this.goToShoppingListEdit(id);
+      });
   }
 
   removeTagFromFilter(tag: ITag) {
@@ -334,6 +354,9 @@ export class ManageDishComponent implements OnInit {
     this.showMealPlanList = !this.showMealPlanList;
   }
 
+  toggleGenerateLists() {
+    this.showGenerateLists = !this.showGenerateLists;
+  }
   showAllMenuPlans() {
     this.getMealPlanForSelect(999);
   }
@@ -350,4 +373,12 @@ export class ManageDishComponent implements OnInit {
     this.router.navigate(["plan/edit/", dish_id])
   }
 
+  goToShoppingListEdit(list_id: string) {
+    this.router.navigate(["list/edit/", list_id])
+  }
+
+  goToAddDish() {
+    this.router.navigate(["adddish"])
+
+  }
 }

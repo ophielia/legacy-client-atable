@@ -28,7 +28,8 @@
 
         <ng-container *ngFor="let list of generalLists">
           <at-single-list-component
-            [list]="list">
+            [list]="list"
+            (delete)="deleteShoppingList($event)">
           </at-single-list-component>
         </ng-container>
 
