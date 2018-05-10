@@ -36,12 +36,51 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
     let sub$ = this.shoppingListService
       .getAll()
       .subscribe(p => {
+        if (p) {
         this.sortOutShoppingLists(p)
+        }
       });
     this.unsubscribe.push(sub$);
   }
 
+  goToEditList(list_id) {
+    this.router.navigate(["list/edit/", list_id]);
+
+  }
+
+  goToShopList(list_id) {
+    this.router.navigate(["list/shop/", list_id]);
+
+  }
+
+  editList(list: ShoppingList) {
+
+    if (list.list_id != null) {
+      if (list.list_type == ListType.ActiveList) {
+        this.goToShopList(list.list_id);
+      } else {
+        this.goToEditList(list.list_id);
+      }
+    } else if (list.list_type == ListType.PickUpList ||
+      list.list_type == ListType.BaseList) {
+      // createList
+      this.shoppingListService.addShoppingListNew(null, null, false, false, false, list.list_type)
+        .subscribe(r => {
+            var headers = r.headers;
+            var location = headers.get("Location");
+            var splitlocation = location.split("/");
+            var list_id = splitlocation[splitlocation.length - 1];
+            this.goToEditList(list_id);
+          }
+        )
+
+    }
+  }
+
   sortOutShoppingLists(lists: IShoppingList[]) {
+    this.pickupList = null;
+    this.activeList = null;
+    this.baseList = null;
     this.generalLists = new Array();
     for (var i = 0; i < lists.length; i++) {
       var list = lists[i];

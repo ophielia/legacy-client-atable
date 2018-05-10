@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="row page-title list-text-color">Quick Pick Up List</div>
+  <div class="row">
+    <div class="col-12" style="padding-left:0px;">
+      <div class="row menubar dish-menubar-text-color menu-color justify-content-start">
+        <div class="input-group searchbox-group" style="max-width:135px;">
+          <at-tag-select aria-describedby="filter-query"
+                         [tagTypes]="'Ingredient,Rating,DishType,TagType'"
+                         [selectType]="'Search'"
+                         [showText]="'Filter by Tag'"
+                         [allowAdd]="false"
+                         [tagList]="alltagsSearch"
+                         [passedInputStyle]="'menubar-input'"
+                         (tagSelected)="addTagToList($event)">
+          </at-tag-select>
+          <span class="input-group-addon searchbox-group-button" id="filter-query" style="margin-left:-1px;"
+                (click)="toggleBrowse()"><span
+            class="fa-filter fa"></span></span>
+        </div>
+      </div>
+      <div class="row" style="margin-left:0px">
+
+        <div *ngIf="showTagBrowse" class="col-3">
+          <div *ngFor="let tagtype of browseTagTypes" class="{{ tagtype.toLocaleLowerCase() + '-1 dish-tag-element'}}"
+          >
+            <span (click)="expandOrFoldBrowse(tagtype)">{{tagtype}}</span>
+            <ng-container *ngIf="isExpanded(tagtype)">
+              <ng-container *ngFor="let drilldown of browseAllDrilldowns[tagtype]">
+
+                <at-tag-browse [tagDrilldown]="drilldown" [showEdit]="false"></at-tag-browse>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+
+        <div *ngFor="let category of shoppingList.categories, let i = index" style="margin:5px">
+          <ng-container *ngFor="let item of category.items">
+            <div class="item-shopping list-text-color" (dblclick)="removeItemFromList(item.item_id)">
+              {{item.tag.name}}
+            </div>
+          </ng-container>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>

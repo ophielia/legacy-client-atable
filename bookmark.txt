@@ -7,10 +7,10 @@ manage dish page
 
 
 edit list page -
-  add / remove items
-  change layout
-  show sources
-  add dish
+  done - add / remove items
+  done - change layout
+  done - show sources
+  done - add dish
 
 
 cleaning up behind
@@ -33,7 +33,7 @@ older
     wire save of tags
 
 ===> debug
-  ?? tag assign tool adds tags twice??
+  done -  tag assign tool adds tags twice??
 
 ===> user experience
   dishes sorted creationdate desc...

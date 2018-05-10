@@ -29,54 +29,62 @@
       </div>
       <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">
         <div class="col">
-          <div class="row justify-content-end text-menu-link"
-               (click)="toggleLayoutList()">Change Layout
-          </div>
-        </div>
-      </div>
-      <div *ngIf="showListLayouts"
-           class="row {{showMenu?'menubar-flush-top':'menubar-flush'}} menu-color dish-menubar-text-color dish-menu-color justify-content-end">
-        <div class="col">
-          <div *ngFor="let listLayout of listLayoutList"
-               class="row justify-content-center" (click)="changeListLayout(listLayout.layout_id)">
-            {{listLayout.name}}
-          </div>
-        </div>
-      </div>
-      <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">
-        <div class="col">
-          <div class="row justify-content-end text-menu-link">
-            Source Display
-          </div>
-        </div>
-      </div>
-      <div class="row menubar-flush menu-color dish-menubar-text-color dish-menu-color justify-content-end">
-        <div class="col">
-          <div class="row justify-content-center" (click)="setSourceDisplay('none')">
-            None
-          </div>
-          <div class="row justify-content-center" (click)="setSourceDisplay('word')">
-            Dish Name
-          </div>
-          <div class="row justify-content-center" (click)="setSourceDisplay('color')">
-            Colors
-          </div>
-        </div>
-      </div>
-      <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">
-        <div class="col">
-          <div class="row justify-content-end text-menu-link"
-               (click)="crossOffAllItems()">{{crossOffAll?'Cross Off All':'Un-cross off all'}}
-          </div>
-          <div class="row justify-content-end text-menu-link"
-               (click)="toggleHideCrossedOff()">{{hideCrossedOff?'Show Crossed Off':'Hide Crossed Off'}}
-          </div>
-          <div class="row justify-content-end text-menu-link"
-          >Print
+          <div class="row justify-content-end text-menu-link" (click)="switchLists()">Shop {{otherShopName}}
           </div>
         </div>
       </div>
 
+      <ng-container *ngIf="showMenu">
+        <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">
+          <div class="col">
+            <div class="row justify-content-end text-menu-link"
+                 (click)="toggleLayoutList()">Change Layout
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showListLayouts"
+             class="row {{showMenu?'menubar-flush-top':'menubar-flush'}} menu-color dish-menubar-text-color dish-menu-color justify-content-end">
+          <div class="col">
+            <div *ngFor="let listLayout of listLayoutList"
+                 class="row justify-content-center" (click)="changeListLayout(listLayout.layout_id)">
+              {{listLayout.name}}
+            </div>
+          </div>
+        </div>
+        <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">
+          <div class="col">
+            <div class="row justify-content-end text-menu-link">
+              Source Display
+            </div>
+          </div>
+        </div>
+        <div class="row menubar-flush menu-color dish-menubar-text-color dish-menu-color justify-content-end">
+          <div class="col">
+            <div class="row justify-content-center" (click)="setSourceDisplay('none')">
+              None
+            </div>
+            <div class="row justify-content-center" (click)="setSourceDisplay('word')">
+              Dish Name
+            </div>
+            <div class="row justify-content-center" (click)="setSourceDisplay('color')">
+              Colors
+            </div>
+          </div>
+        </div>
+        <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end">
+          <div class="col">
+            <div class="row justify-content-end text-menu-link"
+                 (click)="crossOffAllItems()">{{crossOffAll?'Cross Off All':'Un-cross off all'}}
+            </div>
+            <div class="row justify-content-end text-menu-link"
+                 (click)="toggleHideCrossedOff()">{{hideCrossedOff?'Show Crossed Off':'Hide Crossed Off'}}
+            </div>
+            <div class="row justify-content-end text-menu-link"
+            >Print
+            </div>
+          </div>
+        </div>
+      </ng-container>
 
       <div *ngIf="showLegend()" class="row menubar-flush-bottom main-color justify-content-end">
         <div class="col" style="padding:0px;">

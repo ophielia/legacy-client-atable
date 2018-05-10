@@ -23,6 +23,7 @@ import {Item} from "../../model/item";
   styleUrls: ['./shopping-list.component.css']
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
+  otherShopName: string;
 
   @ViewChild('modal1') input;
   private shoppingListId: any = ShoppingList;
@@ -43,6 +44,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
 
   errorMessage: any;
   private activeListExists: boolean = false;
+  private showMenu: boolean = false;
 
 
   constructor(private route: ActivatedRoute,
@@ -77,6 +79,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
         .subscribe(p => {
           this.shoppingList = p;
           this.generateLegend();
+          this.checkListType();
           this.checkSpecialCategories();
         });
       this.unsubscribe.push($sub);
@@ -86,6 +89,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
         .subscribe(p => {
           this.shoppingList = p;
           this.generateLegend();
+          this.checkListType();
           this.checkSpecialCategories();
         });
       this.unsubscribe.push($sub);
@@ -190,33 +194,6 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
     }
   }
 
-  hasActiveItems(category: Category) {
-    if (!this.hideCrossedOff) {
-      return true;
-    }
-    if (!category) {
-      return false;
-    }
-    if ((category.items == null || category.items.length < 1)
-      && (category.subcategories == null || category.subcategories.length < 1)) {
-      return false;
-    }
-    var empty_subcats = true;
-    if (category.subcategories != null) {
-      for (var i = 0; i < category.subcategories.length; i++) {
-        if (this.hasActiveItems(category.subcategories[i])) {
-          empty_subcats = false;
-          break;
-        }
-      }
-    }
-
-    var hasActive = category.items.filter(i => !i.crossed_off);
-
-    return hasActive.length > 0 || !empty_subcats;
-
-  }
-
   highlightDish(source: ItemSource) {
     if (!source) {
       return;
@@ -272,24 +249,37 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   }
 
   toggleMenu() {
-    /*
     this.showMenu = !this.showMenu;
     if (!this.showMenu) {
-      this.showListLayouts = false;
-      this.showSources = false;
-     }*/
+
+    }
   }
 
   toggleLayoutList() {
     this.showListLayouts = !this.showListLayouts;
   }
 
-  toggleShowItemLegends() {
-    this.showItemLegends = !this.showItemLegends;
-  }
-
   toggleHideCrossedOff() {
     this.hideCrossedOff = !this.hideCrossedOff;
   }
 
+  private checkListType() {
+    this.otherShopName = 'Active List';
+    if (this.shoppingList.list_type == ListType.ActiveList) {
+      this.otherShopName = 'Pick-Up List';
+    }
+  }
+
+  switchLists() {
+    var newListType = this.otherShopName.toLowerCase().indexOf('active') >= 0 ? ListType.ActiveList : ListType.PickUpList;
+
+    var $sub = this.shoppingListService.getByType(newListType)
+      .subscribe(p => {
+        this.shoppingList = p;
+        this.generateLegend();
+        this.checkListType();
+        this.checkSpecialCategories();
+      });
+    this.unsubscribe.push($sub);
+  }
 }

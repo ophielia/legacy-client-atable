@@ -10,25 +10,36 @@
 
       <div class="row justify-content-between" style="margin-left:0px">
 
-        <at-single-list-component
-          [list]="activeList"
-          [displayText]="'Active List'">
-        </at-single-list-component>
+        <ng-container *ngIf="activeList">
+          <at-single-list-component
+            [list]="activeList"
+            [displayText]="'Active List'"
+            (edit)="editList($event)"
+            (delete)="deleteShoppingList($event)">
+          </at-single-list-component>
+        </ng-container>
 
         <at-single-list-component
           [list]="baseList"
-          [displayText]="'Base List'">
+          [displayText]="'Base List'"
+          [listType]="'BaseList'"
+          (edit)="editList($event)"
+          (delete)="deleteShoppingList($event)">
         </at-single-list-component>
 
 
         <at-single-list-component
           [list]="pickupList"
-          [displayText]="'Pickup List'">
+          [displayText]="'Pickup List'"
+          [listType]="'PickUpList'"
+          (edit)="editList($event)"
+          (delete)="deleteShoppingList($event)">
         </at-single-list-component>
 
         <ng-container *ngFor="let list of generalLists">
           <at-single-list-component
             [list]="list"
+            (edit)="editList($event)"
             (delete)="deleteShoppingList($event)">
           </at-single-list-component>
         </ng-container>

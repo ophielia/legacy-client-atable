@@ -36,8 +36,8 @@ export class DishSelectComponent implements OnInit, OnDestroy {
     if (event.query) {
       if (this.dishList) {
         let filterBy = event.query.toLocaleLowerCase();
-        this.filteredDishList = this.dishList.filter((tag: IDish) =>
-        tag.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
+        this.filteredDishList = this.dishList.filter((dish: IDish) =>
+        dish.name != null && dish.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
       }
     } else {
       this.filteredDishList = null;

@@ -265,7 +265,10 @@ export class ShoppingListService extends BaseHeadersService {
   }
 
   mapShoppingLists(response: Response): IShoppingList[] {
+    if (response.json()._embedded.shoppingListResourceList) {
     return response.json()._embedded.shoppingListResourceList.map(MappingUtils.toShoppingList);
+    }
+    return null;
   }
 
   mapShoppingList(response: Response): IShoppingList {

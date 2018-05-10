@@ -116,7 +116,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   getAllTags() {
     this.tagService
-      .getAllSelectable(this.tagTypes, 'Search')
+      .getAllSelectable(this.tagTypes, 'Assign')
       .subscribe(p => {
           this.alltags = p;
         },
@@ -284,7 +284,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.dishService.getAll()
       .subscribe(p => {
           this.allDishes = p;
-          //this.showAddTags = (this.allDishes.length == 0);
         },
         e => this.errorMessage = e);
 
