@@ -8,6 +8,7 @@ import {MealPlanService} from "../../services/meal-plan.service";
 import {DishService} from "../../services/dish-service.service";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'at-edit-meal-plan',
@@ -15,10 +16,15 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./edit-meal-plan.component.css']
 })
 export class EditMealPlanComponent implements OnInit, OnDestroy {
+  isShowGenerateList: boolean = false;
 
-
+  selectedDishes: Dish[] = [];
+  mealPlanName: string = "";
+  isEditMealPlanName: boolean = false;
   mealPlan: MealPlan = <MealPlan>{meal_plan_id: "", name: ""};
   sub: any;
+  unsubscribe: Subscription[] = [];
+  private mealPlanId: string;
 
 
   constructor(private mealPlanService: MealPlanService,
@@ -31,19 +37,74 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
+    var $sub = this.route.params.subscribe(params => {
       let id = params['id'];
       console.log('getting mealPlan with id: ', id);
-      this.mealPlanService
-        .getById(id)
-        .subscribe(p => this.mealPlan = p);
+      this.mealPlanId = id;
+      this.loadMealPlan();
     });
-
+    this.unsubscribe.push($sub);
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.unsubscribe.forEach(s => s.unsubscribe());
   }
+
+  loadMealPlan() {
+    var $sub = this.mealPlanService
+      .getById(this.mealPlanId)
+      .subscribe(p => this.mealPlan = p);
+    this.unsubscribe.push($sub);
+  }
+
+  toggleEditMealPlanName() {
+    this.isEditMealPlanName = !this.isEditMealPlanName;
+  }
+
+  toggleGenerateList() {
+    this.isShowGenerateList = !this.isShowGenerateList;
+  }
+
+  saveMealPlanName() {
+    this.mealPlanService.renameMealPlan(this.mealPlan.meal_plan_id, this.mealPlanName)
+      .subscribe(
+        p => {
+          this.loadMealPlan();
+          this.isEditMealPlanName = false;
+        }
+      );
+
+  }
+
+
+  selectSlot(slot) {
+    // MM implement this
+  }
+
+  unselectDish(dish) {
+    // MM implement this
+  }
+
+  removeDishFromMealPlan(dish) {
+    // MM implement this
+  }
+
+  generateListFromMealPlan(properties) {
+    // MM implement this
+  }
+
+  goToPlanList(dish_id: string) {
+    this.router.navigate(['plan/manage']);
+  }
+
+  goToAddToMealPlan(meal_plan_id: string) {
+    this.router.navigate(['plan/add', meal_plan_id]);
+  }
+
+  goToFillInMealPlan(meal_plan_id: string) {
+    this.router.navigate(['plan/fillin', meal_plan_id]);
+  }
+
 
   generateShoppingList() {
     this.shoppingListService.generateShoppingList(this.mealPlan.meal_plan_id)
@@ -56,5 +117,6 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
         this.router.navigate(['/list/edit/', id]);
       });
   }
+
 
 }

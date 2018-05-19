@@ -206,6 +206,7 @@ export default class MappingUtils {
       created: r.shopping_list.created,
       list_type: r.shopping_list.list_type,
       item_count: r.shopping_list.item_count,
+      updated: r.shopping_list.updated,
       layout_type: r.shopping_list.list_layout_type,
       dish_sources: r.shopping_list.dish_sources != null ? r.shopping_list.dish_sources.map(MappingUtils._toItemSource) : null,
       list_sources: r.shopping_list.list_sources != null ? r.shopping_list.list_sources.map(MappingUtils._toItemSource) : null,

@@ -12,7 +12,7 @@ import {DishService} from "../../services/dish-service.service";
 import {TagsService} from "../../services/tags.service";
 import {SourceLegendService} from "../../services/source-legend.service";
 import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.service";
-import {Category, ICategory} from "../../model/category";
+import {ICategory} from "../../model/category";
 import {ItemSource} from "../../model/item-source";
 import CategoryType from "../../model/category-type";
 import {Item} from "../../model/item";
@@ -62,7 +62,11 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.subscribe(params => {
       let id = params['id'];
+      if (!id) {
+        this.determineShoppingList();
+      }
       console.log('getting dish with id: ', id);
+      this.shoppingListId = id;
       this.getShoppingList(id);
     });
     this.getListLayouts();
@@ -70,6 +74,59 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.unsubscribe.forEach(s => s.unsubscribe());
+  }
+
+  determineShoppingList() {
+    var activeList;
+    var pickupList;
+    // get lists
+    this.shoppingListService
+      .getByType(ListType.ActiveList)
+      .subscribe(p => {
+        if (p) {
+          activeList = p;
+        }
+        // now, get the pickup list
+        this.shoppingListService
+          .getByType(ListType.PickUpList)
+          .subscribe(p => {
+            if (p) {
+              pickupList = p;
+            }
+            this.pickActiveList(pickupList, activeList);
+          })
+      });
+  }
+
+  pickActiveList(pickupList, activeList) {
+    // if both are empty, go to manage lists
+    if (!activeList && !pickupList) {
+      this.goToManageLists();
+    }
+
+    // if active list is empty, return pickup list
+    if (!activeList) {
+      this.setCurrentList(pickupList);
+    } else if (!pickupList) {
+      this.setCurrentList(activeList);
+    } else {
+      // at this point, we know that both lists exist -
+      // choose the list with the most recent update date
+      if (activeList.updated > pickupList.updated) {
+        this.setCurrentList(activeList);
+      } else {
+        this.setCurrentList(pickupList);
+      }
+    }
+
+  }
+
+  setCurrentList(list) {
+    this.shoppingListId = list.list_id;
+    this.shoppingList = list;
+    this.generateLegend();
+    this.checkListType();
+    this.checkSpecialCategories();
   }
 
   getShoppingList(id: string) {
@@ -239,6 +296,11 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
       });
     this.unsubscribe.push($sub);
     this.crossOffAll = !this.crossOffAll;
+  }
+
+  goToManageLists() {
+    this.router.navigate(["managelists"]);
+
   }
 
   showLegend() {

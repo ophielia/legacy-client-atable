@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row page-title plan-text-color">Manage Meal Plans</div>
+  <div class="row">
+    <div class="col-12" style="padding-left:0px;">
+      <div class="row menubar list-menubar-text-color menu-color justify-content-end">
+        <div class=" add-button-md plan-color" (click)="addPlan()">
+          <fa [name]="'plus'"></fa>
+        </div>
+      </div>
+
+      <div class="row justify-content-between" style="margin-left:0px">
+
+        <ng-container *ngFor="let plan of mealPlans">
+          <at-single-plan
+            [plan]="plan"
+            (edit)="editPlan($event)"
+            (delete)="deletePlan($event)">
+          </at-single-plan>
+        </ng-container>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+</div>

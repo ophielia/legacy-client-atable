@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row page-title plan-text-color">Add To Meal Plan</div>
+  <div class="row">
+
+
+    <at-dish-filter-select class="col-9" (dishSelected)="selectDish($event)"
+                           [showAdd]="false"
+                           [elementClass]="'plan'">
+
+    </at-dish-filter-select>
+
+
+    <div class="col-3">
+      <div
+        class="row {{showSelectedMenu?'menubar-flush-top':'menubar-flush'}} menu-color dish-menubar-text-color dish-menu-color justify-content-end">
+
+        <div class="text-menu-link" (click)="goToEdit()">Back to Edit</div>
+      </div>
+      <div class="row main-color justify-content-center" style="margin-left:0px;">
+
+        <ng-container *ngIf="mealPlanDishes.length > 0">
+          <div *ngFor="let dish of mealPlanDishes" class="dish-tag-element dish-tag-element-spaced plan-color"
+               (dblclick)="unSelectDish(dish)">
+            {{dish.name}}
+          </div>
+          <div class=" spacer"></div>
+        </ng-container>
+
+
+        <ng-container *ngIf="mealPlanDishes.length == 0">
+          <div>no dishes yet</div>
+          <div class=" spacer"></div>
+        </ng-container>
+
+      </div>
+
+    </div>
+  </div>
+
+
+</div>

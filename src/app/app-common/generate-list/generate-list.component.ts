@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, Input} from '@angular/core';
 import {IListGenerateProperties} from "../../model/listgenerateproperties";
 
 @Component({
@@ -8,13 +8,16 @@ import {IListGenerateProperties} from "../../model/listgenerateproperties";
 })
 export class GenerateListComponent implements OnInit {
   @Output() generateProperties: EventEmitter<IListGenerateProperties> = new EventEmitter<IListGenerateProperties>();
-
+  @Input() showMealPlanOption: boolean = true;
 
   addFromBase: boolean = true;
   addFromPickUp: boolean = true;
   saveMealPlan: boolean = true;
 
   constructor() {
+    if (this.showMealPlanOption == false) {
+      this.saveMealPlan = false;
+    }
   }
 
   ngOnInit() {

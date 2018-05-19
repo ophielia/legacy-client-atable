@@ -15,6 +15,7 @@ import {FormsModule} from "@angular/forms";
 import {ModalComponent} from "./modal/modal";
 import {DishSelectComponent} from './dish-select/dish-select.component';
 import {GenerateListComponent} from "./generate-list/generate-list.component";
+import {DishFilterSelectComponent} from './dish-filter-select/dish-filter-select.component';
 
 @NgModule({
   imports: [
@@ -27,8 +28,8 @@ import {GenerateListComponent} from "./generate-list/generate-list.component";
     commonRouting
   ],
   providers: [TagsService, TagCommService],
-  declarations: [TagBrowseComponent, TagBrowseNodeComponent, GenerateListComponent, TagBrowseStyleDirective, ModalComponent, TagSelectComponent, DishSelectComponent],
-  exports: [TagBrowseComponent, GenerateListComponent, DishSelectComponent, TagSelectComponent, TagBrowseStyleDirective, ModalComponent]
+  declarations: [TagBrowseComponent, TagBrowseNodeComponent, GenerateListComponent, TagBrowseStyleDirective, ModalComponent, TagSelectComponent, DishSelectComponent, DishFilterSelectComponent],
+  exports: [TagBrowseComponent, DishFilterSelectComponent, GenerateListComponent, DishSelectComponent, TagSelectComponent, TagBrowseStyleDirective, ModalComponent]
 })
 export class AppCommonModule {
 }

@@ -120,6 +120,18 @@ export class MealPlanService extends BaseHeadersService {
         {headers: this.getHeaders()});
     return proposal$;
   }
+
+  renameMealPlan(meal_plan_id: string, mealPlanName: string) {
+    // just filling in here
+    let url = this.baseUrl + "/" + meal_plan_id + "/name/" + encodeURIComponent(mealPlanName);
+
+
+    let mealplan$ = this.http
+      .post(`${url}`,
+        null,
+        {headers: this.getHeaders()});
+    return mealplan$;
+  }
 }
 
 function handleError(error: any) {

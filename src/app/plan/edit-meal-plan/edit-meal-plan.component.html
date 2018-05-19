@@ -1,11 +1,81 @@
-<p>
-  edit-meal-plan works! - {{mealPlan.name}}
+<div class="container">
+  <div class="row page-title plan-text-color">Edit Meal Plan</div>
+  <div class="row">
+    <div class="col-9" style="padding-left:0px;">
+      <div class="row menubar dish-menubar-text-color menu-color menubar-header justify-content-start">
+        <div>
 
-</p>
-<div>
+          <ng-container *ngIf="!isEditMealPlanName">
+            <span style="padding-top:5px">{{mealPlan.name}}</span>
+            <span class="icon-button-sm" (click)="toggleEditMealPlanName()"
+            ><span class="fa-edit fa"></span></span>
+          </ng-container>
 
-  <a class="btn btn-primary btn-lg"
-     (click)="generateShoppingList()">
-    PUSH ME TO MAKE A LIST
-  </a>
+          <div *ngIf="isEditMealPlanName" class="input-group searchbox-group" style="max-width:135px;">
+            <input type="text" class="form-control searchbox"
+                   aria-describedby="search-query"
+                   placeholder="{{mealPlan.name}}"
+                   [(ngModel)]="mealPlanName"
+                   (keyup.enter)="saveMealPlanName()"
+            />
+            <span (click)="saveMealPlanName()" class="input-group-addon searchbox-group-button" id="search-query"><span
+              class="fa-check fa"></span></span>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="row" style="margin-left:0px">
+
+        <div *ngFor="let slot of mealPlan.slots, let i = index" style="margin:5px">
+          <div class="clearfix" *ngIf="i % 3 == 0"></div>
+
+          <div class="dish-tag-element plan-color" (dblclick)="selectSlot(slot)">{{slot.dish.name}}
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <div class="col-3">
+      <div
+        class="row menubar-flush-top dish-menubar-text-color menu-color justify-content-end">
+        <div class="">                <span (click)="goToPlanList()"
+                                            class="fa-list fa standalone-button"></span></div>
+
+      </div>
+      <div class="row menubar-flush-middle dish-menubar-text-color dish-menu-dropdown-color justify-content-end">
+        <div class="col">
+          <div class="row justify-content-end text-menu-link" (click)="goToAddToMealPlan(mealPlan.meal_plan_id)">Add to
+            Meal Plan
+          </div>
+          <div class="row justify-content-end text-menu-link" (click)="goToFillInMealPlan(mealPlan.meal_plan_id)">Fill
+            In Meal Plan
+          </div>
+          <div class="row justify-content-end text-menu-link" (click)="toggleGenerateList()">Generate List</div>
+          <div *ngIf="isShowGenerateList" class="row justify-content-end text-menu-link">
+            <at-generate-list [showMealPlanOption]="false"
+                              (generateProperties)="generateListFromMealPlan($event)"></at-generate-list>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="selectedDishes.length > 0" class="row menubar-flush inline-menu-panel main-color-outline">
+        <div class="col">
+          <div *ngFor="let seldish of selectedDishes"
+               (dblclick)="unselectDish(seldish)">
+            {{seltag.name}}
+          </div>
+          <div class="standard-button-sm main-button-color"
+               (click)="removeDishFromMealPlan()">Remove from Meal Plan
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

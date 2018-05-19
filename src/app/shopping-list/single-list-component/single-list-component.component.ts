@@ -36,6 +36,9 @@ export class SingleListComponentComponent implements OnInit {
   }
 
   isActive(list) {
+    if (!list) {
+      return false;
+    }
     return list.list_type == ListType.ActiveList;
   }
 }

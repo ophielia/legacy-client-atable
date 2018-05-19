@@ -1,0 +1,75 @@
+<!--<div ngClass="col-{{getContainerClass()}}" style="padding-left:0px;">-->
+<div style="padding-left:0px;">
+  <div class="row menubar dish-menubar-text-color menu-color justify-content-start">
+    <div class="input-group searchbox-group" style="max-width:135px;">
+      <input type="text" class="form-control searchbox"
+             aria-describedby="search-query"
+             placeholder="Search By Dishname"
+             [(ngModel)]="searchValue"
+             (keyup)="filterByDishname()"
+             (keyup.enter)="clearSearchValue()"
+      />
+      <span class="input-group-addon searchbox-group-button" id="search-query"><span
+        class="fa-search fa"></span></span>
+    </div>
+    <div class="input-group searchbox-group" style="max-width:135px;">
+      <at-tag-select aria-describedby="filter-query"
+                     [tagTypes]="'Ingredient,Rating,DishType,TagType'"
+                     [selectType]="'Search'"
+                     [showText]="'Filter by Tag'"
+                     [allowAdd]="false"
+                     [tagList]="alltagsSearch"
+                     [passedInputStyle]="'menubar-input'"
+                     (tagSelected)="addTagToFilter($event)">
+      </at-tag-select>
+      <span class="input-group-addon searchbox-group-button" id="filter-query" style="margin-left:-1px;"
+            (click)="toggleBrowse()"><span
+        class="fa-filter fa"></span></span>
+    </div>
+    <div *ngIf="showAdd" ngClass=" {{getAddButtonClass('add-button-md ')}}" style="float:right" (click)="addClick()">
+      <fa [name]="'plus'"></fa>
+    </div>
+  </div>
+
+  <div class="row filterbar-tease" style="margin-left:0px">
+    <div class="col-sm">
+      <div class="row ">
+        <div *ngFor="let tag of filterTags" atTagBrowseStyle [tag]="tag"
+             [origClass]="'col  dish-tag-element-fill-teaser'"
+             (dblclick)="removeTagFromFilter(tag)"
+        >{{tag.name}}
+          <fa style="float:right; padding-left:5px;"
+              [class.inverted]="tag.is_inverted"
+              [class.notinverted]="!tag.is_inverted"
+              (click)="toggleInvert(tag)"
+              [name]="'ban'"></fa>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-left:0px">
+    <div *ngIf="showBrowse" class="col-3">
+      <div *ngFor="let tagtype of browseTagTypes" class="{{ tagtype.toLocaleLowerCase() + '-1 dish-tag-element'}}"
+      >
+        <span (click)="expandOrFoldBrowse(tagtype)">{{tagtype}}</span>
+        <ng-container *ngIf="isExpanded(tagtype)">
+          <ng-container *ngFor="let drilldown of browseAllDrilldowns[tagtype]">
+
+            <at-tag-browse [tagDrilldown]="drilldown" [showEdit]="false"></at-tag-browse>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div *ngFor="let dish of filteredDishes, let i = index" style="margin:5px">
+      <div class="clearfix" *ngIf="i % 3 == 0"></div>
+      <div ngClass=" {{getElementClass('dish-tag-element dish-tag-element-spaced ')}}" (dblclick)="selectDish(dish)">
+        {{dish.name}}
+
+      </div>
+    </div>
+
+  </div>
+
+
+</div>

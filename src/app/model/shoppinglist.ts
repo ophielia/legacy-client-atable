@@ -5,6 +5,7 @@ export interface IShoppingList {
   categories: Category[];
   user_id: string;
   created: number;
+  updated: number;
   list_type: string;
   layout_type: string;
   item_count: number;
@@ -20,6 +21,7 @@ export class ShoppingList implements IShoppingList {
   categories: Category[];
   user_id: string;
   created: number;
+  updated: number;
   list_type: string;
   layout_type: string;
   item_count: number;

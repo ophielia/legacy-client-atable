@@ -6,6 +6,13 @@ body {
   /*font-family: 'Titillium Web', sans-serif;*/
 }
 
+.landing-box-header {
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+
+
 .main-color {
   background-color: #4a6288;
   color: white;
@@ -26,6 +33,25 @@ body {
 .dish-text-color {
   color: #e26279;
   text-decoration: none;
+}
+
+.plan-text-color {
+  color: #28b9b9;
+  text-decoration: none;
+}
+
+.dish-outline-color {
+  background-color: white;
+  border-color: #e26279;
+  color: #e26279;
+
+}
+
+.plan-outline-color {
+  background-color: white;
+  border-color: #28b9b9;
+  color: #28b9b9;
+
 }
 
 .menu-color {

@@ -78,8 +78,6 @@ export class ManageDishComponent implements OnInit {
 
   ngOnInit() {
 
-    this.getAllDishes();
-    this.getTagsForBrowse();
     this.getMealPlanForSelect(5);
     this.tagSelectEvent = this.tagCommService.selectEvent
       .subscribe(selectevent => {
@@ -104,23 +102,6 @@ export class ManageDishComponent implements OnInit {
       }
     })
     this.unsubscribe.push($sub);
-  }
-
-  getTagsForBrowse() {
-
-    for (var i = 0; i < this.browseTagTypes.length; i++) {
-      let ttype = this.browseTagTypes[i];
-      // get / fill tag lists here from service
-      let $sub = this.tagService
-        .getTagDrilldownList(ttype).subscribe(p => {
-          this.browseAllDrilldowns[ttype] = p
-        });
-      this.unsubscribe.push($sub);
-
-      this.expandFoldState[ttype] = false;
-    }
-
-
   }
 
   getAllDishes() {
@@ -159,15 +140,6 @@ export class ManageDishComponent implements OnInit {
     this.filteredDishes = this.allDishes;
   }
 
-  clearSearchValue() {
-    this.searchValue = "";
-    this.resetFilter();
-  }
-
-  toggleBrowse() {
-    this.showBrowse = !this.showBrowse;
-  }
-
 
   toggleSelectedMenu() {
     this.showSelectedMenu = !this.showSelectedMenu;
@@ -187,25 +159,9 @@ export class ManageDishComponent implements OnInit {
     return this.expandFoldState[tagtype];
   }
 
-  filterByDishname() {
-    console.log("filter by dishname" + this.searchValue);
-
-    if (this.searchValue.length == 0) {
-      this.filteredDishes = this.allDishes;
-    } else if (this.filteredDishes) {
-      let filterBy = this.searchValue.toLocaleLowerCase();
-      this.filteredDishes = this.filteredDishes.filter((dish: Dish) =>
-      dish.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
-    }
-  }
 
   selectDish(dish: Dish) {
-    let match = this.selectedDishes.filter(t => dish.dish_id == t.dish_id);
-    if (!match || match.length == 0) {
-      let $sub = this.dishService.getById(dish.dish_id)
-        .subscribe(d => this.selectedDishes.push(d));
-      this.unsubscribe.push($sub);
-    }
+    this.selectedDishes.push(dish);
   }
 
   unSelectDish(dish: Dish) {
@@ -272,21 +228,6 @@ export class ManageDishComponent implements OnInit {
         var id = splitlocation[splitlocation.length - 1];
         this.goToShoppingListEdit(id);
       });
-  }
-
-  removeTagFromFilter(tag: ITag) {
-    this.filterTags = this.filterTags.filter(t => t.tag_id != tag.tag_id);
-    this.getAllDishes();
-  }
-
-
-  toggleInvert(tag: ITag) {
-    for (var i: number = 0; i < this.filterTags.length; i++) {
-      if (this.filterTags[i].tag_id == tag.tag_id) {
-        this.filterTags[i].is_inverted = !this.filterTags[i].is_inverted;
-      }
-    }
-    this.getAllDishes();
   }
 
   addTagToDishes(tag: Tag) {
@@ -357,6 +298,7 @@ export class ManageDishComponent implements OnInit {
   toggleGenerateLists() {
     this.showGenerateLists = !this.showGenerateLists;
   }
+
   showAllMenuPlans() {
     this.getMealPlanForSelect(999);
   }
