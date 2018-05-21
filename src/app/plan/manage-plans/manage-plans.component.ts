@@ -40,7 +40,6 @@ export class ManagePlansComponent implements OnInit, OnDestroy {
   addPlan() {
     this.mealPlanService.addMealPlan('')
       .subscribe(r => {
-        console.log(`added!!! mealPlan`)
         var headers = r.headers;
         var location = headers.get("Location");
         var splitlocation = location.split("/");

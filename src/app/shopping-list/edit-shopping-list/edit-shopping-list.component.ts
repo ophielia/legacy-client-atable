@@ -191,7 +191,8 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       return;
     }
     // check if it's connected with a dish
-    if (category.category_type == CategoryType.Highlight) {
+    if (category.category_type == CategoryType.Highlight
+      || category.category_type == CategoryType.HighlightList) {
       // find category in legend
       var search: string = category.name;
       var overrideName = null;
@@ -347,6 +348,9 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   }
 
 
+  isListType(list_type: string) {
+    return this.shoppingList.list_type == list_type;
+  }
   showLegend() {
     if (this.shoppingList.dish_sources.length > 0) {
       return true;

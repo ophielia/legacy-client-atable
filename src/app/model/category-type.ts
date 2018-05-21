@@ -2,6 +2,7 @@ export default class CategoryType {
 
   static UnCategorized: string = "UnCategorized";
   static Highlight: string = "Highlight";
+  static HighlightList: string = "HighlightList";
   static Frequent: string = "frequent";
   static Standard: string = "Standard";
 

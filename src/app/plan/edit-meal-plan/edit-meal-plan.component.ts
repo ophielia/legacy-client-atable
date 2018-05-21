@@ -1,14 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ITag} from "../../model/tag";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.service";
 import {Dish} from "../../model/dish";
-import TagSelectType from "../../model/tag-select-type";
-import {MealPlan} from "../../model/mealplan";
+import {IMealPlan} from "../../model/mealplan";
 import {MealPlanService} from "../../services/meal-plan.service";
 import {DishService} from "../../services/dish-service.service";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
+import {AlertService} from "app/services/alert.service";
+
 
 @Component({
   selector: 'at-edit-meal-plan',
@@ -21,16 +21,14 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
   selectedDishes: Dish[] = [];
   mealPlanName: string = "";
   isEditMealPlanName: boolean = false;
-  mealPlan: MealPlan = <MealPlan>{meal_plan_id: "", name: ""};
+  mealPlan: IMealPlan;
   sub: any;
   unsubscribe: Subscription[] = [];
   private mealPlanId: string;
 
 
   constructor(private mealPlanService: MealPlanService,
-              private dishService: DishService,
               private shoppingListService: ShoppingListService,
-              tagCommService: TagCommService,
               private route: ActivatedRoute,
               private router: Router,) {
 
@@ -53,7 +51,9 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
   loadMealPlan() {
     var $sub = this.mealPlanService
       .getById(this.mealPlanId)
-      .subscribe(p => this.mealPlan = p);
+      .subscribe(p => {
+        this.mealPlan = p;
+      });
     this.unsubscribe.push($sub);
   }
 

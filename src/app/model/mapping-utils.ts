@@ -16,7 +16,7 @@ import {ProposalDish} from "./proposal-dish";
 import {ItemSource} from "app/model/item-source";
 export default class MappingUtils {
 
-  static showConsoleLogs: boolean = true;
+  static showConsoleLogs: boolean = false;
 
   static toTag(r: any): ITag {
     return MappingUtils._toTag(r.tag);

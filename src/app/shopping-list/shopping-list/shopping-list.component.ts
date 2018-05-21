@@ -221,7 +221,8 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
       return;
     }
     // check if it's connected with a dish
-    if (category.category_type == CategoryType.Highlight) {
+    if (category.category_type == CategoryType.Highlight ||
+      category.category_type == CategoryType.HighlightList) {
       // find category in legend
       var search: string = category.name;
       var overrideName = null;

@@ -1,20 +1,22 @@
 import {Inject, Injectable} from "@angular/core";
 import {AuthenticationService} from "./authentication.service";
-import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {MealPlan} from "../model/mealplan";
 import MappingUtils from "app/model/mapping-utils";
 import MealPlanType from "../model/meal-plan-type";
-import {BaseHeadersService} from "./base-service";
+import {BaseHeadersService, myHeaders} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {Logger} from "angular2-logger/core";
+import {HttpClient, HttpResponse} from "@angular/common/http";
+import {map} from "rxjs/operators";
+
 
 @Injectable()
 export class MealPlanService extends BaseHeadersService {
 
   private baseUrl: string;
 
-  constructor(private http: Http,
+  constructor(private httpClient: HttpClient,
               @Inject(APP_CONFIG) private config: AppConfig,
               private _logger: Logger,
               private _authenticationService: AuthenticationService) {
@@ -23,45 +25,44 @@ export class MealPlanService extends BaseHeadersService {
   }
 
   getAll(): Observable<MealPlan[]> {
-    let mealplans$ = this.http
-      .get(`${this.baseUrl}`, {headers: this.getHeaders()})
-      .map(this.mapMealPlans).catch(handleError);
+    let mealplans$ = this.httpClient
+      .get(`${this.baseUrl}`)
+      .map(data => this.mapMealPlansClient(data));
     return mealplans$;
   }
 
-  private mapMealPlans(response: Response): MealPlan[] {
-    return response.json()._embedded.mealPlanResourceList.map(MappingUtils.toMealPlan);
+  getById(meal_plan_id: string) {
+    let url = this.baseUrl + "/" + meal_plan_id;
+    return this.httpClient.get(url).pipe(
+      map(data => this.mapMealPlanClient(data)));
   }
 
-  private mapMealPlan(response: Response): MealPlan {
-    return MappingUtils.toMealPlan(response.json());
+  private mapMealPlansClient(object: Object): MealPlan[] {
+    let embeddedObj = object["_embedded"];
+    return embeddedObj["mealPlanResourceList"].map(MappingUtils.toMealPlan);
+    //return new Array<MealPlan>();
+    //return response.json()._embedded.mealPlanResourceList.map(MappingUtils.toMealPlan);
   }
 
-  getById(meal_plan_id: any) {
-    let mealplan$ = this.http
-      .get(`${this.baseUrl}/${meal_plan_id}`,
-        {headers: this.getHeaders()})
-      .map(this.mapMealPlan)
-      .catch(handleError);
-    return mealplan$;
+  private mapMealPlanClient(object: Object): MealPlan {
+    return MappingUtils.toMealPlan(object);
   }
+
 
   removeDishFromMealPlan(dish_id: string, meal_plan_id: string) {
     var url: string = this.baseUrl + '/' + meal_plan_id + "/dish/" + dish_id;
 
     return this
-      .http
-      .delete(`${url}`,
-        {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${url}`);
   }
 
   addDishToMealPlan(dish_id: string, meal_plan_id: string) {
     var url: string = this.baseUrl + '/' + meal_plan_id + "/dish/" + dish_id;
 
     return this
-      .http
-      .post(`${url}`, null,
-        {headers: this.getHeaders()});
+      .httpClient
+      .post(`${url}`, null);
   }
 
 
@@ -85,7 +86,7 @@ export class MealPlanService extends BaseHeadersService {
 
   }
 
-  addMealPlan(mealPlanName: string) {
+  addMealPlan(mealPlanName: string): Observable<HttpResponse<Object>> {
     var newMealPlan: MealPlan = <MealPlan>({
       name: mealPlanName,
       meal_plan_type: MealPlanType.Manual
@@ -93,19 +94,20 @@ export class MealPlanService extends BaseHeadersService {
 
     var url: string = this.baseUrl + '';
 
+
     return this
-      .http
+      .httpClient
       .post(`${url}`,
         JSON.stringify(newMealPlan),
-        {headers: this.getHeaders()});
+        {headers: myHeaders, observe: 'response'});
   }
 
   deleteMealPlan(mealPlanId: string) {
     var url: string = this.baseUrl + '/' + mealPlanId;
 
     return this
-      .http
-      .delete(`${url}`, {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${url}`);
   }
 
 
@@ -114,10 +116,10 @@ export class MealPlanService extends BaseHeadersService {
       + proposalId;
 
 
-    let proposal$ = this.http
+    let proposal$ = this.httpClient
       .post(`${url}`,
         null,
-        {headers: this.getHeaders()});
+        {headers: myHeaders, observe: 'response'});
     return proposal$;
   }
 
@@ -126,20 +128,11 @@ export class MealPlanService extends BaseHeadersService {
     let url = this.baseUrl + "/" + meal_plan_id + "/name/" + encodeURIComponent(mealPlanName);
 
 
-    let mealplan$ = this.http
+    let mealplan$ = this.httpClient
       .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
     return mealplan$;
   }
 }
 
-function handleError(error: any) {
-  // log error
-  // could be something more sophisticated
-  let errorMsg = error.message || `Yikes! There was a problem with our hyperdrive device and we couldn't retrieve your data!`
-  console.error(errorMsg);
 
-  // throw an application level error
-  return Observable.throw(errorMsg);
-}

@@ -4,8 +4,7 @@ import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.servic
 import {Dish} from "../../model/dish";
 import TagSelectType from "../../model/tag-select-type";
 import {DishService} from "../../services/dish-service.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {TagDrilldown} from "../../model/tag-drilldown";
+import {Router} from "@angular/router";
 import {TagsService} from "../../services/tags.service";
 import TagType from "../../model/tag-type";
 import {TimerObservable} from "rxjs/observable/TimerObservable";
@@ -27,7 +26,6 @@ export class ManageDishComponent implements OnInit {
   filterTags: ITag[];
   tagSelectEvent: any;
   selectedDishes: Dish[] = [];
-  searchValue: string;
   hoverTimer: any;
   mealPlanList: MealPlan[];
   mealPlanMore: boolean;
@@ -37,13 +35,11 @@ export class ManageDishComponent implements OnInit {
 
   allDishes: Dish[];
   filteredDishes: Dish[];
-  browseAllDrilldowns: { [type: string]: TagDrilldown[] } = {};
   browseTagTypes: string[];
   expandFoldState: Map<string, boolean> = new Map<string, boolean>();
   selectHoverDetail: string;
   isShowTagEntry: boolean = false;
 
-  showBrowse: boolean = false;
   selectType: string = TagSelectType.Search;
 
 
@@ -60,7 +56,6 @@ export class ManageDishComponent implements OnInit {
               private mealPlanService: MealPlanService,
               private tagService: TagsService,
               private shoppingListService: ShoppingListService,
-              private route: ActivatedRoute,
               private router: Router,) {
     this.tagCommService = tagCommService;
     this.initializeBrowseTagTypes();

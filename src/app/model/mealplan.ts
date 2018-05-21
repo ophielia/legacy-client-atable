@@ -20,3 +20,4 @@ export class MealPlan implements IMealPlan {
   meal_plan_type: string;
   slots: Slot[];
 }
+

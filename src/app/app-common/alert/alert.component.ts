@@ -1,0 +1,57 @@
+import {Component, OnInit, Input, ChangeDetectorRef} from '@angular/core';
+import {Alert, AlertType} from "../../model/alert";
+import {AlertService} from "../../services/alert.service";
+
+@Component({
+  moduleId: module.id,
+  selector: 'alert',
+  templateUrl: 'alert.component.html'
+})
+
+export class AlertComponent {
+  @Input() id: string;
+
+  alerts: Alert[] = [];
+
+  constructor(private alertService: AlertService,
+              private cd: ChangeDetectorRef) {
+  }
+
+  ngOnInit() {
+    this.alertService.getAlert(this.id).subscribe((alert: Alert) => {
+      if (!alert.message) {
+        // clear alerts when an empty alert is received
+        this.alerts = [];
+        return;
+      }
+
+      // add alert to array
+      this.alerts.push(alert);
+      this.cd.detectChanges();
+    });
+  }
+
+  removeAlert(alert: Alert) {
+    this.alerts = this.alerts.filter(x => x !== alert);
+    this.cd.detectChanges();
+    console.log("beep");
+  }
+
+  cssClass(alert: Alert) {
+    if (!alert) {
+      return;
+    }
+
+    // return css class based on alert type
+    switch (alert.type) {
+      case AlertType.Success:
+        return 'alert alert-success';
+      case AlertType.Error:
+        return 'alert alert-danger';
+      case AlertType.Info:
+        return 'alert alert-info';
+      case AlertType.Warning:
+        return 'alert alert-warning';
+    }
+  }
+}

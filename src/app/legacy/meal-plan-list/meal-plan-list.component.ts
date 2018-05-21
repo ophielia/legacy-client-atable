@@ -40,8 +40,7 @@ export class MealPlanListComponent implements OnInit {
 
   addMealPlan(mealPlanName: string) {
     this.mealPlanService.addMealPlan(mealPlanName)
-      .subscribe(r => {
-        console.log(`added!!! mealPlan`)
+      .subscribe((r) => {
         var headers = r.headers;
         var location = headers.get("Location");
         var splitlocation = location.split("/");

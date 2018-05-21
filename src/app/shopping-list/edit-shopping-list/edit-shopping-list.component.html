@@ -57,10 +57,10 @@
           <div class="row justify-content-end text-menu-link"
                (click)="clearList()">Clear List
           </div>
-          <div class="row justify-content-end text-menu-link"
+          <div *ngIf="!isListType(PICK_UP_LIST)" class="row justify-content-end text-menu-link"
                (click)="addFromList(PICK_UP_LIST)">Add From Pick-Up List
           </div>
-          <div class="row justify-content-end text-menu-link"
+          <div *ngIf="!isListType(BASE_LIST)" class="row justify-content-end text-menu-link"
                (click)="addFromList(BASE_LIST)">Add From Base List
           </div>
         </div>

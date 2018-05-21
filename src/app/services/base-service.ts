@@ -1,12 +1,31 @@
 import {Injectable} from "@angular/core";
 import {AuthenticationService} from "./authentication.service";
 import {Headers} from "@angular/http";
+import {HttpHeaders} from "@angular/common/http";
+
+
+export const httpOptions = {
+  headers: new HttpHeaders({
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Expose-Headers': 'Location',
+  })
+}
+
+export const myHeaders = new HttpHeaders({
+  'Accept': 'application/json',
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Expose-Headers': 'Location',
+});
 
 @Injectable()
 export class BaseHeadersService {
 
   constructor(private authenticationService: AuthenticationService) {
   }
+
 
   getHeaders() {
     let headers = new Headers();

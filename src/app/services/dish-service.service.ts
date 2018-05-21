@@ -8,7 +8,6 @@ import {BaseHeadersService} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {Logger} from "angular2-logger/core";
 import {ITag} from "../model/tag";
-import {isUndefined} from "util";
 
 @Injectable()
 export class DishService extends BaseHeadersService {
@@ -26,15 +25,14 @@ export class DishService extends BaseHeadersService {
   getAll(): Observable<Dish[]> {
     let dishs$ = this.http
       .get(`${this.dishUrl}`, {headers: this.getHeaders()})
-      .map(this.mapDishes).catch(handleError);  // HERE: This is new!
+      .map(this.mapDishes);
     return dishs$;
   }
 
   getById(dish_id: string): Observable<Dish> {
     let dish$ = this.http
       .get(`${this.dishUrl}/${dish_id}`, {headers: this.getHeaders()})
-      .map(this.mapDish)
-      .catch(handleError);
+      .map(this.mapDish);
     return dish$;
   }
 
@@ -114,7 +112,7 @@ export class DishService extends BaseHeadersService {
     }
     let dishs$ = this.http
       .get(url, {headers: this.getHeaders()})
-      .map(this.mapDishes).catch(handleError);
+      .map(this.mapDishes);
     return dishs$;
   }
 
@@ -161,16 +159,5 @@ export class DishService extends BaseHeadersService {
 
 }
 
-
-// this could also be a private method of the component class
-function handleError(error: any) {
-  // log error
-  // could be something more sophisticated
-  let errorMsg = error.message || `Yikes! There was a problem with our hyperdrive device and we couldn't retrieve your data!`
-  console.error(errorMsg);
-
-  // throw an application level error
-  return Observable.throw(errorMsg);
-}
 
 
