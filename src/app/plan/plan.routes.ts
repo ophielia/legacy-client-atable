@@ -16,8 +16,8 @@ const planRoutes: Routes = [
   {path: 'plan/fillin/:id', component: FillInMealPlanComponent},
   {path: 'plan/manage', component: ManagePlansComponent},
   {path: 'plan/dinnertonight/one', component: DinnerTonightOnHandComponent},
-  {path: 'plan/dinnertonight/two', component: DinnerTonightTargetComponent},
-  {path: 'plan/dinnertonight/result', component: DinnerTonightResultComponent},
+  {path: 'plan/dinnertonight/two/:id', component: DinnerTonightTargetComponent},
+  {path: 'plan/dinnertonight/result/:id', component: DinnerTonightResultComponent},
   {path: 'list/edit/:id', component: EditShoppingListComponent},
   {path: '', redirectTo: 'home', pathMatch: 'full'}
 ];

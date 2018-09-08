@@ -3,7 +3,10 @@ import {TagsService} from "../../services/tags.service";
 import {Subscription} from "rxjs/Subscription";
 import {ITag, Tag} from "../../model/tag";
 import TagSelectType from "../../model/tag-select-type";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Target} from "../../model/target";
+import {TargetService} from "../../services/target.service";
+import {ProposalService} from "../../services/proposal.service";
 
 @Component({
   selector: 'at-dinner-tonight-target',
@@ -11,17 +14,25 @@ import {Router} from "@angular/router";
   styleUrls: ['./dinner-tonight-target.component.css']
 })
 export class DinnerTonightTargetComponent implements OnInit, OnDestroy {
+  slotId: string;
+  targetId: string;
+  target: Target;
 
   private selectedTags: ITag[] = [];
   private alltagsSearch: ITag[];
   unsubscribe: Subscription[] = [];
 
   constructor(private tagService: TagsService,
+              private targetService: TargetService,
+              private proposalService: ProposalService,
+              private route: ActivatedRoute,
               private router: Router) {
+    this.targetId = this.route.snapshot.params['id'];
   }
 
   ngOnInit() {
     this.getSearchTags();
+    this.getTarget();
   }
 
   ngOnDestroy() {
@@ -38,11 +49,31 @@ export class DinnerTonightTargetComponent implements OnInit, OnDestroy {
     this.unsubscribe.push($sub);
   }
 
-  goToNext() {
-    // MM need to save the target here
-    this.router.navigate(["plan/dinnertonight/result"]);
-    //this.router.navigate(["plan/dinnertonight/two", target_id]);
+  getTarget() {
+    var $sub = this.targetService
+      .getById(this.targetId)
+      .subscribe(p => {
+        this.target = p;
+        this.setSlotId(p);
+      });
+    this.unsubscribe.push($sub);
+  }
 
+  setSlotId(target: Target) {
+    if (target.target_slots && target.target_slots.length > 0) {
+      this.slotId = target.target_slots[0].target_slot_id;
+    }
+  }
+
+  goToNext() {
+    this.proposalService.generateProposal(this.targetId)
+      .subscribe(r => {
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var proposal_id = splitlocation[splitlocation.length - 1];
+        this.router.navigate(["plan/dinnertonight/result", proposal_id]);
+      });
   }
 
   selectTag(tag: Tag) {
@@ -51,6 +82,13 @@ export class DinnerTonightTargetComponent implements OnInit, OnDestroy {
       return;
     }
     this.selectedTags.push(tag);
+    this.addToTarget(tag);
+  }
+
+  addToTarget(tag: ITag) {
+    if (this.slotId) {
+      this.targetService.moveTagToTargetSlot(this.targetId, tag.tag_id, null, this.slotId).subscribe();
+    }
   }
 
   removeTag(tag: Tag) {

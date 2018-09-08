@@ -92,22 +92,10 @@ export class ShoppingListService extends BaseHeadersService {
       list_type: listType,
 
     });
-    var url = this.shoppingListUrl + '/new';
+    var url = this.shoppingListUrl;
     return this
       .http
       .post(url,
-        JSON.stringify(properties),
-        {headers: this.getHeaders()});
-
-  }
-
-  addShoppingList(): Observable<Response> {
-    var properties: IListGenerateProperties = <IListGenerateProperties>({
-      add_from_base: false,
-    });
-    return this
-      .http
-      .post(`${this.shoppingListUrl}`,
         JSON.stringify(properties),
         {headers: this.getHeaders()});
 

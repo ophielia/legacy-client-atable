@@ -8,6 +8,8 @@ export interface Target {
   proposal_id: string;
   target_name: string;
   last_used: number;
+  is_temporary: boolean;
+  target_type: string;
   target_slots: TargetSlot[];
 }
 

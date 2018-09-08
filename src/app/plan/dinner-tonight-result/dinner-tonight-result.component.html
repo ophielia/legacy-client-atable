@@ -1,3 +1,8 @@
 <p>
   dinner-tonight-result works!
 </p>
+<ng-container *ngFor="let slot of proposal.proposal_slots">
+  <div *ngFor="let dish_slot of slot.dish_slot_list">
+    {{dish_slot.dish.name}}
+  </div>
+</ng-container>

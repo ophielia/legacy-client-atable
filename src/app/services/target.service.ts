@@ -8,6 +8,8 @@ import {TargetSlot} from "../model/target-slot";
 import {BaseHeadersService} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {Logger} from "angular2-logger/core";
+import {ITag} from "../model/tag";
+import TargetType from "../model/target-type";
 
 @Injectable()
 export class TargetService extends BaseHeadersService {
@@ -73,10 +75,32 @@ export class TargetService extends BaseHeadersService {
 
   addTarget(targetName: string) {
     var newTarget: Target = <Target>({
-      target_name: targetName,
+      target_name: targetName
     });
 
     var url: string = this.baseUrl + '';
+
+    return this
+      .http
+      .post(`${url}`,
+        JSON.stringify(newTarget),
+        {headers: this.getHeaders()});
+  }
+
+  createPickupTarget(targetName: string, tags: ITag[]) {
+    var newTarget: Target = <Target>({
+      target_name: targetName,
+      target_type: TargetType.PickUp
+    });
+
+    var idString: string = "";
+    if (tags) {
+      tags.forEach(t => idString = idString + "," + t.tag_id);
+      if (idString.length > 0) {
+        idString = "?pickupTags=" + idString.substr(1, idString.length - 1);
+      }
+    }
+    var url: string = this.baseUrl + '/pickup' + idString;
 
     return this
       .http

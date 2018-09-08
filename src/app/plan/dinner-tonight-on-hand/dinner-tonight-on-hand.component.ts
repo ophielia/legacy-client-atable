@@ -4,7 +4,7 @@ import {Subscription} from "rxjs/Subscription";
 import {ITag, Tag} from "../../model/tag";
 import TagSelectType from "../../model/tag-select-type";
 import {ActivatedRoute, Router} from "@angular/router";
-import {MealPlanService} from "../../services/meal-plan.service";
+import {TargetService} from "../../services/target.service";
 
 @Component({
   selector: 'at-dinner-tonight-on-hand',
@@ -18,7 +18,7 @@ export class DinnerTonightOnHandComponent implements OnInit, OnDestroy {
   unsubscribe: Subscription[] = [];
 
   constructor(private tagService: TagsService,
-              private mealPlanService: MealPlanService,
+              private targetService: TargetService,
               private route: ActivatedRoute,
               private router: Router) {
   }
@@ -43,9 +43,18 @@ export class DinnerTonightOnHandComponent implements OnInit, OnDestroy {
   }
 
   goToNext() {
-    // MM need to save the target here
-    this.router.navigate(["plan/dinnertonight/two"]);
-    //this.router.navigate(["plan/dinnertonight/two", target_id]);
+
+    this.targetService.createPickupTarget("PickUpTarget", this.selectedTags)
+      .subscribe(r => {
+        var headers = r.headers;
+        var location = headers.get("Location");
+        var splitlocation = location.split("/");
+        var target_id = splitlocation[splitlocation.length - 1];
+
+
+        this.router.navigate(["plan/dinnertonight/two", target_id]);
+
+      });
 
   }
 
