@@ -1,5 +1,5 @@
 import {Inject, Injectable} from "@angular/core";
-import {Http, Response} from "@angular/http";
+import {Response} from "@angular/http";
 import {AuthenticationService} from "./authentication.service";
 import {Observable} from "rxjs/Observable";
 import {Target} from "../model/target";
@@ -7,18 +7,20 @@ import MappingUtils from "../model/mapping-utils";
 import {TargetSlot} from "../model/target-slot";
 import {BaseHeadersService} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
-import {Logger} from "angular2-logger/core";
+import {NGXLogger} from "ngx-logger";
 import {ITag} from "../model/tag";
 import TargetType from "../model/target-type";
+import {throwError} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class TargetService extends BaseHeadersService {
 
   private baseUrl = "http://localhost:8181";
 
-  constructor(private http: Http,
+  constructor(private httpClient: HttpClient,
               @Inject(APP_CONFIG) private config: AppConfig,
-              private _logger: Logger,
+              private _logger: NGXLogger,
               private _authenticationService: AuthenticationService) {
     super(_authenticationService);
     this.baseUrl = this.config.apiEndpoint + "target";
@@ -26,17 +28,16 @@ export class TargetService extends BaseHeadersService {
 
 
   getAll(): Observable<Target[]> {
-    let targets$ = this.http
-      .get(`${this.baseUrl}`, {headers: this.getHeaders()})
+    let targets$ = this.httpClient
+      .get(`${this.baseUrl}`)
       .map(this.mapTargets).catch(handleError);
     return targets$;
   }
 
 
   getById(target_id: any) {
-    let target$ = this.http
-      .get(`${this.baseUrl}/${target_id}`,
-        {headers: this.getHeaders()})
+    let target$ = this.httpClient
+      .get(`${this.baseUrl}/${target_id}`)
       .map(this.mapTarget)
       .catch(handleError);
     return target$;
@@ -46,9 +47,8 @@ export class TargetService extends BaseHeadersService {
     var url: string = this.baseUrl + '/' + target_id + "/dish/" + dish_id;
 
     return this
-      .http
-      .delete(`${url}`,
-        {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${url}`);
   }
 
   addSlotToTarget(target_id: string, tag_id: string) {
@@ -58,19 +58,17 @@ export class TargetService extends BaseHeadersService {
     var url: string = this.baseUrl + '/' + target_id + "/slot";
 
     return this
-      .http
+      .httpClient
       .post(`${url}`,
-        JSON.stringify(newTargetSlot),
-        {headers: this.getHeaders()});
+        JSON.stringify(newTargetSlot));
   }
 
   deleteSlotFromTarget(target_id: string, slot_id: string) {
     var url: string = this.baseUrl + '/' + target_id + "/slot/" + slot_id;
 
     return this
-      .http
-      .delete(`${url}`,
-        {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${url}`);
   }
 
   addTarget(targetName: string) {
@@ -81,10 +79,9 @@ export class TargetService extends BaseHeadersService {
     var url: string = this.baseUrl + '';
 
     return this
-      .http
+      .httpClient
       .post(`${url}`,
-        JSON.stringify(newTarget),
-        {headers: this.getHeaders()});
+        JSON.stringify(newTarget));
   }
 
   createPickupTarget(targetName: string, tags: ITag[]) {
@@ -103,37 +100,34 @@ export class TargetService extends BaseHeadersService {
     var url: string = this.baseUrl + '/pickup' + idString;
 
     return this
-      .http
+      .httpClient
       .post(`${url}`,
-        JSON.stringify(newTarget),
-        {headers: this.getHeaders()});
+        JSON.stringify(newTarget));
   }
 
   deleteTarget(targetId: string) {
     var url: string = this.baseUrl + '/' + targetId;
 
     return this
-      .http
-      .delete(`${url}`, {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${url}`);
   }
 
   addTagToTarget(target_id: string, tag_id: string) {
     var url: string = this.baseUrl + '/' + target_id + "/tag/" + tag_id;
 
     return this
-      .http
+      .httpClient
       .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
   }
 
   removeTagFromTarget(target_id: string, tag_id: string) {
     var url: string = this.baseUrl + '/' + target_id + "/tag/" + tag_id;
 
     return this
-      .http
-      .delete(`${url}`,
-        {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${url}`);
   }
 
   moveTagToTarget(target_id: string, tag_id: string, source_slot_id: string) {
@@ -145,15 +139,13 @@ export class TargetService extends BaseHeadersService {
 
 
     let addTagCall = this
-      .http
+      .httpClient
       .post(`${addTagUrl}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
 
     let cleanupTagCall = this
-      .http
-      .delete(`${cleanupTagUrl}`,
-        {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${cleanupTagUrl}`);
 
     return addTagCall.concat(cleanupTagCall);
   }
@@ -174,15 +166,13 @@ export class TargetService extends BaseHeadersService {
 
 
     let addTagCall = this
-      .http
+      .httpClient
       .post(`${addTagUrl}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
 
     let cleanupTagCall = this
-      .http
-      .delete(`${cleanupTagUrl}`,
-        {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${cleanupTagUrl}`);
 
     return addTagCall.concat(cleanupTagCall);
   }
@@ -207,7 +197,7 @@ function handleError(error: any) {
   console.error(errorMsg);
 
   // throw an application level error
-  return Observable.throw(errorMsg);
+  return throwError(errorMsg);
 }
 
 

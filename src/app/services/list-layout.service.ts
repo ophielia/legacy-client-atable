@@ -1,6 +1,6 @@
 import {Inject, Injectable} from "@angular/core";
 import {AuthenticationService} from "./authentication.service";
-import {Http, Response} from "@angular/http";
+import {Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import MappingUtils from "../model/mapping-utils";
 import {ITag} from "../model/tag";
@@ -8,24 +8,26 @@ import {ListLayout} from "../model/listlayout";
 import {ListLayoutCategory} from "../model/listcategory";
 import {BaseHeadersService} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
-import {Logger} from "angular2-logger/core";
+import {NGXLogger} from "ngx-logger";
+import {throwError} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class ListLayoutService extends BaseHeadersService {
 
   private baseUrl: string;
 
-  constructor(private http: Http,
+  constructor(private httpClient: HttpClient,
               @Inject(APP_CONFIG) private config: AppConfig,
-              private _logger: Logger,
+              private _logger: NGXLogger,
               private _authenticationService: AuthenticationService) {
     super(_authenticationService);
     this.baseUrl = this.config.apiEndpoint + "listlayout";
   }
 
   getAll(): Observable<ListLayout[]> {
-    let listLayouts$ = this.http
-      .get(`${this.baseUrl}`, {headers: this.getHeaders()})
+    let listLayouts$ = this.httpClient
+      .get(`${this.baseUrl}`)
       .map(this.mapListLayouts).catch(handleError);
     return listLayouts$;
   }
@@ -38,16 +40,15 @@ export class ListLayoutService extends BaseHeadersService {
     });
 
     return this
-      .http
+      .httpClient
       .post(`${this.baseUrl}`,
-        JSON.stringify(newListLayout),
-        {headers: this.getHeaders()});
+        JSON.stringify(newListLayout));
 
   }
 
   getById(listLayout_id: string): Observable<ListLayout> {
-    let listLayout$ = this.http
-      .get(`${this.baseUrl}/${listLayout_id}`, {headers: this.getHeaders()})
+    let listLayout$ = this.httpClient
+      .get(`${this.baseUrl}/${listLayout_id}`)
       .map(this.mapListLayout)
       .catch(handleError);
     return listLayout$;
@@ -57,17 +58,15 @@ export class ListLayoutService extends BaseHeadersService {
   addCategoryToListLayout(listLayout_id: string, category_name: string): Observable<Response> {
     var category: ListLayoutCategory = <ListLayoutCategory>{name: category_name};
     return this
-      .http
-      .post(`${this.baseUrl}/${listLayout_id}/category`, category,
-        {headers: this.getHeaders()});
+      .httpClient
+      .post(`${this.baseUrl}/${listLayout_id}/category`, category);
   }
 
 
   deleteCategoryFromListLayout(listLayout_id: string, category_id: string): Observable<Response> {
     return this
-      .http
-      .delete(`${this.baseUrl}/${listLayout_id}/category/${category_id}`,
-        {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${this.baseUrl}/${listLayout_id}/category/${category_id}`);
   }
 
   updateCategoryInListLayout(listLayout_id: string, category_id: string, category_name: string): Observable<Response> {
@@ -78,9 +77,8 @@ export class ListLayoutService extends BaseHeadersService {
     category.tags = [];
 
     return this
-      .http
-      .put(`${this.baseUrl}/${listLayout_id}/category/${category.category_id}`, category,
-        {headers: this.getHeaders()});
+      .httpClient
+      .put(`${this.baseUrl}/${listLayout_id}/category/${category.category_id}`, category);
   }
 
 
@@ -89,10 +87,9 @@ export class ListLayoutService extends BaseHeadersService {
     var url = this.baseUrl + "/" + layout_id
       + "/category/" + category_id + "/tag?tags=" + listofids;
     return this
-      .http
+      .httpClient
       .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
 
   }
 
@@ -100,15 +97,14 @@ export class ListLayoutService extends BaseHeadersService {
     var url = this.baseUrl + "/" + layout_id
       + "/category/" + category_id + "/tag?tags=" + listofids;
     return this
-      .http
-      .delete(`${url}`,
-        {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${url}`);
   }
 
   getUncategorizedTags(id: string) {
     var url = this.baseUrl + "/" + id + "/tag";
-    let tags$ = this.http
-      .get(`${url}`, {headers: this.getHeaders()})
+    let tags$ = this.httpClient
+      .get(`${url}`)
       .map(this.mapTags).catch(handleError);
     return tags$;
   }
@@ -117,29 +113,27 @@ export class ListLayoutService extends BaseHeadersService {
   getTagsForLayoutCategory(layoutId: any, category_id: string) {
     ///{listLayoutId}/category/{layoutCategoryId}/tag
     var url = this.baseUrl + "/" + layoutId + "/category/" + category_id + "/tag";
-    let tags$ = this.http
-      .get(`${url}`, {headers: this.getHeaders()})
+    let tags$ = this.httpClient
+      .get(`${url}`)
       .map(this.mapTags).catch(handleError);
     return tags$;
   }
 
   moveCategory(layout_id: string, category: ListLayoutCategory, directionUp: boolean) {
-    var url = this.baseUrl + "/category/" + category.category_id + "?move=" + ( directionUp ? "up" : "down");
+    var url = this.baseUrl + "/category/" + category.category_id + "?move=" + (directionUp ? "up" : "down");
     return this
-      .http
+      .httpClient
       .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
   }
 
   moveCategoryToParent(layout_id: string, category: ListLayoutCategory) {
     var url = this.baseUrl
       + "/category/" + category.category_id + "/parent/0";
     return this
-      .http
+      .httpClient
       .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
 
   }
 
@@ -148,10 +142,9 @@ export class ListLayoutService extends BaseHeadersService {
       + "/category/" + categoryId
       + "/parent/" + parentId;
     return this
-      .http
+      .httpClient
       .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
   }
 
   mapListLayouts(response: Response): ListLayout[] {
@@ -183,5 +176,5 @@ function handleError(error: any) {
   console.error(errorMsg);
 
   // throw an application level error
-  return Observable.throw(errorMsg);
+  return throwError(errorMsg);
 }

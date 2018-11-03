@@ -6,7 +6,7 @@ import MappingUtils from "app/model/mapping-utils";
 import MealPlanType from "../model/meal-plan-type";
 import {BaseHeadersService, myHeaders} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
-import {Logger} from "angular2-logger/core";
+import {NGXLogger} from "ngx-logger";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {map} from "rxjs/operators";
 
@@ -18,7 +18,7 @@ export class MealPlanService extends BaseHeadersService {
 
   constructor(private httpClient: HttpClient,
               @Inject(APP_CONFIG) private config: AppConfig,
-              private _logger: Logger,
+              private _logger: NGXLogger,
               private _authenticationService: AuthenticationService) {
     super(_authenticationService);
     this.baseUrl = this.config.apiEndpoint + "mealplan";

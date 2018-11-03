@@ -1,21 +1,22 @@
 import {Inject, Injectable} from "@angular/core";
-import {Http, Response} from "@angular/http";
+import {Response} from "@angular/http";
 import {AuthenticationService} from "./authentication.service";
-import {Observable} from "rxjs/Observable";
 import MappingUtils from "../model/mapping-utils";
 import {Proposal} from "../model/proposal";
 import {BaseHeadersService} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
-import {Logger} from "angular2-logger/core";
+import {NGXLogger} from "ngx-logger";
+import {throwError} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class ProposalService extends BaseHeadersService {
 
   private baseUrl: string;
 
-  constructor(private http: Http,
+  constructor(private httpClient: HttpClient,
               @Inject(APP_CONFIG) private config: AppConfig,
-              private _logger: Logger,
+              private _logger: NGXLogger,
               private _authenticationService: AuthenticationService) {
     super(_authenticationService);
     this.baseUrl = this.config.apiEndpoint + "proposal";
@@ -23,9 +24,8 @@ export class ProposalService extends BaseHeadersService {
 
 
   getById(proposal_id: any) {
-    let proposal$ = this.http
-      .get(`${this.baseUrl}/${proposal_id}`,
-        {headers: this.getHeaders()})
+    let proposal$ = this.httpClient
+      .get(`${this.baseUrl}/${proposal_id}`)
       .map(this.mapProposal)
       .catch(handleError);
     return proposal$;
@@ -35,10 +35,9 @@ export class ProposalService extends BaseHeadersService {
     var url: string = this.baseUrl + '/target/' + target_id;
 
     return this
-      .http
+      .httpClient
       .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
   }
 
   private mapProposal(response: Response): Proposal {
@@ -62,10 +61,9 @@ export class ProposalService extends BaseHeadersService {
       + dish_id;
 
 
-    let proposal$ = this.http
+    let proposal$ = this.httpClient
       .post(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
     return proposal$;
   }
 
@@ -78,9 +76,8 @@ export class ProposalService extends BaseHeadersService {
       + dish_id;
 
 
-    let proposal$ = this.http
-      .delete(`${url}`,
-        {headers: this.getHeaders()});
+    let proposal$ = this.httpClient
+      .delete(`${url}`);
     return proposal$;
   }
 
@@ -92,10 +89,9 @@ export class ProposalService extends BaseHeadersService {
       + direction;
 
 
-    let proposal$ = this.http
+    let proposal$ = this.httpClient
       .put(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
     return proposal$;
   }
 
@@ -106,10 +102,9 @@ export class ProposalService extends BaseHeadersService {
       + slot_id;
 
 
-    let proposal$ = this.http
+    let proposal$ = this.httpClient
       .put(`${url}`,
-        null,
-        {headers: this.getHeaders()});
+        null);
     return proposal$;
   }
 }
@@ -121,6 +116,6 @@ function handleError(error: any) {
   console.error(errorMsg);
 
   // throw an application level error
-  return Observable.throw(errorMsg);
+  return throwError(errorMsg);
 }
 

@@ -24,7 +24,7 @@ import {ProposalEditComponent} from "./proposal-edit/proposal-edit.component";
 import {ProposalSlotComponentComponent} from "./proposal-slot-component/proposal-slot-component.component";
 import {RatingTagAssignToolComponent} from "./rating-tag-assign-tool/rating-tag-assign-tool.component";
 import {legacyRouting} from "./legacy.routes";
-import {HttpModule} from "@angular/http";
+
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {AutoCompleteModule} from "primeng/primeng";
@@ -41,7 +41,7 @@ import {MealPlanService} from "../services/meal-plan.service";
 import {DishService} from "../services/dish-service.service";
 import {TagsService} from "../services/tags.service";
 import {APP_CONFIG, APP_DI_CONFIG, AppConfigModule} from "app/app.config";
-import {Logger} from "angular2-logger/core";
+import {NGXLogger} from "ngx-logger";
 import {LayoutSubcategoryToolComponent} from './layout-subcategory-tool/layout-subcategory-tool.component';
 import {EditDisplayCategoryComponent} from './list-layout-list/edit-display-category/edit-display-category.component';
 
@@ -50,7 +50,6 @@ import {EditDisplayCategoryComponent} from './list-layout-list/edit-display-cate
     CommonModule,
     BrowserModule,
     FormsModule,
-    HttpModule,
     legacyRouting,
     DrilldownModule,
     Angular2FontawesomeModule,
@@ -88,7 +87,7 @@ import {EditDisplayCategoryComponent} from './list-layout-list/edit-display-cate
   providers: [{
     provide: APP_CONFIG,
     useValue: APP_DI_CONFIG
-  }, Logger, TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService,
+  }, NGXLogger, TagsService, DishService, MealPlanService, ShoppingListService, TagCommService, ListLayoutService,
     AuthenticationService, TargetService, ProposalService],
 })
 export class LegacyModule {

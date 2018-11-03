@@ -1,12 +1,12 @@
 import {Inject, Injectable} from "@angular/core";
 import {AuthenticationService} from "./authentication.service";
-import {Http, Response} from "@angular/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {Dish} from "../model/dish";
 import MappingUtils from "../model/mapping-utils";
 import {BaseHeadersService} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
-import {Logger} from "angular2-logger/core";
+import {NGXLogger} from "ngx-logger";
 import {ITag} from "../model/tag";
 
 @Injectable()
@@ -14,30 +14,30 @@ export class DishService extends BaseHeadersService {
 
   private dishUrl: string;
 
-  constructor(private http: Http,
+  constructor(private httpClient: HttpClient,
               @Inject(APP_CONFIG) private config: AppConfig,
-              private _logger: Logger,
+              private _logger: NGXLogger,
               private _authenticationService: AuthenticationService) {
     super(_authenticationService);
     this.dishUrl = this.config.apiEndpoint + "dish";
   }
 
   getAll(): Observable<Dish[]> {
-    let dishs$ = this.http
-      .get(`${this.dishUrl}`, {headers: this.getHeaders()})
-      .map(this.mapDishes);
+    let dishs$ = this.httpClient
+      .get(`${this.dishUrl}`)
+      .map(this.mapDishesClient);
     return dishs$;
   }
 
   getById(dish_id: string): Observable<Dish> {
-    let dish$ = this.http
-      .get(`${this.dishUrl}/${dish_id}`, {headers: this.getHeaders()})
-      .map(this.mapDish);
+    let dish$ = this.httpClient
+      .get(`${this.dishUrl}/${dish_id}`)
+      .map(data => this.mapDishClient(data));
     return dish$;
   }
 
 
-  addDish(newDishName: string, tags?: ITag[]): Observable<Response> {
+  addDish(newDishName: string, tags?: ITag[]): Observable<HttpResponse<Object>> {
 
     var newDish: Dish = <Dish>({
       name: newDishName,
@@ -48,46 +48,39 @@ export class DishService extends BaseHeadersService {
     }
 
     return this
-      .http
+      .httpClient
       .post(`${this.dishUrl}`,
         JSON.stringify(newDish),
-        {headers: this.getHeaders()});
+        {observe: 'response'});
 
   }
 
-  saveDish(dish: Dish): Observable<Response> {
+  saveDish(dish: Dish): Observable<Object> {
     return this
-      .http
+      .httpClient
       .put(`${this.dishUrl}/${dish.dish_id}`,
-        JSON.stringify(dish),
-        {headers: this.getHeaders()});
+        JSON.stringify(dish));
   }
 
-  mapDishes(response: Response): Dish[] {
-    // The response of the API has a results
-    // property with the actual results
-    if (response.json()._embedded && response.json()._embedded.dishResourceList) {
-      return response.json()._embedded.dishResourceList.map(MappingUtils.toDish);
-    }
-    return null;
+  private mapDishesClient(object: Object): Dish[] {
+    let embeddedObj = object["_embedded"];
+    return embeddedObj["dishResourceList"].map(MappingUtils.toDish);
   }
 
-  mapDish(response: Response): Dish {
-    return MappingUtils.toDish(response.json());
+  private mapDishClient(object: Object): Dish {
+    return MappingUtils.toDish(object);
   }
 
-  removeTagFromDish(dish_id: string, tag_id: string): Observable<Response> {
+  removeTagFromDish(dish_id: string, tag_id: string): Observable<Object> {
     return this
-      .http
-      .delete(`${this.dishUrl}/${dish_id}/tag/${tag_id}`,
-        {headers: this.getHeaders()});
+      .httpClient
+      .delete(`${this.dishUrl}/${dish_id}/tag/${tag_id}`);
   }
 
-  addTagToDish(dish_id: string, tag_id: string): Observable<Response> {
+  addTagToDish(dish_id: string, tag_id: string): Observable<Object> {
     return this
-      .http
-      .post(`${this.dishUrl}/${dish_id}/tag/${tag_id}`, null,
-        {headers: this.getHeaders()});
+      .httpClient
+      .post(`${this.dishUrl}/${dish_id}/tag/${tag_id}`, null);
   }
 
   findByTags(inclList: string[], exclList: string[]) {
@@ -110,13 +103,13 @@ export class DishService extends BaseHeadersService {
       url = url +
         (inclString.length > 0 ? "&" : "?") + "excludedTags=" + exclString;
     }
-    let dishs$ = this.http
-      .get(url, {headers: this.getHeaders()})
-      .map(this.mapDishes);
+    let dishs$ = this.httpClient
+      .get(url)
+      .map(this.mapDishesClient);
     return dishs$;
   }
 
-  addAndRemoveTags(dish: any, toAdd: string[], toRemove: string[], saveDish): Observable<Response> {
+  addAndRemoveTags(dish: any, toAdd: string[], toRemove: string[], saveDish): Observable<Object> {
     var inclString = "";
     if (toAdd) {
       inclString = toAdd.join(",");
@@ -136,8 +129,8 @@ export class DishService extends BaseHeadersService {
       url = url +
         (inclString.length > 0 ? "&" : "?") + "removeTags=" + exclString;
     }
-    let dishs$ = this.http
-      .put(url, null, {headers: this.getHeaders()});
+    let dishs$ = this.httpClient
+      .put(url, null);
     if (saveDish == true) {
       let saveDish$ = this.saveDish(dish);
       return dishs$.concat(saveDish$).combineAll();
@@ -156,6 +149,22 @@ export class DishService extends BaseHeadersService {
     }
     return dishrequest$;
   }
+
+  mapDish(response: Response): Dish {
+    // return MappingUtils.toDish(response.json());
+    return null;
+  }
+
+
+  mapDishes(response: Response): Dish[] {
+    // The response of the API has a results
+    // property with the actual results
+    //  if (response.json()._embedded && response.json()._embedded.dishResourceList) {
+    //return response.json()._embedded.dishResourceList.map(MappingUtils.toDish);
+    // }
+    return null;
+  }
+
 
 }
 

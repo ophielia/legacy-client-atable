@@ -1,5 +1,4 @@
 import {Inject, Injectable} from "@angular/core";
-import {Http, Response} from "@angular/http";
 import {ITag} from "../model/tag";
 import {AuthenticationService} from "./authentication.service";
 import {Observable} from "rxjs/Observable";
@@ -9,8 +8,10 @@ import MappingUtils from "../model/mapping-utils";
 import TType from "../model/tag-type";
 import TagSelectType from "../model/tag-select-type";
 import {APP_CONFIG, AppConfig} from "../app.config";
-import {Logger} from "angular2-logger/core";
+import {NGXLogger} from "ngx-logger";
 import {BaseHeadersService} from "./base-service";
+import {HttpClient, HttpResponse} from "@angular/common/http";
+import {throwError} from "rxjs";
 
 
 const tagType: string[] = TType.listAll();
@@ -21,9 +22,9 @@ export class TagsService extends BaseHeadersService {
   private tagUrl = 'http://localhost:8181';
   private tagInfoUrl: string;
 
-  constructor(private http: Http,
+  constructor(private httpClient: HttpClient,
               @Inject(APP_CONFIG) private config: AppConfig,
-              private _logger: Logger,
+              private _logger: NGXLogger,
               private _authenticationService: AuthenticationService) {
     super(_authenticationService);
     this.tagUrl = this.config.apiEndpoint + "tag";
@@ -32,9 +33,9 @@ export class TagsService extends BaseHeadersService {
 
 
   getAll(): Observable<ITag[]> {
-    let tags$ = this.http
-      .get(`${this.tagUrl}`, {headers: this.getHeaders()})
-      .map(this.mapTags).catch(handleError);
+    let tags$ = this.httpClient
+      .get(`${this.tagUrl}`)
+      .map(this.mapTagsClient).catch(handleError);
     return tags$;
   }
 
@@ -45,28 +46,28 @@ export class TagsService extends BaseHeadersService {
     }
     let url = this.tagUrl + "?filter="
       + searchString + "&tag_type=" + tagTypes;
-    let tags$ = this.http
-      .get(`${url}`, {headers: this.getHeaders()})
-      .map(this.mapTags).catch(handleError);
+    let tags$ = this.httpClient
+      .get(`${url}`)
+      .map(this.mapTagsClient).catch(handleError);
     return tags$;
   }
 
-  getAllSelectableFilled(tagtype: string): Observable<TagDrilldown[]> {
+  getAllSelectableFilled(tagtype: string): Observable<ITag[]> {
     var filter: string = "";
     if (tagtype) {
       filter = "?tag_type=" + tagtype + "&filter=ForSelectAssign&fill_tags=true";
     }
-    let tags$ = this.http
-      .get(`${this.tagUrl}${filter}`, {headers: this.getHeaders()})
-      .map(this.mapTags).catch(handleError);
+    let tags$ = this.httpClient
+      .get(`${this.tagUrl}${filter}`)
+      .map(this.mapTagsClient).catch(handleError);
     return tags$;
 
   }
 
   getAllParentTags(tagTypes: string): Observable<ITag[]> {
-    let tags$ = this.http
-      .get(`${this.tagUrl}?filter=ParentTags&tag_type=` + tagTypes, {headers: this.getHeaders()})
-      .map(this.mapTags).catch(handleError);
+    let tags$ = this.httpClient
+      .get(`${this.tagUrl}?filter=ParentTags&tag_type=` + tagTypes)
+      .map(this.mapTagsClient).catch(handleError);
     return tags$;
   }
 
@@ -79,57 +80,72 @@ export class TagsService extends BaseHeadersService {
     if (tagtype) {
       filter = "?tag_type=" + tagtype;
     }
-    let tags$ = this.http
-      .get(`${this.tagInfoUrl}${filter}`, {headers: this.getHeaders()})
-      .map(this.mapFilledTags).catch(handleError);  // HERE: This is new!
+    let tags$ = this.httpClient
+      .get(`${this.tagInfoUrl}${filter}`)
+      .map(this.mapFilledTagsClient).catch(handleError);  // HERE: This is new!
     return tags$;
 
   }
 
   getById(tag_id: string): Observable<ITag> {
-    let tag$ = this.http
-      .get(`${this.tagUrl}/${tag_id}`, {headers: this.getHeaders()})
-      .map(this.mapTag)
+    let tag$ = this.httpClient
+      .get(`${this.tagUrl}/${tag_id}`)
+      .map(this.mapTagClient)
       .catch(handleError);
     return tag$;
   }
 
-  addTag(newTagName: string, tagType: string): Observable<Response> {
+  addTag(newTagName: string, tagType: string): Observable<HttpResponse<Object>> {
     var newTag: ITag = <ITag>({
       name: newTagName,
       tag_type: tagType
     });
 
     return this
-      .http
+      .httpClient
       .post(`${this.tagUrl}`,
-        JSON.stringify(newTag),
-        {headers: this.getHeaders()});
+        JSON.stringify(newTag), {observe: 'response'});
 
   }
 
-  saveTag(tag: ITag): Observable<Response> {
+  saveTag(tag: ITag): Observable<HttpResponse<Object>> {
     return this
-      .http
+      .httpClient
       .put(`${this.tagUrl}/${tag.tag_id}`,
-        JSON.stringify(tag),
-        {headers: this.getHeaders()});
+        JSON.stringify(tag), {observe: 'response'});
   }
 
-  mapFilledTags(response: Response): TagDrilldown[] {
-    if (response.json()) {
-      return response.json().map(MappingUtils._toNewTagDrilldown);
+  /*
+    mapFilledTags(response: Response): TagDrilldown[] {
+      if (response.json()) {
+        return response.json().map(MappingUtils._toNewTagDrilldown);
+      }
     }
-  }
 
-  mapTags(response: Response): ITag[] {
-    if (response.json()) {
-      return response.json()._embedded.tagResourceList.map(MappingUtils.toTag);
+    mapTags(response: Response): ITag[] {
+      if (response.json()) {
+        return response.json()._embedded.tagResourceList.map(MappingUtils.toTag);
+      }
     }
+
+    mapTag(response: Response): ITag {
+      let tag = MappingUtils.toTag(response.json());
+      return tag;
+    }
+  */
+
+  mapFilledTagsClient(object: Object): TagDrilldown[] {
+    let embeddedObj = Object.keys(object);
+    return Array.from(embeddedObj, k => object[k]).map(MappingUtils._toNewTagDrilldown);
   }
 
-  mapTag(response: Response): ITag {
-    let tag = MappingUtils.toTag(response.json());
+  mapTagsClient(object: Object): ITag[] {
+    let embeddedObj = object["_embedded"];
+    return embeddedObj["tagResourceList"].map(MappingUtils.toTag);
+  }
+
+  mapTagClient(object: Object): ITag {
+    let tag = MappingUtils.toTag(object);
     return tag;
   }
 
@@ -139,7 +155,7 @@ export class TagsService extends BaseHeadersService {
     var basicUrl: string = this.tagUrl + "/" + tag_id
       + "/children?tagIds=" + tagsToAdd;
     // create list of urls - 1 per hopperTag
-    let tag$ = this.http.post(basicUrl, null, {headers: this.getHeaders()});
+    let tag$ = this.httpClient.post(basicUrl, null);
     return tag$;
   }
 
@@ -153,12 +169,12 @@ export class TagsService extends BaseHeadersService {
       // put together merge of urls
       var tagUrl = basicUrl + tagsToAdd[i].tag_id;
       if (tag$ == null) {
-        tag$ = this.http
-          .put(`${tagUrl}`, {headers: this.getHeaders()});
+        tag$ = this.httpClient
+          .put(`${tagUrl}`, null);
       }
       else {
-        tag$ = tag$.merge(this.http
-          .put(`${tagUrl}`, {headers: this.getHeaders()}));
+        tag$ = tag$.merge(this.httpClient)
+          .put(`${tagUrl}`, null);
       }
     }
     // return observable
@@ -168,9 +184,9 @@ export class TagsService extends BaseHeadersService {
 
   getDishesForRatingTags(selectedRatingId: number) {
     var url = this.tagUrl + "/" + selectedRatingId + "/children/dish";
-    let tags$ = this.http
-      .get(`${url}`, {headers: this.getHeaders()})
-      .map(this.mapTags).catch(handleError);
+    let tags$ = this.httpClient
+      .get(`${url}`)
+      .map(this.mapTagsClient).catch(handleError);
     return tags$;
   }
 
@@ -178,9 +194,8 @@ export class TagsService extends BaseHeadersService {
   replaceTagsInDishes(fromTagId: string, toTagId: string) {
     var url = this.tagUrl + "/" + fromTagId + "/dish/" + toTagId;
 
-    let tag$ = this.http
-      .put(`${url}`, null,
-        {headers: this.getHeaders()});
+    let tag$ = this.httpClient
+      .put(`${url}`, null);
 
     return tag$;
   }
@@ -196,6 +211,6 @@ function handleError(error: any) {
   console.error(errorMsg);
 
   // throw an application level error
-  return Observable.throw(errorMsg);
+  return throwError(errorMsg);
 }
 

@@ -5,7 +5,7 @@ import {ITag} from "../../model/tag";
 import {TagsService} from "../../services/tags.service";
 import TagType from "../../model/tag-type";
 import TagSelectType from "../../model/tag-select-type";
-import {Logger} from "angular2-logger/core";
+import {NGXLogger} from "ngx-logger";
 import {APP_CONFIG, AppConfig} from "../../app.config";
 
 @Component({
@@ -22,7 +22,7 @@ export class AddDishCreateComponent implements OnInit, OnDestroy {
   constructor(private dishService: DishService,
               @Inject(APP_CONFIG) private config: AppConfig,
               private tagService: TagsService,
-              private logger: Logger,
+              private logger: NGXLogger,
               private router: Router) {
   }
 

@@ -10,7 +10,7 @@ import {commonRouting} from "./common.routes";
 import {TagBrowseStyleDirective} from "./tag-browse-style.directive";
 import {TagSelectComponent} from "./tag-select/tag-select.component";
 import {AutoCompleteModule} from "primeng/primeng";
-import {HttpModule} from "@angular/http";
+
 import {FormsModule} from "@angular/forms";
 import {ModalComponent} from "./modal/modal";
 import {DishSelectComponent} from "./dish-select/dish-select.component";
@@ -23,7 +23,6 @@ import {AlertService} from "../services/alert.service";
     CommonModule,
     BrowserModule,
     FormsModule,
-    HttpModule,
     Angular2FontawesomeModule,
     AutoCompleteModule,
     commonRouting
