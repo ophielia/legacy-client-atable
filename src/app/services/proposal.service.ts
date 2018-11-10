@@ -1,13 +1,12 @@
 import {Inject, Injectable} from "@angular/core";
-import {Response} from "@angular/http";
 import {AuthenticationService} from "./authentication.service";
 import MappingUtils from "../model/mapping-utils";
 import {Proposal} from "../model/proposal";
 import {BaseHeadersService} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {NGXLogger} from "ngx-logger";
-import {throwError} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {Observable, throwError} from "rxjs";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 
 @Injectable()
 export class ProposalService extends BaseHeadersService {
@@ -31,13 +30,13 @@ export class ProposalService extends BaseHeadersService {
     return proposal$;
   }
 
-  generateProposal(target_id: string) {
+  generateProposal(target_id: string): Observable<HttpResponse<Proposal>> {
     var url: string = this.baseUrl + '/target/' + target_id;
 
     return this
       .httpClient
-      .post(`${url}`,
-        null);
+      .post<Proposal>(`${url}`,
+        null, {observe: 'response'});
   }
 
   private mapProposal(response: Response): Proposal {

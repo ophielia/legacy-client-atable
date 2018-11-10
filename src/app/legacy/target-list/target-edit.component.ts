@@ -10,6 +10,7 @@ import TagType from "../../model/tag-type";
 import {DragulaService} from "ng2-dragula";
 import TagSelectType from "../../model/tag-select-type";
 import {ProposalService} from "app/services/proposal.service";
+import {HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'at-target-edit',

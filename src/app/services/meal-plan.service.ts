@@ -8,7 +8,9 @@ import {BaseHeadersService, myHeaders} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {NGXLogger} from "ngx-logger";
 import {HttpClient, HttpResponse} from "@angular/common/http";
-import {map} from "rxjs/operators";
+import {concatMap, map, mergeMap} from "rxjs/operators";
+import {from} from "rxjs";
+
 
 
 @Injectable()
@@ -49,12 +51,22 @@ export class MealPlanService extends BaseHeadersService {
   }
 
 
-  removeDishFromMealPlan(dish_id: string, meal_plan_id: string) {
+  removeDishFromMealPlan(dish_id: string, meal_plan_id: string): Observable<any> {
     var url: string = this.baseUrl + '/' + meal_plan_id + "/dish/" + dish_id;
 
     return this
       .httpClient
       .delete(`${url}`);
+  }
+
+  removeDishesFromMealPlan(dish_ids: string[], meal_plan_id: string): Observable<any> {
+    return from(dish_ids).pipe(
+      concatMap((id, index) => {
+          return <Observable<any>>  this.removeDishFromMealPlan(dish_ids[index], meal_plan_id);
+        }
+      ));
+
+
   }
 
   addDishToMealPlan(dish_id: string, meal_plan_id: string) {
@@ -68,10 +80,6 @@ export class MealPlanService extends BaseHeadersService {
 
   addDishesToMealPlan(dish_ids: string[], meal_plan_id: string) {
     // check if this will be a new mealplan (meal_plan_id empty or null)
-    var mealPlan
-    if (meal_plan_id == null || meal_plan_id.length == 0) {
-
-    }
 
     var chain: any = this.addDishToMealPlan(dish_ids[0], meal_plan_id);
 

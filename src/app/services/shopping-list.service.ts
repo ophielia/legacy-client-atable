@@ -1,6 +1,5 @@
 import {Inject, Injectable} from "@angular/core";
 import {AuthenticationService} from "./authentication.service";
-import {Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {IShoppingList} from "../model/shoppinglist";
 import MappingUtils from "../model/mapping-utils";
@@ -78,7 +77,7 @@ export class ShoppingListService extends BaseHeadersService {
     return shoppingList$;
   }
 
-  addShoppingListNew(dishIds: string[], mealPlanId: string[],
+  addShoppingListNew(dishIds: string[], mealPlanId: string,
                      addBase: boolean, addPickup: boolean,
                      generatePlan: boolean, listType: string): Observable<HttpResponse<Object>> {
 
@@ -98,23 +97,23 @@ export class ShoppingListService extends BaseHeadersService {
     return this
       .httpClient
       .post(url,
-        JSON.stringify(properties), {observe: 'response');
+        JSON.stringify(properties), {observe: 'response'});
 
   }
 
-  generateShoppingList(meal_plan_id: string) {
+  generateShoppingList(meal_plan_id: string): Observable<HttpResponse<Object>> {
     var url: string = this.shoppingListUrl + '/mealplan/' + meal_plan_id;
     return this
       .httpClient
       .post(`${url}`,
-        null);
+        null, {observe: 'response'});
   }
 
 
   removeItemFromShoppingList(shoppingList_id: string,
                              item_id: string,
                              remove_all: boolean,
-                             dish_id: string): Observable<Response> {
+                             dish_id: string): Observable<Object> {
     var url = this.shoppingListUrl + "/" + shoppingList_id + "/item/" + item_id;
     var params: string[] = new Array();
     if (dish_id) {
@@ -135,7 +134,7 @@ export class ShoppingListService extends BaseHeadersService {
 
   toggleCrossedOffForItem(shoppingList_id: string,
                           item_id: string,
-                          crossOff: boolean): Observable<Response> {
+                          crossOff: boolean): Observable<Object> {
     var url = this.shoppingListUrl + "/" + shoppingList_id + "/item/shop/" + item_id;
     var params: string[] = new Array();
     if (crossOff) {
@@ -154,7 +153,7 @@ export class ShoppingListService extends BaseHeadersService {
         null);
   }
 
-  crossOffAllItemsFromList(shoppingList_id: string, crossOff): Observable<Response> {
+  crossOffAllItemsFromList(shoppingList_id: string, crossOff): Observable<Object> {
     var url = this.shoppingListUrl + "/" + shoppingList_id + "/item/shop";
     var params: string[] = new Array();
     if (crossOff) {
@@ -194,14 +193,14 @@ export class ShoppingListService extends BaseHeadersService {
       .delete(url);
   }
 
-  addTagItemToShoppingList(shoppingList_id: string, tag: ITag): Observable<Response> {
+  addTagItemToShoppingList(shoppingList_id: string, tag: ITag): Observable<Object> {
     var item: Item = <Item>{tag_id: tag.tag_id};
     return this
       .httpClient
       .post(`${this.shoppingListUrl}/${shoppingList_id}/item`, item);
   }
 
-  addListToShoppingList(shoppingList_id: string, list_type: string): Observable<Response> {
+  addListToShoppingList(shoppingList_id: string, list_type: string): Observable<Object> {
     var url = this.shoppingListUrl + "/" + shoppingList_id + "/listtype/" + list_type;
     return this
       .httpClient
@@ -209,11 +208,11 @@ export class ShoppingListService extends BaseHeadersService {
         null);
   }
 
-  addDishToShoppingList(shoppingList_id: string, dish_id: string): Observable<Response> {
+  addDishToShoppingList(shoppingList_id: string, dish_id: string): Observable<HttpResponse<Object>> {
     return this
       .httpClient
-      .post(`${this.shoppingListUrl}/${shoppingList_id}/dish/${dish_id}`,
-        null);
+      .post<Object>(`${this.shoppingListUrl}/${shoppingList_id}/dish/${dish_id}`,
+        null, {observe: 'response'});
   }
 
   changeListLayout(list_id: string, layoutId: string) {
@@ -232,13 +231,14 @@ export class ShoppingListService extends BaseHeadersService {
   }
 
 
-  setListActive(shoppingListId: string, replaceList: boolean) {
+  setListActive(shoppingListId: string, replaceList: boolean): Observable<HttpResponse<Object>> {
     var generateType = replaceList ? 'Replace' : 'Add';
     var url = this.shoppingListUrl + "/" + shoppingListId
       + "?generateType=" + generateType;
-    return this
+    var observable$ = this
       .httpClient
-      .put(`${url}`, null);
+      .put(`${url}`, null, {observe: 'response'});
+    return observable$;
   }
 
   mapShoppingLists(object: Object): IShoppingList[] {

@@ -5,7 +5,7 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
 import {throwError} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 
 @Injectable()
 export class AuthenticationService {
@@ -16,13 +16,21 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string): Observable<boolean> {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Expose-Headers': 'Location',
+      })
+    }
     return this.httpClient.post(this.authUrl, JSON.stringify({
       username: username,
       password: password
-    }))
-      .map((response: Response) => {
+    }), httpOptions)
+      .map((response: HttpResponse<any>) => {
         // login successful if there's a jwt token in the response
-        let token = response.json() && response.json().token;
+        let token = response["token"];
         if (token) {
           // store username and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify({username: username, token: token}));

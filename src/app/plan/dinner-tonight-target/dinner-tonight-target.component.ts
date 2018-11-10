@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Target} from "../../model/target";
 import {TargetService} from "../../services/target.service";
 import {ProposalService} from "../../services/proposal.service";
+import {HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'at-dinner-tonight-target',
@@ -68,6 +69,7 @@ export class DinnerTonightTargetComponent implements OnInit, OnDestroy {
   goToNext() {
     this.proposalService.generateProposal(this.targetId)
       .subscribe(r => {
+        //var resp : HttpResponse<any> = r;
         var headers = r.headers;
         var location = headers.get("Location");
         var splitlocation = location.split("/");

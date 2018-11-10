@@ -1,6 +1,5 @@
 import {Inject, Injectable} from "@angular/core";
 import {AuthenticationService} from "./authentication.service";
-import {Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import MappingUtils from "../model/mapping-utils";
 import {ITag} from "../model/tag";
@@ -10,7 +9,7 @@ import {BaseHeadersService} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {NGXLogger} from "ngx-logger";
 import {throwError} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 
 @Injectable()
 export class ListLayoutService extends BaseHeadersService {
@@ -32,7 +31,7 @@ export class ListLayoutService extends BaseHeadersService {
     return listLayouts$;
   }
 
-  addListLayout(listLayoutType: string): Observable<Response> {
+  addListLayout(listLayoutType: string): Observable<HttpResponse<ListLayout>> {
 
     var newListLayout: ListLayout = <ListLayout>({
       name: listLayoutType,
@@ -41,8 +40,8 @@ export class ListLayoutService extends BaseHeadersService {
 
     return this
       .httpClient
-      .post(`${this.baseUrl}`,
-        JSON.stringify(newListLayout));
+      .post<ListLayout>(`${this.baseUrl}`,
+        JSON.stringify(newListLayout), {observe: 'response'});
 
   }
 
@@ -55,7 +54,7 @@ export class ListLayoutService extends BaseHeadersService {
   }
 
 
-  addCategoryToListLayout(listLayout_id: string, category_name: string): Observable<Response> {
+  addCategoryToListLayout(listLayout_id: string, category_name: string): Observable<Object> {
     var category: ListLayoutCategory = <ListLayoutCategory>{name: category_name};
     return this
       .httpClient
@@ -63,13 +62,13 @@ export class ListLayoutService extends BaseHeadersService {
   }
 
 
-  deleteCategoryFromListLayout(listLayout_id: string, category_id: string): Observable<Response> {
+  deleteCategoryFromListLayout(listLayout_id: string, category_id: string): Observable<Object> {
     return this
       .httpClient
       .delete(`${this.baseUrl}/${listLayout_id}/category/${category_id}`);
   }
 
-  updateCategoryInListLayout(listLayout_id: string, category_id: string, category_name: string): Observable<Response> {
+  updateCategoryInListLayout(listLayout_id: string, category_id: string, category_name: string): Observable<Object> {
     var category: ListLayoutCategory = new ListLayoutCategory();
     category.name = category_name;
     category.category_id = category_id;
@@ -147,23 +146,28 @@ export class ListLayoutService extends BaseHeadersService {
         null);
   }
 
-  mapListLayouts(response: Response): ListLayout[] {
-    return response.json()._embedded.listLayoutResourceList.map(MappingUtils.toListLayout);
+  mapListLayouts(object: Object): ListLayout[] {
+    let embeddedObj = object["_embedded"];
+    if (embeddedObj) {
+      return embeddedObj["listLayoutResourceList"].map(MappingUtils.toListLayout);
+    }
+    return null;
+    //   return response.map(MappingUtils.toListLayout);
   }
 
-  mapListLayout(response: Response): ListLayout {
-    if (response.status == 200) {
-      var beep = MappingUtils.toListLayout(response.json());
+
+  mapListLayout(object: Object): ListLayout {
+    if (object) {
+      var beep = MappingUtils.toListLayout(object);
       return beep;
     }
     return null;
 
   }
 
-  mapTags(response: Response): ITag[] {
-    if (response.json()) {
-      return response.json()._embedded.tagResourceList.map(MappingUtils.toTag);
-    }
+  mapTags(object: Object): ITag[] {
+    let embeddedObj = object["_embedded"];
+    return embeddedObj["tagResourceList"].map(MappingUtils.toTag);
   }
 
 

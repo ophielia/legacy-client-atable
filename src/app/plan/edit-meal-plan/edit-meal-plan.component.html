@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="mealPlan" class="container">
   <div class="row page-title plan-text-color">Edit Meal Plan</div>
   <div class="row">
     <div class="col-9" style="padding-left:0px;">
@@ -68,7 +68,7 @@
         <div class="col">
           <div *ngFor="let seldish of selectedDishes"
                (dblclick)="unselectDish(seldish)">
-            {{seltag.name}}
+            {{seldish.name}}
           </div>
           <div class="standard-button-sm main-button-color"
                (click)="removeDishFromMealPlan()">Remove from Meal Plan

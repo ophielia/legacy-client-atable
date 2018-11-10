@@ -11,7 +11,7 @@ import {NGXLogger} from "ngx-logger";
 import {ITag} from "../model/tag";
 import TargetType from "../model/target-type";
 import {throwError} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 
 @Injectable()
 export class TargetService extends BaseHeadersService {
@@ -71,7 +71,7 @@ export class TargetService extends BaseHeadersService {
       .delete(`${url}`);
   }
 
-  addTarget(targetName: string) {
+  addTarget(targetName: string): Observable<any> {
     var newTarget: Target = <Target>({
       target_name: targetName
     });
@@ -84,7 +84,7 @@ export class TargetService extends BaseHeadersService {
         JSON.stringify(newTarget));
   }
 
-  createPickupTarget(targetName: string, tags: ITag[]) {
+  createPickupTarget(targetName: string, tags: ITag[]): Observable<HttpResponse<any>> {
     var newTarget: Target = <Target>({
       target_name: targetName,
       target_type: TargetType.PickUp
@@ -102,7 +102,7 @@ export class TargetService extends BaseHeadersService {
     return this
       .httpClient
       .post(`${url}`,
-        JSON.stringify(newTarget));
+        JSON.stringify(newTarget), {observe: 'response'});
   }
 
   deleteTarget(targetId: string) {
