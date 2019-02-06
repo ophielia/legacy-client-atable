@@ -200,6 +200,14 @@ export class TagsService extends BaseHeadersService {
     return tag$;
   }
 
+  replaceTagGlobally(tagToDelete: ITag, tagForReplace: ITag) {
+    var url = this.tagUrl + "/delete/" + tagToDelete.tag_id + "?replacementTagId=" + tagForReplace.tag_id;
+
+    let tag$ = this.httpClient
+      .delete(`${url}`);
+
+    return tag$;
+  }
 }
 
 

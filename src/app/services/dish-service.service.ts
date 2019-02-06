@@ -2,6 +2,7 @@ import {Inject, Injectable} from "@angular/core";
 import {AuthenticationService} from "./authentication.service";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
+import {merge} from 'rxjs';
 import {Dish} from "../model/dish";
 import MappingUtils from "../model/mapping-utils";
 import {BaseHeadersService} from "./base-service";
@@ -25,14 +26,14 @@ export class DishService extends BaseHeadersService {
   getAll(): Observable<Dish[]> {
     let dishs$ = this.httpClient
       .get(`${this.dishUrl}`)
-      .map(this.mapDishesClient);
+      .map(this.mapDishes);
     return dishs$;
   }
 
   getById(dish_id: string): Observable<Dish> {
     let dish$ = this.httpClient
       .get(`${this.dishUrl}/${dish_id}`)
-      .map(data => this.mapDishClient(data));
+      .map(data => this.mapDish(data));
     return dish$;
   }
 
@@ -62,14 +63,6 @@ export class DishService extends BaseHeadersService {
         JSON.stringify(dish));
   }
 
-  private mapDishesClient(object: Object): Dish[] {
-    let embeddedObj = object["_embedded"];
-    return embeddedObj["dishResourceList"].map(MappingUtils.toDish);
-  }
-
-  private mapDishClient(object: Object): Dish {
-    return MappingUtils.toDish(object);
-  }
 
   removeTagFromDish(dish_id: string, tag_id: string): Observable<Object> {
     return this
@@ -105,7 +98,7 @@ export class DishService extends BaseHeadersService {
     }
     let dishs$ = this.httpClient
       .get(url)
-      .map(this.mapDishesClient);
+      .map(this.mapDishes);
     return dishs$;
   }
 
@@ -133,7 +126,7 @@ export class DishService extends BaseHeadersService {
       .put(url, null);
     if (saveDish == true) {
       let saveDish$ = this.saveDish(dish);
-      return dishs$.concat(saveDish$).combineAll();
+      return merge(dishs$, saveDish$);
     }
     return dishs$;
   }
@@ -142,27 +135,25 @@ export class DishService extends BaseHeadersService {
     if (!dishList || dishList.length == 0) {
       return;
     }
+
     var dishrequest$ = this.addTagToDish(dishList[0].dish_id, tag_id);
     for (var i = 1; i < dishList.length; i++) {
       let nextDish$ = this.addTagToDish(dishList[i].dish_id, tag_id);
-      dishrequest$ = dishrequest$.merge(nextDish$);
+      dishrequest$ = merge(dishrequest$, nextDish$);
     }
     return dishrequest$;
   }
 
-  mapDish(response: Response): Dish {
-    // return MappingUtils.toDish(response.json());
-    return null;
+  private mapDishes(object: Object): Dish[] {
+    let embeddedObj = object["_embedded"];
+    if (embeddedObj) {
+      return embeddedObj["dishResourceList"].map(MappingUtils.toDish);
+    } else
+      return [];
   }
 
-
-  mapDishes(response: Response): Dish[] {
-    // The response of the API has a results
-    // property with the actual results
-    //  if (response.json()._embedded && response.json()._embedded.dishResourceList) {
-    //return response.json()._embedded.dishResourceList.map(MappingUtils.toDish);
-    // }
-    return null;
+  private mapDish(object: Object): Dish {
+    return MappingUtils.toDish(object);
   }
 
 

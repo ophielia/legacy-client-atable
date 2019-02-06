@@ -44,6 +44,8 @@ import {APP_CONFIG, APP_DI_CONFIG, AppConfigModule} from "app/app.config";
 import {NGXLogger} from "ngx-logger";
 import {LayoutSubcategoryToolComponent} from './layout-subcategory-tool/layout-subcategory-tool.component';
 import {EditDisplayCategoryComponent} from './list-layout-list/edit-display-category/edit-display-category.component';
+import {DeleteTagComponent} from "./delete-tag/delete-tag.component";
+import {AppCommonModule} from "../app-common/app-common.module";
 
 @NgModule({
   imports: [
@@ -55,7 +57,8 @@ import {EditDisplayCategoryComponent} from './list-layout-list/edit-display-cate
     Angular2FontawesomeModule,
     DragulaModule,
     AutoCompleteModule,
-    AppConfigModule
+    AppConfigModule,
+    AppCommonModule
   ],
   declarations: [
     TagListComponent,
@@ -82,6 +85,7 @@ import {EditDisplayCategoryComponent} from './list-layout-list/edit-display-cate
     ProposalSlotComponentComponent,
     RatingTagAssignToolComponent,
     LayoutSubcategoryToolComponent,
+    DeleteTagComponent,
     EditDisplayCategoryComponent
   ],
   providers: [{

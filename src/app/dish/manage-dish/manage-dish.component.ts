@@ -14,6 +14,7 @@ import {Subscription} from "rxjs/Subscription";
 import {IListGenerateProperties} from "../../model/listgenerateproperties";
 import ListType from "../../model/list-type";
 import {ShoppingListService} from "../../services/shopping-list.service";
+import {DishFilterSelectCommService} from "../../app-common/dish-filter-select/dish-filter-select-comm.service";
 
 
 @Component({
@@ -53,6 +54,7 @@ export class ManageDishComponent implements OnInit {
 
   constructor(private dishService: DishService,
               private tagCommService: TagCommService,
+              private dishFilterCommService: DishFilterSelectCommService,
               private mealPlanService: MealPlanService,
               private tagService: TagsService,
               private shoppingListService: ShoppingListService,
@@ -157,6 +159,7 @@ export class ManageDishComponent implements OnInit {
 
   selectDish(dish: Dish) {
     this.selectedDishes.push(dish);
+    this.dishFilterCommService.dishSelected();
   }
 
   unSelectDish(dish: Dish) {

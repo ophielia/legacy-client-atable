@@ -17,6 +17,7 @@ import {DishSelectComponent} from "./dish-select/dish-select.component";
 import {GenerateListComponent} from "./generate-list/generate-list.component";
 import {DishFilterSelectComponent} from "./dish-filter-select/dish-filter-select.component";
 import {AlertService} from "../services/alert.service";
+import {DishFilterSelectCommService} from "./dish-filter-select/dish-filter-select-comm.service";
 
 @NgModule({
   imports: [
@@ -27,7 +28,7 @@ import {AlertService} from "../services/alert.service";
     AutoCompleteModule,
     commonRouting
   ],
-  providers: [TagsService, TagCommService, AlertService],
+  providers: [TagsService, TagCommService, DishFilterSelectCommService, AlertService],
   declarations: [TagBrowseComponent, TagBrowseNodeComponent,
     GenerateListComponent, TagBrowseStyleDirective, ModalComponent,
     TagSelectComponent, DishSelectComponent, DishFilterSelectComponent],

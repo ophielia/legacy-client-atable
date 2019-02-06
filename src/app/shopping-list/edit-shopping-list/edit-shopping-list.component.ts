@@ -105,7 +105,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     }
 
     var $sub = this.shoppingListService
-      .getByType(ListType.ActiveList)
+      .getById(id)
       .subscribe(t => {
         if (t) {
           this.activeListExists = true;

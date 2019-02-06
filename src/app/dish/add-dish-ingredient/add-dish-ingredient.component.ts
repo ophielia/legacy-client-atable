@@ -101,7 +101,7 @@ export class AddDishIngredientComponent implements OnInit {
     }
     let toRemove: string[] = this.originalTags.map(t => t.tag_id);
     this.dishService.addAndRemoveTags(this.dish, toAdd, toRemove, true).subscribe(
-      (val) => console.log(val), t => this.router.navigate([navpage, this.dishId])
+      t => this.router.navigate([navpage, this.dishId])
     );
   }
 

@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="row page-title plan-text-color">Delete Tag Tool</div>
+  <div class="row">
+    <div class="col-9">
+      <div class="row menubar dish-menubar-text-color menu-color justify-content-between">
+        <div style="float:left">
+          <div class="input-group searchbox-group" style="width:555px;">
+            <ng-container *ngIf="!hasDeleteTag()">
+              <span>Select Tag To Delete</span>
+              <at-tag-select
+                [tagTypes]="'Ingredient,Rating,DishType,TagType,NonEdible'"
+                [selectType]="'Assign'"
+                [showText]="'replace tag'"
+                [tagList]="alltagsSearch"
+                [allowAdd]="true"
+                [showCancelButton]="true"
+                [passedInputStyle]="'menubar-input'"
+                (tagSelected)="selectTag($event)"
+                (cancelAddTag)="toggleTagEntry(true)"></at-tag-select>
+            </ng-container>
+            <ng-container *ngIf="hasDeleteTag() && !hasReplaceTag()">
+              <span>Select Tag For Replace</span>
+              <at-tag-select
+                [tagTypes]="'Ingredient,Rating,DishType,TagType,NonEdibles'"
+                [selectType]="'Assign'"
+                [showText]="'replace tag'"
+                [tagList]="alltagsSearch"
+                [allowAdd]="true"
+                [showCancelButton]="true"
+                [passedInputStyle]="'menubar-input'"
+                (tagSelected)="selectTag($event)"
+                (cancelAddTag)="toggleTagEntry(true)"></at-tag-select>
+            </ng-container>
+            <ng-container *ngIf="hasDeleteTag() && hasReplaceTag()">
+              <span>Replace Tag {{tagToDelete.name}} with Tag {{tagForReplace.name}}??</span>
+              <button class="dish-tag-element main-color" (click)="replaceTag()">Yes, do it.</button>
+            </ng-container>
+
+            <!--  <at-tag-select aria-describedby="filter-query"
+                           [selectType]="'Assign'"
+                           [tagTypes]=[tagTypes]="'Ingredient,Rating,DishType,TagType'"
+                           [showText]="'Select a tag to replace'"
+                           [allowAdd]="false"
+                           [tagList]="alltagsSearch"
+                          [passedInputStyle]="'menubar-input'"
+                           (tagSelected)="selectTag($event)"></at-tag-select>-->
+          </div>
+
+        </div>
+        <div>
+        </div>
+      </div>
+      <div>{{message}}</div>
+    </div>
+
+  </div>
+</div>
+

@@ -7,11 +7,11 @@ import TagSelectType from "../../model/tag-select-type";
 import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.service";
 import {MealPlanService} from "../../services/meal-plan.service";
 import {TagsService} from "app/services/tags.service";
-import {ShoppingListService} from "../../services/shopping-list.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {TagDrilldown} from "../../model/tag-drilldown";
 import {MealPlan} from "../../model/mealplan";
 import TagType from "../../model/tag-type";
+import {DishFilterSelectCommService} from "./dish-filter-select-comm.service";
 
 @Component({
   selector: 'at-dish-filter-select',
@@ -53,6 +53,7 @@ export class DishFilterSelectComponent implements OnInit {
   constructor(private dishService: DishService,
               private tagCommService: TagCommService,
               private mealPlanService: MealPlanService,
+              private dishFilterCommService: DishFilterSelectCommService,
               private tagService: TagsService,
               private router: Router,) {
     this.tagCommService = tagCommService;
@@ -78,6 +79,11 @@ export class DishFilterSelectComponent implements OnInit {
       .subscribe(selectevent => {
         this.addTagToFilter(selectevent);
       })
+    this.dishFilterCommService.dishSelectedObs$.subscribe(
+      t => {
+        this.clearSearchValue();
+      }
+    )
     this.getAllTags();
   }
 
