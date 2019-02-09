@@ -48,6 +48,11 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
 
   }
 
+  goToPickupList(list_id) {
+    this.router.navigate(["list/pickupedit/", list_id]);
+
+  }
+
   goToShopList(list_id) {
     this.router.navigate(["list/shop/", list_id]);
 
@@ -58,6 +63,8 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
     if (list.list_id != null) {
       if (list.list_type == ListType.ActiveList) {
         this.goToShopList(list.list_id);
+      } else if (list.list_type == ListType.PickUpList) {
+        this.goToPickupList(list.list_id);
       } else {
         this.goToEditList(list.list_id);
       }
@@ -76,6 +83,7 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
 
     }
   }
+
 
   sortOutShoppingLists(lists: IShoppingList[]) {
     this.pickupList = null;

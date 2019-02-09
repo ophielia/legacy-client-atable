@@ -18,6 +18,7 @@ import {CrossOffItemComponent} from "./cross-off-item/cross-off-item.component";
 import {ColorTagsComponent} from "./color-tags/color-tags.component";
 import {WordTagsComponent} from "./word-tags/word-tags.component";
 import {QuickPickUpListComponent} from './quick-pick-up-list/quick-pick-up-list.component';
+import {EditPickupListComponent} from './edit-pickup-list/edit-pickup-list.component';
 
 
 @NgModule({
@@ -35,7 +36,7 @@ import {QuickPickUpListComponent} from './quick-pick-up-list/quick-pick-up-list.
   providers: [ShoppingListService, TagCommService, SourceLegendService],
   declarations: [ManageShoppingListComponent, EditShoppingListComponent,
     ShoppingListItemsComponent, SingleListComponentComponent, ShoppingListComponent, CrossOffItemComponent,
-    ColorTagsComponent, WordTagsComponent, QuickPickUpListComponent]
+    ColorTagsComponent, WordTagsComponent, QuickPickUpListComponent, EditPickupListComponent]
 })
 export class ShoppingListModule {
 }
