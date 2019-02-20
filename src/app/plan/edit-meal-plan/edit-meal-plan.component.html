@@ -55,6 +55,9 @@
           <div class="row justify-content-end text-menu-link" (click)="goToFillInMealPlan(mealPlan.meal_plan_id)">Fill
             In Meal Plan
           </div>
+          <div class="row justify-content-end text-menu-link" (click)="goToRateMealPlan(mealPlan.meal_plan_id)">Rate
+            Meal Plan
+          </div>
           <div class="row justify-content-end text-menu-link" (click)="toggleGenerateList()">Generate List</div>
           <div *ngIf="isShowGenerateList" class="row justify-content-end text-menu-link">
             <at-generate-list [showMealPlanOption]="false"

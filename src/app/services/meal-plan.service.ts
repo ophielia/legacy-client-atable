@@ -10,6 +10,7 @@ import {NGXLogger} from "ngx-logger";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {concatMap, map, mergeMap} from "rxjs/operators";
 import {from} from "rxjs";
+import {RatingUpdateInfo} from "../model/rating-update-info";
 
 
 
@@ -141,6 +142,18 @@ export class MealPlanService extends BaseHeadersService {
         null);
     return mealplan$;
   }
+
+  getRatingInfoForMealPlan(meal_plan_id: string): Observable<RatingUpdateInfo> {
+    let dish$ = this.httpClient
+      .get(`${this.baseUrl}/${meal_plan_id}/ratings`)
+      .map(data => this.mapRatingUpdateInfo(data));
+    return dish$;
+  }
+
+  private mapRatingUpdateInfo(object: Object): RatingUpdateInfo {
+    return MappingUtils.toRatingUpdateInfo(object);
+  }
+
 }
 
 

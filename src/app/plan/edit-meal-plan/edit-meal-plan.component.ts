@@ -140,6 +140,9 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
     this.router.navigate(['plan/add', meal_plan_id]);
   }
 
+  goToRateMealPlan(meal_plan_id: string) {
+    this.router.navigate(['plan/rate', meal_plan_id]);
+  }
   goToFillInMealPlan(meal_plan_id: string) {
     this.router.navigate(['plan/fillin', meal_plan_id]);
   }

@@ -35,24 +35,14 @@ export class AddDishCreateComponent implements OnInit, OnDestroy {
     // fill dish type list
     this.tagService.getAllSelectable(TagType.DishType, TagSelectType.Assign)
       .subscribe(t => this.dishTypes = t);
-    // fill the default rating tags
-    this.tagService.getAllSelectable(TagType.Rating, TagSelectType.Assign)
-      .subscribe(t => this.fillDefaultRatingTags(t));
 
   }
 
-  private fillDefaultRatingTags(tagList: ITag[]) {
-    if (tagList) {
-      this.defaultRatingTags = tagList.filter(t => t.power == 3);
-    }
-  }
 
   createDish(dishTypeTag: ITag) {
     this.logger.debug("Creating new dish [" + this.dishName + "] with tag [" + dishTypeTag + "]");
     // put tags in dish
     let tags: ITag[] = [];
-    tags.push(dishTypeTag);
-    this.defaultRatingTags.forEach(t => tags.push(t));
 
     this.dishService.addDish(this.dishName, tags)
       .subscribe(r => {

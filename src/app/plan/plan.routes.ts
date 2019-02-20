@@ -8,12 +8,14 @@ import {FillInMealPlanComponent} from "./fill-in-meal-plan/fill-in-meal-plan.com
 import {DinnerTonightOnHandComponent} from "./dinner-tonight-on-hand/dinner-tonight-on-hand.component";
 import {DinnerTonightTargetComponent} from "./dinner-tonight-target/dinner-tonight-target.component";
 import {DinnerTonightResultComponent} from "./dinner-tonight-result/dinner-tonight-result.component";
+import {RateMealPlanComponent} from "./rate-meal-plan/rate-meal-plan.component";
 
 const planRoutes: Routes = [
   {path: 'home', component: LandingPadComponent},
   {path: 'plan/edit/:id', component: EditMealPlanComponent},
   {path: 'plan/add/:id', component: AddToMealPlanComponent},
   {path: 'plan/fillin/:id', component: FillInMealPlanComponent},
+  {path: 'plan/rate/:id', component: RateMealPlanComponent},
   {path: 'plan/manage', component: ManagePlansComponent},
   {path: 'plan/dinnertonight/one', component: DinnerTonightOnHandComponent},
   {path: 'plan/dinnertonight/two/:id', component: DinnerTonightTargetComponent},

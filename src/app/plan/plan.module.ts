@@ -13,6 +13,7 @@ import {FillInMealPlanComponent} from './fill-in-meal-plan/fill-in-meal-plan.com
 import {DinnerTonightOnHandComponent} from './dinner-tonight-on-hand/dinner-tonight-on-hand.component';
 import {DinnerTonightTargetComponent} from './dinner-tonight-target/dinner-tonight-target.component';
 import {DinnerTonightResultComponent} from './dinner-tonight-result/dinner-tonight-result.component';
+import {RateMealPlanComponent} from './rate-meal-plan/rate-meal-plan.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import {DinnerTonightResultComponent} from './dinner-tonight-result/dinner-tonig
     Angular2FontawesomeModule,
     AppCommonModule
   ],
-  declarations: [EditMealPlanComponent, ManagePlansComponent, SinglePlanComponent, AddToMealPlanComponent, FillInMealPlanComponent, DinnerTonightOnHandComponent, DinnerTonightTargetComponent, DinnerTonightResultComponent]
+  declarations: [EditMealPlanComponent, ManagePlansComponent, SinglePlanComponent, AddToMealPlanComponent, FillInMealPlanComponent, DinnerTonightOnHandComponent, DinnerTonightTargetComponent, DinnerTonightResultComponent, RateMealPlanComponent]
 })
 export class PlanModule {
 }
