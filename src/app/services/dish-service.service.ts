@@ -9,6 +9,8 @@ import {BaseHeadersService} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {NGXLogger} from "ngx-logger";
 import {ITag} from "../model/tag";
+import {RatingUpdateInfo} from "../model/rating-update-info";
+import {RatingInfo} from "../model/rating-info";
 
 @Injectable()
 export class DishService extends BaseHeadersService {
@@ -37,6 +39,12 @@ export class DishService extends BaseHeadersService {
     return dish$;
   }
 
+  getRatingInfoForDish(dish_id: string): Observable<RatingUpdateInfo> {
+    let dish$ = this.httpClient
+      .get(`${this.dishUrl}/${dish_id}/ratings`)
+      .map(data => this.mapRatingUpdateInfo(data));
+    return dish$;
+  }
 
   addDish(newDishName: string, tags?: ITag[]): Observable<HttpResponse<Object>> {
 
@@ -144,6 +152,14 @@ export class DishService extends BaseHeadersService {
     return dishrequest$;
   }
 
+  incrementDishRating(dish_id: string, rating_tag_id: number, direction: string) {
+    var url = this.dishUrl;
+    url = url + "/" + dish_id + "/rating/" + rating_tag_id + "?direction=" + direction;
+    return this
+      .httpClient
+      .post(url, null);
+  }
+
   private mapDishes(object: Object): Dish[] {
     let embeddedObj = object["_embedded"];
     if (embeddedObj) {
@@ -154,6 +170,10 @@ export class DishService extends BaseHeadersService {
 
   private mapDish(object: Object): Dish {
     return MappingUtils.toDish(object);
+  }
+
+  private mapRatingUpdateInfo(object: Object): RatingUpdateInfo {
+    return MappingUtils.toRatingUpdateInfo(object);
   }
 
 

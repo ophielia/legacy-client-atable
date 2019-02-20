@@ -7,14 +7,14 @@
           <fa [name]="'chevron-right'"></fa>
         </div>
       </div>
-      <ng-container *ngIf="ratingDictionary">
-        <div class="row" *ngFor="let tag of ratingTags" style="margin-left:0px;">
+      <ng-container *ngIf="ratings">
+        <div class="row" *ngFor="let ratingInfo of ratings" style="margin-left:0px;">
 
-          <div class="dish-tag-xl dish-tag-element rating-1 "> {{tag.name}}</div>
-          <div class="add-button-lg dish-color " (click)="incrementDown(tag)">
+          <div class="dish-tag-xl dish-tag-element rating-1 "> {{ratingInfo.label}} {{ratingInfo.power}}</div>
+          <div class="add-button-lg dish-color " (click)="incrementDown(ratingInfo)">
             <fa [name]="'minus'"></fa>
           </div>
-          <div class=" add-button-lg dish-color" (click)="incrementUp(tag)">
+          <div class=" add-button-lg dish-color" (click)="incrementUp(ratingInfo)">
             <fa [name]="'plus'"></fa>
           </div>
 

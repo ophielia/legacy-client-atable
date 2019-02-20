@@ -14,12 +14,42 @@ import {Proposal} from "./proposal";
 import {ProposalSlot} from "./proposal-slot";
 import {ProposalDish} from "./proposal-dish";
 import {ItemSource} from "app/model/item-source";
+import {RatingUpdateInfo} from "./rating-update-info";
+import {IRatingInfo, RatingInfo} from "./rating-info";
+import {DishRatingInfo, IDishRatingInfo} from "./dish-rating-info";
+
 export default class MappingUtils {
 
   static showConsoleLogs: boolean = false;
 
   static toTag(r: any): ITag {
     return MappingUtils._toTag(r.tag);
+  }
+
+  static _toRatingInfo(r: any): IRatingInfo {
+    let ratingInfo = <RatingInfo>({
+      rating_tag_id: r.rating_tag_id,
+      label: r.label,
+      power: r.power,
+      max_power: r.max_power
+    });
+
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed rating info:', ratingInfo);
+    }
+    return ratingInfo;
+  }
+
+  static _toDishRatingInfo(r: any): IDishRatingInfo {
+    let dishRatingInfo = <DishRatingInfo>({
+      dish_id: r.dish_id,
+      dish_name: r.dish_name,
+      ratings: r.ratings.map(MappingUtils._toRatingInfo)
+    });
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed dish rating info:', dishRatingInfo);
+    }
+    return dishRatingInfo;
   }
 
   static _toTag(r: any): ITag {
@@ -53,6 +83,15 @@ export default class MappingUtils {
       })
     ;
     return dish;
+  }
+
+  private static _toRatingUpdateInfo(r: any): RatingUpdateInfo {
+    let ratingUpdateInfo = <RatingUpdateInfo>({
+        headers: r.headers.map(MappingUtils._toRatingInfo),
+        dish_ratings: r.dish_ratings.map(MappingUtils._toDishRatingInfo)
+      })
+    ;
+    return ratingUpdateInfo;
   }
 
   private static _toTargetSlot(r: any): TargetSlot {
@@ -179,6 +218,16 @@ export default class MappingUtils {
     }
 
     return dish;
+  }
+
+  static toRatingUpdateInfo(r: any): RatingUpdateInfo {
+    let ratingInfo = MappingUtils._toRatingUpdateInfo(r.ratingUpdateInfo);
+
+    if (MappingUtils.showConsoleLogs) {
+      console.log('Parsed rating info:', ratingInfo);
+    }
+
+    return ratingInfo;
   }
 
   static toMealPlan(r: any): MealPlan {
