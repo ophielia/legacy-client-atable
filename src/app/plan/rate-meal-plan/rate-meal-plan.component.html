@@ -1,0 +1,53 @@
+<div *ngIf="loaded" class="container">
+  <div class="row page-title plan-text-color">Rate Meal Plan - {{mealPlan.name}}</div>
+  <div class="row">
+    <div class="col-12" style="padding-left:0px;">
+      <div class="panel panel-default">
+        <table class="table">
+          <thead class="thead-light ">
+          <tr>
+            <th scope="col"><span class=" add-button-md plan-text-color" (click)="goToEditMealPlan()"><fa
+              [name]="'arrow-left'"></fa></span></th>
+            <th scope="col"><span class=" add-button-md plan-color" (click)="shiftRatingsLeft()">
+              <fa [name]="'chevron-left'"></fa></span>
+            </th>
+            <th scope="col" *ngFor="let index of indices">
+              <span class="dish-tag-element-table-header text-center plan-color">
+                {{headers[index].label}}</span>
+            </th>
+            <th scope="col">
+             <span class=" add-button-md plan-color" (click)="shiftRatingsRight()">
+               <fa [name]="'chevron-right'"></fa>
+             </span>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let dishRating of dishRatingInfo">
+            <td scope="row">
+              <div class="dish-tag-element dish-tag-element-spaced plan-outline-color">{{dishRating.dish_name}}</div>
+            </td>
+            <td></td>
+
+            <td *ngFor="let index of indices" class="text-center add-cell">
+              <span class=" add-button-md plan-color"
+                    (click)="incrementRatingDown(dishRating.dish_id, dishRating.ratings[index])"><fa
+                [name]="'minus'"></fa></span>
+              {{dishRating.ratings[index].power}}
+              <span class=" add-button-md plan-color"
+                    (click)="incrementRatingUp(dishRating.dish_id, dishRating.ratings[index])"><fa [name]="'plus'"></fa></span>
+            </td>
+
+
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- <div class="row menubar dish-menubar-text-color menu-color menubar-header"> <div class="col-4">1</div> <div class="col-2">1</div> <div class="col-2">1</div> <div class="col-2">1</div> <div class="col-2">1</div> -->
+      <!--<div class="col-12  text-center plan-text-color" style="padding-left:0px;"> <span class=" add-button-md plan-color" (click)="goToPreviousRating()" > <fa [name]="'chevron-left'"></fa> </span> <div class="dish-tag-xl dish-tag-element plan-color"> {{headers[currentIndex].label}}</div> <span class=" add-button-md plan-color" (click)="goToNextRating()"> <fa [name]="'chevron-right'"></fa> </span> </div>-->
+    </div>
+    <!-- <div class="row" style="margin-left:15px"> <div class="col-4">1</div> <div class="col-2">1</div> <div class="col-2">1</div> <div class="col-2">1</div> <div class="col-2">1</div> -->
+    <!--<div class="col-12  text-center plan-text-color" style="padding-left:0px;"> <div *ngFor="let dishRating of dishRatingInfo" class="row text-capitalize"> <div class="plan-outline-color plan-text-color  "> {{dishRating.dish_name}}</div> <div class="add-button-lg dish-color "> <fa [name]="'minus'"></fa> </div> <div class=" plan-text-color "> {{dishRating.ratings[currentIndex].power}} </div> <div class=" add-button-lg dish-color" > <fa [name]="'plus'"></fa> </div> </div> </div>-->
+  </div>
+</div><!--<div class="col-3"> <div class="row menubar-flush-top dish-menubar-text-color menu-color justify-content-end"> <div class="">                <span (click)="goToPlanList()" class="fa-list fa standalone-button"></span></div> </div> <div class="row menubar-flush-middle dish-menubar-text-color dish-menu-dropdown-color justify-content-end"> <div class="col"> <div class="row justify-content-end text-menu-link" (click)="goToAddToMealPlan(mealPlan.meal_plan_id)">Add to Meal Plan </div> <div class="row justify-content-end text-menu-link" (click)="goToFillInMealPlan(mealPlan.meal_plan_id)">Fill In Meal Plan </div> <div class="row justify-content-end text-menu-link" (click)="toggleGenerateList()">Generate List</div> <div *ngIf="isShowGenerateList" class="row justify-content-end text-menu-link"> <at-generate-list [showMealPlanOption]="false" (generateProperties)="generateListFromMealPlan($event)"></at-generate-list> </div> </div> </div> </div>-->
