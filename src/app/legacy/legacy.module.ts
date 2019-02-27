@@ -1,6 +1,5 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {TagListComponent} from "./tag-list/tag-list.component";
 import {AddTagComponent} from "./tag-list/add-tag.component";
 import {EditTagComponent} from "./tag-list/edit-tag.component";
 import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
@@ -60,7 +59,6 @@ import {AppCommonModule} from "../app-common/app-common.module";
     AppCommonModule
   ],
   declarations: [
-    TagListComponent,
     AddTagComponent,
     EditTagComponent,
     DishTagSelectComponent,

@@ -1,5 +1,4 @@
 import {RouterModule, Routes} from "@angular/router";
-import {TagListComponent} from "./legacy/tag-list/tag-list.component";
 import {AddTagComponent} from "./legacy/tag-list/add-tag.component";
 import {LoginComponent} from "./legacy/login/login.component";
 import {EditDishComponent} from "./legacy/dish-list/edit-dish.component";
@@ -15,7 +14,6 @@ import {LandingPadComponent} from "app/dashboard/landing-pad/landing-pad.compone
 const routes: Routes = [
   {path: 'home', component: LandingPadComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'list', component: TagListComponent},
   {path: 'add', component: AddTagComponent},
   {path: 'dish/edit/:id', component: EditDishComponent},
   {path: 'shoppinglist/list', component: ShoppingListListComponent},

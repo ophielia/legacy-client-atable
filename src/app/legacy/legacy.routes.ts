@@ -1,5 +1,4 @@
 import {RouterModule, Routes} from "@angular/router";
-import {TagListComponent} from "./tag-list/tag-list.component";
 import {AddTagComponent} from "./tag-list/add-tag.component";
 import {EditTagComponent} from "./tag-list/edit-tag.component";
 import {HomeComponent} from "./home.component";
@@ -24,7 +23,6 @@ import {DeleteTagComponent} from "./delete-tag/delete-tag.component";
 const legacyRoutes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'list', component: TagListComponent},
   {path: 'add', component: AddTagComponent},
   {path: 'edit/:id', component: EditTagComponent},
   {path: 'dish/edit/:id', component: EditDishComponent},
