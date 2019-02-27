@@ -5,11 +5,6 @@ import {EditTagComponent} from "./tag-list/edit-tag.component";
 import {DishTagSelectComponent} from "./dish-list/dish-tag-select.component";
 import {HomeComponent} from "./home.component";
 import {LoginComponent} from "./login/login.component";
-import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
-import {EditMealPlanComponent} from "./meal-plan-list/edit-meal-plan.component";
-import {ShoppingListListComponent} from "./shopping-list-list/shopping-list-list.component";
-import {EditShoppingListComponent} from "./shopping-list-list/edit-shopping-list.component";
-import {SingleListComponent} from "./shopping-list-list/single-list.component";
 import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign-tool.component";
 import {ListLayoutListComponent} from "./list-layout-list/list-layout-list.component";
 import {EditListLayoutComponent} from "./list-layout-list/edit-list-layout.component";
@@ -63,11 +58,6 @@ import {AppCommonModule} from "../app-common/app-common.module";
     DishTagSelectComponent,
     HomeComponent,
     LoginComponent,
-    MealPlanListComponent,
-    EditMealPlanComponent,
-    ShoppingListListComponent,
-    EditShoppingListComponent,
-    SingleListComponent,
     DishTagAssignToolComponent,
     ListLayoutListComponent,
     EditListLayoutComponent,

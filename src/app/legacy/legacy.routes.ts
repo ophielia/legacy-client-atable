@@ -3,10 +3,6 @@ import {AddTagComponent} from "./tag-list/add-tag.component";
 import {EditTagComponent} from "./tag-list/edit-tag.component";
 import {HomeComponent} from "./home.component";
 import {LoginComponent} from "./login/login.component";
-import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
-import {EditMealPlanComponent} from "./meal-plan-list/edit-meal-plan.component";
-import {ShoppingListListComponent} from "./shopping-list-list/shopping-list-list.component";
-import {EditShoppingListComponent} from "./shopping-list-list/edit-shopping-list.component";
 import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign-tool.component";
 import {ListLayoutListComponent} from "./list-layout-list/list-layout-list.component";
 import {EditListLayoutComponent} from "./list-layout-list/edit-list-layout.component";
@@ -24,9 +20,6 @@ const legacyRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'add', component: AddTagComponent},
   {path: 'edit/:id', component: EditTagComponent},
-  {path: 'shoppinglist/list', component: ShoppingListListComponent},
-  {path: 'shoppinglist/edit/:id', component: EditShoppingListComponent},
-  {path: 'shoppinglist/delete/:id', component: ShoppingListListComponent},
   {path: 'listlayout/list', component: ListLayoutListComponent},
   {path: 'listlayout/edit/:id', component: EditListLayoutComponent},
   {path: 'listlayout/assign/:id', component: ListTagAssignToolComponent},
@@ -36,9 +29,6 @@ const legacyRoutes: Routes = [
   {path: 'targets/list', component: TargetListComponent},
   {path: 'targets/edit/:id', component: TargetEditComponent},
   {path: 'proposal/edit/:id', component: ProposalEditComponent},
-  {path: 'mealplan/list', component: MealPlanListComponent},
-  {path: 'mealplan/edit/:id', component: EditMealPlanComponent},
-  {path: 'mealplan/delete/:id', component: MealPlanListComponent}, // MM will be delete component
   {path: 'tools/dishtotag', component: DishTagAssignToolComponent},
   {path: 'tools/ratingtag', component: RatingTagAssignToolComponent},
   {path: '', redirectTo: 'dish/list', pathMatch: 'full'}
