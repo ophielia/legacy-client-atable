@@ -3,7 +3,6 @@ import {AddTagComponent} from "./tag-list/add-tag.component";
 import {EditTagComponent} from "./tag-list/edit-tag.component";
 import {HomeComponent} from "./home.component";
 import {LoginComponent} from "./login/login.component";
-import {EditDishComponent} from "./dish-list/edit-dish.component";
 import {MealPlanListComponent} from "./meal-plan-list/meal-plan-list.component";
 import {EditMealPlanComponent} from "./meal-plan-list/edit-meal-plan.component";
 import {ShoppingListListComponent} from "./shopping-list-list/shopping-list-list.component";
@@ -25,7 +24,6 @@ const legacyRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'add', component: AddTagComponent},
   {path: 'edit/:id', component: EditTagComponent},
-  {path: 'dish/edit/:id', component: EditDishComponent},
   {path: 'shoppinglist/list', component: ShoppingListListComponent},
   {path: 'shoppinglist/edit/:id', component: EditShoppingListComponent},
   {path: 'shoppinglist/delete/:id', component: ShoppingListListComponent},

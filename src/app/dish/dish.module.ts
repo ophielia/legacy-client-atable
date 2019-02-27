@@ -13,7 +13,6 @@ import {TagCommService} from "../legacy/drilldown/tag-drilldown-select.service";
 import {AddDishIngredientComponent} from './add-dish-ingredient/add-dish-ingredient.component';
 import {AddDishFinishComponent} from './add-dish-finish/add-dish-finish.component';
 import {ManageDishComponent} from './manage-dish/manage-dish.component';
-import {EditDishComponent} from './edit-dish/edit-dish.component';
 import {PlanModule} from "../plan/plan.module";
 import {DishFilterSelectCommService} from "../app-common/dish-filter-select/dish-filter-select-comm.service";
 
@@ -30,7 +29,7 @@ import {DishFilterSelectCommService} from "../app-common/dish-filter-select/dish
   providers: [DishService, TagCommService, DishFilterSelectCommService],
   declarations: [AddDishRatingComponent, AddDishGeneralComponent,
     DishWindowComponent, AddDishIngredientComponent,
-    AddDishFinishComponent, ManageDishComponent, EditDishComponent]
+    AddDishFinishComponent, ManageDishComponent]
 })
 export class DishModule {
 }

@@ -1,7 +1,6 @@
 import {RouterModule, Routes} from "@angular/router";
 import {AddTagComponent} from "./legacy/tag-list/add-tag.component";
 import {LoginComponent} from "./legacy/login/login.component";
-import {EditDishComponent} from "./legacy/dish-list/edit-dish.component";
 import {MealPlanListComponent} from "./legacy/meal-plan-list/meal-plan-list.component";
 import {ShoppingListListComponent} from "./legacy/shopping-list-list/shopping-list-list.component";
 import {DishTagAssignToolComponent} from "./legacy/dish-tag-assign-tool/dish-tag-assign-tool.component";
@@ -15,7 +14,6 @@ const routes: Routes = [
   {path: 'home', component: LandingPadComponent},
   {path: 'login', component: LoginComponent},
   {path: 'add', component: AddTagComponent},
-  {path: 'dish/edit/:id', component: EditDishComponent},
   {path: 'shoppinglist/list', component: ShoppingListListComponent},
   {path: 'listlayout/list', component: ListLayoutListComponent},
   {path: 'tools/tagtotag', component: TagTagAssignToolComponent},
