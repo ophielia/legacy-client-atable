@@ -3,7 +3,6 @@ import {TagListComponent} from "./legacy/tag-list/tag-list.component";
 import {AddTagComponent} from "./legacy/tag-list/add-tag.component";
 import {LoginComponent} from "./legacy/login/login.component";
 import {EditDishComponent} from "./legacy/dish-list/edit-dish.component";
-import {DishListComponent} from "./legacy/dish-list/dish-list.component";
 import {MealPlanListComponent} from "./legacy/meal-plan-list/meal-plan-list.component";
 import {ShoppingListListComponent} from "./legacy/shopping-list-list/shopping-list-list.component";
 import {DishTagAssignToolComponent} from "./legacy/dish-tag-assign-tool/dish-tag-assign-tool.component";
@@ -18,8 +17,6 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'list', component: TagListComponent},
   {path: 'add', component: AddTagComponent},
-  {path: 'dish/list', component: DishListComponent},
-  {path: 'dish/add', component: DishListComponent},
   {path: 'dish/edit/:id', component: EditDishComponent},
   {path: 'shoppinglist/list', component: ShoppingListListComponent},
   {path: 'listlayout/list', component: ListLayoutListComponent},
