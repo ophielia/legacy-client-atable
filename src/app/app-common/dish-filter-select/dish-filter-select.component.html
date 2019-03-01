@@ -1,36 +1,58 @@
 <!--<div ngClass="col-{{getContainerClass()}}" style="padding-left:0px;">-->
 <div style="padding-left:0px;">
-  <div class="row menubar dish-menubar-text-color menu-color justify-content-start">
-    <div class="input-group searchbox-group" style="max-width:135px;">
-      <input type="text" class="form-control searchbox"
-             aria-describedby="search-query"
-             placeholder="Search By Dishname"
-             [(ngModel)]="searchValue"
-             (keyup)="filterByDishname()"
-             (keyup.enter)="clearSearchValue()"
-      />
-      <span class="input-group-addon searchbox-group-button" id="search-query"><span
-        class="fa-search fa"></span></span>
+
+
+  <div class="d-flex justify-content-between menubar dish-menubar-text-color menu-color ">
+    <div>
+      <div class="input-group searchbox-group" style="float:left;max-width:135px;">
+        <input type="text" class="form-control searchbox"
+               aria-describedby="search-query"
+               placeholder="Search By Dishname"
+               [(ngModel)]="searchValue"
+               (keyup)="filterByDishname()"
+               (keyup.enter)="clearSearchValue()"
+        />
+        <span class="input-group-addon searchbox-group-button" id="search-query"><span
+          class="fa-search fa"></span></span>
+      </div>
+      <div class="input-group searchbox-group" style="max-width:135px;">
+        <at-tag-select aria-describedby="filter-query"
+                       [tagTypes]="'Ingredient,Rating,DishType,TagType'"
+                       [selectType]="'Search'"
+                       [showText]="'Filter by Tag'"
+                       [allowAdd]="false"
+                       [tagList]="alltagsSearch"
+                       [passedInputStyle]="'menubar-input'"
+                       (tagSelected)="addTagToFilter($event)">
+        </at-tag-select>
+        <span class="input-group-addon searchbox-group-button" id="filter-query" style="margin-left:-1px;"
+              (click)="toggleBrowse()"><span
+          class="fa-filter fa"></span></span>
+      </div>
+
     </div>
-    <div class="input-group searchbox-group" style="max-width:135px;">
-      <at-tag-select aria-describedby="filter-query"
-                     [tagTypes]="'Ingredient,Rating,DishType,TagType'"
-                     [selectType]="'Search'"
-                     [showText]="'Filter by Tag'"
-                     [allowAdd]="false"
-                     [tagList]="alltagsSearch"
-                     [passedInputStyle]="'menubar-input'"
-                     (tagSelected)="addTagToFilter($event)">
-      </at-tag-select>
-      <span class="input-group-addon searchbox-group-button" id="filter-query" style="margin-left:-1px;"
-            (click)="toggleBrowse()"><span
-        class="fa-filter fa"></span></span>
-    </div>
-    <div *ngIf="showAdd" ngClass=" {{getAddButtonClass('add-button-md ')}}" style="float:right" (click)="addClick()">
-      <fa [name]="'plus'"></fa>
+    <div>
+      <!-- order controls -->
+      <div *ngIf="showOrderBy" class="orderByDiv">
+        <span (click)="toggleShowOrderBy()" style="padding-left:5px"><fa [name]="'eye-slash'"></fa></span>
+        <select name="sortkey" [(ngModel)]="sortKey" (change)="changeSort()">
+          <option *ngFor="let sortkey of sortOptions" [value]="sortkey">{{sortkey}}</option>
+        </select>
+        <span *ngIf="isSortDirectionUp()" (click)="changeSortDirection()" style="padding-left:5px"><fa
+          [name]="'arrow-down'"></fa></span>
+        <span *ngIf="!isSortDirectionUp()" (click)="changeSortDirection()"><fa [name]="'arrow-up'"></fa></span>
+      </div>
+      <div *ngIf="!showOrderBy" (click)="toggleShowOrderBy()" class="orderByDiv">
+        <span (click)="changeSortDirection()" style="padding-left:5px"><fa [name]="'arrow-down'"></fa></span>
+        <span (click)="changeSortDirection()"><fa [name]="'arrow-up'"></fa></span>
+      </div>
+
+      <!-- add control -->
+      <div *ngIf="showAdd" ngClass=" {{getAddButtonClass('add-button-md ')}}" style="float:right" (click)="addClick()">
+        <fa [name]="'plus'"></fa>
+      </div>
     </div>
   </div>
-
   <div class="row filterbar-tease" style="margin-left:0px">
     <div class="col-sm">
       <div class="row ">
