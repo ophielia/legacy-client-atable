@@ -52,18 +52,6 @@ export class TagsService extends BaseHeadersService {
     return tags$;
   }
 
-  getAllSelectableFilled(tagtype: string): Observable<ITag[]> {
-    var filter: string = "";
-    if (tagtype) {
-      filter = "?tag_type=" + tagtype + "&filter=ForSelectAssign&fill_tags=true";
-    }
-    let tags$ = this.httpClient
-      .get(`${this.tagUrl}${filter}`)
-      .map(this.mapTagsClient).catch(handleError);
-    return tags$;
-
-  }
-
   getAllParentTags(tagTypes: string): Observable<ITag[]> {
     let tags$ = this.httpClient
       .get(`${this.tagUrl}?filter=ParentTags&tag_type=` + tagTypes)
@@ -114,25 +102,6 @@ export class TagsService extends BaseHeadersService {
       .put(`${this.tagUrl}/${tag.tag_id}`,
         JSON.stringify(tag), {observe: 'response'});
   }
-
-  /*
-    mapFilledTags(response: Response): TagDrilldown[] {
-      if (response.json()) {
-        return response.json().map(MappingUtils._toNewTagDrilldown);
-      }
-    }
-
-    mapTags(response: Response): ITag[] {
-      if (response.json()) {
-        return response.json()._embedded.tagResourceList.map(MappingUtils.toTag);
-      }
-    }
-
-    mapTag(response: Response): ITag {
-      let tag = MappingUtils.toTag(response.json());
-      return tag;
-    }
-  */
 
   mapFilledTagsClient(object: Object): TagDrilldown[] {
     let embeddedObj = Object.keys(object);
