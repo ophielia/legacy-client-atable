@@ -22,6 +22,9 @@ cleaning up behind
 
 
 
+docker build -t meg-apps/list-client:latest .
+
+
 
 older
   done - dish list
