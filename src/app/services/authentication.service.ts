@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Inject, Injectable} from "@angular/core";
 import {Headers, Response} from "@angular/http";
 import {Observable} from "rxjs/Rx";
 import "rxjs/add/operator/map";
@@ -6,13 +6,15 @@ import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
 import {throwError} from "rxjs";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
+import {APP_CONFIG, AppConfig} from "../app.config";
 
 @Injectable()
 export class AuthenticationService {
-  private authUrl = 'http://localhost:8181/auth';
+  private authUrl;
   private headers = new Headers({'Content-Type': 'application/json'});
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,@Inject(APP_CONFIG) private config: AppConfig) {
+    this.authUrl = this.config.apiEndpoint + "auth";
   }
 
   login(username: string, password: string): Observable<boolean> {

@@ -16,7 +16,7 @@ import {HttpClient, HttpResponse} from "@angular/common/http";
 @Injectable()
 export class TargetService extends BaseHeadersService {
 
-  private baseUrl = "http://localhost:8181";
+  private baseUrl;
 
   constructor(private httpClient: HttpClient,
               @Inject(APP_CONFIG) private config: AppConfig,

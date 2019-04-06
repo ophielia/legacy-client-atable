@@ -19,7 +19,7 @@ const tagType: string[] = TType.listAll();
 @Injectable()
 export class TagsService extends BaseHeadersService {
 
-  private tagUrl = 'http://localhost:8181';
+  private tagUrl;
   private tagInfoUrl: string;
 
   constructor(private httpClient: HttpClient,
