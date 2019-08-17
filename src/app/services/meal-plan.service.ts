@@ -8,8 +8,9 @@ import {BaseHeadersService, myHeaders} from "./base-service";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {NGXLogger} from "ngx-logger";
 import {HttpClient, HttpResponse} from "@angular/common/http";
-import {concatMap, map, mergeMap} from "rxjs/operators";
+import {concatMap, map} from "rxjs/operators";
 import {from} from "rxjs";
+import "rxjs/add/operator/merge";
 import {RatingUpdateInfo} from "../model/rating-update-info";
 
 
@@ -70,7 +71,7 @@ export class MealPlanService extends BaseHeadersService {
 
   }
 
-  addDishToMealPlan(dish_id: string, meal_plan_id: string) {
+  addDishToMealPlan(dish_id: string, meal_plan_id: string): Observable<any> {
     var url: string = this.baseUrl + '/' + meal_plan_id + "/dish/" + dish_id;
 
     return this
@@ -82,17 +83,16 @@ export class MealPlanService extends BaseHeadersService {
   addDishesToMealPlan(dish_ids: string[], meal_plan_id: string) {
     // check if this will be a new mealplan (meal_plan_id empty or null)
 
-    var chain: any = this.addDishToMealPlan(dish_ids[0], meal_plan_id);
+    var chain$ = this.addDishToMealPlan(dish_ids[0], meal_plan_id);
 
     if (dish_ids.length == 1) {
-      return chain;
+      return chain$;
     }
 
     for (var i = 1; i < dish_ids.length; i++) {
-      chain = chain.concat(this.addDishToMealPlan(dish_ids[i], meal_plan_id));
+      chain$ = chain$.merge(this.addDishToMealPlan(dish_ids[i], meal_plan_id));
     }
-    return chain;
-
+    return chain$;
   }
 
   addMealPlan(mealPlanName: string): Observable<HttpResponse<Object>> {

@@ -7,11 +7,11 @@ import TagSelectType from "../../model/tag-select-type";
 import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.service";
 import {MealPlanService} from "../../services/meal-plan.service";
 import {TagsService} from "app/services/tags.service";
-import {Router} from "@angular/router";
 import {TagDrilldown} from "../../model/tag-drilldown";
 import {MealPlan} from "../../model/mealplan";
 import TagType from "../../model/tag-type";
 import {DishFilterSelectCommService} from "./dish-filter-select-comm.service";
+import {DishSort} from "../../model/dish-sort";
 
 @Component({
   selector: 'at-dish-filter-select',
@@ -26,26 +26,25 @@ export class DishFilterSelectComponent implements OnInit {
 
   filterTags: ITag[];
   tagSelectEvent: any;
-  selectedDishes: Dish[] = [];
   searchValue: string;
   mealPlanList: MealPlan[];
   mealPlanMore: boolean;
-  showMealPlanList: boolean;
-
+  showOrderBy: boolean = false;
 
   allDishes: Dish[];
   filteredDishes: Dish[];
   browseAllDrilldowns: { [type: string]: TagDrilldown[] } = {};
   browseTagTypes: string[];
   expandFoldState: Map<string, boolean> = new Map<string, boolean>();
-  isShowTagEntry: boolean = false;
 
   showBrowse: boolean = false;
   selectType: string = TagSelectType.Search;
 
+  sortOptions: SortKey[] = DishSort.getKeys();
+  sortKey: SortKey = SortKey.LastUsed;
+  sortDirection: SortDirection = SortDirection.Up;
 
   private errorMessage: string;
-  private showSelectedMenu: boolean = false;
   unsubscribe: Subscription[] = [];
   private alltags: ITag[];
   private alltagsSearch: ITag[];
@@ -54,8 +53,7 @@ export class DishFilterSelectComponent implements OnInit {
               private tagCommService: TagCommService,
               private mealPlanService: MealPlanService,
               private dishFilterCommService: DishFilterSelectCommService,
-              private tagService: TagsService,
-              private router: Router,) {
+              private tagService: TagsService) {
     this.tagCommService = tagCommService;
     this.initializeBrowseTagTypes();
 
@@ -127,8 +125,8 @@ export class DishFilterSelectComponent implements OnInit {
       this.dishService
         .getAll()
         .subscribe(p => {
+            this.sortDishes(p);
             this.allDishes = p;
-            this.sortDishes();
             this.resetFilter()
           },
           e => this.errorMessage = e);
@@ -138,6 +136,7 @@ export class DishFilterSelectComponent implements OnInit {
       let $sub = this.dishService
         .findByTags(includeTagList, excludeTagList)
         .subscribe(p => {
+            this.sortDishes(p);
             this.allDishes = p;
             this.filteredDishes = p;
           },
@@ -155,12 +154,66 @@ export class DishFilterSelectComponent implements OnInit {
     this.onAddClick.emit(true);
   }
 
-  sortDishes() {
-    this.allDishes.sort((a, b) => {
-      if (a.name < b.name) return -1;
-      else if (a.name > b.name) return 1;
+  sortDishes(dishList: Dish[]) {
+    if (this.sortKey == SortKey.Name) {
+      this.sortByDishName(dishList);
+    } else if (this.sortKey == SortKey.LastUsed) {
+      this.sortByLastUsed(dishList)
+    } else if (this.sortKey == SortKey.CreatedOn) {
+      this.sortByCreated(dishList);
+    }
+
+  }
+
+  private sortByDishName(dishList: Dish[]) {
+    dishList.sort((a, b) => {
+      return a.name.localeCompare(b.name) * this.sortDirection;
+    });
+  }
+
+
+  private sortByCreated(dishList: Dish[]) {
+    dishList.sort((a, b) => {
+      let aNum = parseInt(a.dish_id, 10);
+      let bNum = parseInt(b.dish_id, 10);
+
+      if (aNum < bNum) return -1 * this.sortDirection;
+      else if (aNum > bNum) return 1 * this.sortDirection;
       else return 0;
     });
+  }
+
+
+  private sortByLastUsed(dishList: Dish[]) {
+    dishList.sort((a, b) => {
+      let aDate = !a.last_added ? new Date('1970-10-01') : new Date(a.last_added);
+      let bDate = !b.last_added ? new Date('1970-10-01') : new Date(b.last_added);
+      if (aDate < bDate) return -1 * this.sortDirection;
+      else if (aDate > bDate) return 1 * this.sortDirection;
+      else return 0;
+    });
+  }
+
+  changeSort() {
+    this.sortDishes(this.allDishes);
+    if (this.filteredDishes.length == this.allDishes.length) {
+      this.filteredDishes = this.allDishes
+    } else {
+      this.sortDishes(this.filteredDishes);
+    }
+  }
+
+  changeSortDirection() {
+    if (this.sortDirection == SortDirection.Up) {
+      this.sortDirection = SortDirection.Down;
+    } else {
+      this.sortDirection = SortDirection.Up;
+    }
+    this.changeSort();
+  }
+
+  isSortDirectionUp() {
+    return this.sortDirection == SortDirection.Up;
   }
 
   resetFilter() {
@@ -174,6 +227,10 @@ export class DishFilterSelectComponent implements OnInit {
 
   toggleBrowse() {
     this.showBrowse = !this.showBrowse;
+  }
+
+  toggleShowOrderBy() {
+    this.showOrderBy = !this.showOrderBy;
   }
 
   expandOrFoldBrowse(tagtype: string) {
@@ -195,15 +252,6 @@ export class DishFilterSelectComponent implements OnInit {
       dish.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
     }
   }
-
-
-  hasSelectedDishes() {
-    if (this.selectedDishes && this.selectedDishes.length > 0) {
-      return true;
-    }
-    return false;
-  }
-
 
   addTagToFilter(tag: ITag) {
     tag.is_inverted = false;

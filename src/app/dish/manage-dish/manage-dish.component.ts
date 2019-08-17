@@ -245,7 +245,7 @@ export class ManageDishComponent implements OnInit {
     dishIds = this.selectedDishes.map(i => i.dish_id);
 
     var newMealPlan: any = this.mealPlanService.addMealPlan('');
-    newMealPlan = newMealPlan.flatMap(
+    let $sub = newMealPlan.subscribe(
       (r) => {
         var headers = r.headers;
         var location = headers.get("Location");
@@ -257,7 +257,6 @@ export class ManageDishComponent implements OnInit {
           });
       }
     );
-    let $sub = newMealPlan.subscribe();
     this.unsubscribe.push($sub);
   }
 
@@ -306,7 +305,7 @@ export class ManageDishComponent implements OnInit {
   }
 
   goToDishEdit(dish_id: string) {
-    this.router.navigate(["editdish/edit/", dish_id])
+    this.router.navigate(["editdish/", dish_id])
   }
 
   goToMealPlanEdit(dish_id: string) {

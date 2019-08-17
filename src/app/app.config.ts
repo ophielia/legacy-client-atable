@@ -8,7 +8,7 @@ export class AppConfig {
 }
 
 export const APP_DI_CONFIG: AppConfig = {
-  apiEndpoint: 'http://localhost:8181/',
+  apiEndpoint: 'http://localhost:8181/v1/',
   defaultRatingPower: 3
 };
 
