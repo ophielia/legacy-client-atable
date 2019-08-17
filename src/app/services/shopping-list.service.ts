@@ -23,11 +23,12 @@ export class ShoppingListService extends BaseHeadersService {
               private _logger: NGXLogger,
               private _authenticationService: AuthenticationService) {
     super(_authenticationService);
+    console.log("this.config.apiEndpoint" + this.config.apiEndpoint)
     this.shoppingListUrl = this.config.apiEndpoint + "shoppinglist";
   }
 
   getAll(): Observable<IShoppingList[]> {
-    this._logger.debug("Retrieving all shopping lists for user.");
+    this._logger.debug("Retrieving all shopping lists for user.!" + this.shoppingListUrl);
     let shoppingLists$ = this.httpClient
       .get(`${this.shoppingListUrl}`)
       .map(this.mapShoppingLists).catch(handleError);  // HERE: This is new!
