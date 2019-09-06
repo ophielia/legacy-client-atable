@@ -198,7 +198,7 @@ export class ShoppingListService extends BaseHeadersService {
     var item: Item = <Item>{tag_id: tag.tag_id};
     return this
       .httpClient
-      .post(`${this.shoppingListUrl}/${shoppingList_id}/item`, item);
+      .post(`${this.shoppingListUrl}/${shoppingList_id}/tag/${tag.tag_id}`, item);
   }
 
   addListToShoppingList(shoppingList_id: string, list_type: string): Observable<Object> {
