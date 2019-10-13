@@ -130,7 +130,7 @@ export class TagsService extends BaseHeadersService {
 
   assignTagsToBaseTag(tagsToAdd: ITag[]) {
     //"{parentId}/child/{childId}"
-    var basicUrl: string = this.tagUrl + "/basetag/child/";
+    var basicUrl: string = this.tagUrl + "/base/";
     // create list of urls - 1 per hopperTag
     let tag$ = null;
 
@@ -152,7 +152,7 @@ export class TagsService extends BaseHeadersService {
 
 
   getDishesForRatingTags(selectedRatingId: number) {
-    var url = this.tagUrl + "/" + selectedRatingId + "/children/dish";
+    var url = this.tagUrl + "/" + selectedRatingId + "/dish";
     let tags$ = this.httpClient
       .get(`${url}`)
       .map(this.mapTagsClient).catch(handleError);
