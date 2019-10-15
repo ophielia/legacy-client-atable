@@ -52,6 +52,9 @@ export class AddDishCreateComponent implements OnInit, OnDestroy {
           var id = splitlocation[splitlocation.length - 1];
           //    this.getAllDishes();
           this.router.navigate(['/adddish/ratings/', id]);
+        }, e => {
+        // an error occurred....
+
         }
       )
     ;
