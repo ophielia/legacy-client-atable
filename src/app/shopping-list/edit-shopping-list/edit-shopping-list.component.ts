@@ -15,7 +15,7 @@ import CategoryType from "../../model/category-type";
 import TagType from "../../model/tag-type";
 import {IDish} from "../../model/dish";
 import {DishService} from "../../services/dish-service.service";
-import ListType from "../../model/list-type";
+
 
 @Component({
   selector: 'at-edit-shopping-list',
@@ -27,14 +27,13 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private shoppingListId: any = ShoppingList;
   private allDishes: IDish[];
   private alltags: ITag[];
-  private PICK_UP_LIST: string = ListType.PickUpList;
-  private BASE_LIST: string = ListType.BaseList;
 
   private tagTypes: string;
   private tagSelectEvent: any;
   private shoppingList: IShoppingList;
   private listLayoutList: ListLayout[];
   private listLegend: Map<string, string>;
+  private starterListId: number;
 
   private highlightDishId: string;
   private highlightListId: string;
@@ -77,6 +76,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       })
     this.getAllTags()
     this.getAllDishes();
+    this.getStarterList();
   }
 
   ngOnDestroy(): void {
@@ -104,14 +104,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       this.unsubscribe.push($sub);
     }
 
-    var $sub = this.shoppingListService
-      .getById(id)
-      .subscribe(t => {
-        if (t) {
-          this.activeListExists = true;
-        }
-      });
-    this.unsubscribe.push($sub);
+
   }
 
   getAllTags() {
@@ -240,11 +233,11 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     if (!source) {
       return;
     }
-    if (source.display == this.highlightListId) {
+    if (source.id == this.highlightListId) {
       this.highlightListId = null;
     } else {
 
-      this.highlightListId = source.display;
+      this.highlightListId = source.id;
       this.highlightDishId = null;
     }
     this.getShoppingList(this.shoppingList.list_id);
@@ -263,7 +256,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   }
 
   removeList(listSource: ItemSource) {
-    var $sub = this.shoppingListService.removeListItemsFromShoppingList(this.shoppingList.list_id, listSource.display)
+    var $sub = this.shoppingListService.removeListItemsFromShoppingList(this.shoppingList.list_id, listSource.id)
       .subscribe(r => {
         this.getShoppingList(this.shoppingList.list_id)
       });
@@ -299,30 +292,20 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.highlightDishId = null;
   }
 
-  addFromList(listType: string) {
+  addFromList() {
     this.listLegend = null;
-    var $sub = this.shoppingListService.addListToShoppingList(this.shoppingList.list_id, listType)
+
+    var $sub = this.shoppingListService.addListToShoppingList(this.shoppingList.list_id, this.starterListId)
       .subscribe(r => {
-        this.highlightListId = listType;
+        this.highlightListId = this.starterListId;
         this.highlightDishId = null;
         this.getShoppingList(this.shoppingList.list_id);
       });
+
     this.unsubscribe.push($sub);
   }
 
-  shopWithThisList() {
 
-    // determine if modal should be shown
-    if (this.activeListExists) {
-      // show modal
-      this.input.show();
-    } else {
-      // set list active directly
-      this.setListActive(false);
-    }
-
-
-  }
 
   processModalSelection(modal_result: string) {
     console.log(modal_result + 'modal result');
@@ -348,8 +331,8 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   }
 
 
-  isListType(list_type: string) {
-    return this.shoppingList.list_type == list_type;
+  isStarterList() {
+    return this.shoppingList.is_starter;
   }
   showLegend() {
     if (this.shoppingList.dish_sources.length > 0) {
@@ -395,5 +378,13 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   }
 
 
-
+  private getStarterList() {
+    var $sub = this.shoppingListService.getStarterLists()
+      .subscribe( lists => {
+        if (lists && lists.length >0) {
+          this.starterListId = lists[0].list_id;
+        }
+          });
+    this.unsubscribe.push($sub);
+  }
 }

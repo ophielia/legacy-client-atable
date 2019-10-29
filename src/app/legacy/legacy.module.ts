@@ -9,6 +9,7 @@ import {DishTagAssignToolComponent} from "./dish-tag-assign-tool/dish-tag-assign
 import {ListLayoutListComponent} from "./list-layout-list/list-layout-list.component";
 import {EditListLayoutComponent} from "./list-layout-list/edit-list-layout.component";
 import {ListTagAssignToolComponent} from "./list-layout-list/list-tag-assign-tool.component";
+
 import {TargetListComponent} from "./target-list/target-list.component";
 import {TagTagAssignToolComponent} from "./tag-tag-assign-tool/tag-tag-assign-tool.component";
 import {TargetEditComponent} from "./target-list/target-edit.component";
@@ -70,7 +71,7 @@ import {AppCommonModule} from "../app-common/app-common.module";
     RatingTagAssignToolComponent,
     LayoutSubcategoryToolComponent,
     DeleteTagComponent,
-    EditDisplayCategoryComponent
+    EditDisplayCategoryComponent,
   ],
   providers: [{
     provide: APP_CONFIG,

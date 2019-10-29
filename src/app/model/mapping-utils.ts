@@ -254,6 +254,8 @@ export default class MappingUtils {
       user_id: r.shopping_list.user_id,
       created: r.shopping_list.created,
       list_type: r.shopping_list.list_type,
+      name: r.shopping_list.name,
+      is_starter: r.shopping_list.is_starter_list,
       item_count: r.shopping_list.item_count,
       updated: r.shopping_list.updated,
       layout_type: r.shopping_list.list_layout_type,

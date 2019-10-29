@@ -8,10 +8,10 @@ import {ITag} from "../model/tag";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {BaseHeadersService} from "app/services/base-service";
 import {IListGenerateProperties} from "../model/listgenerateproperties";
-import ListType from "../model/list-type";
 import {NGXLogger} from "ngx-logger";
 import {throwError} from "rxjs";
 import {HttpClient, HttpResponse} from "@angular/common/http";
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class ShoppingListService extends BaseHeadersService {
@@ -31,7 +31,7 @@ export class ShoppingListService extends BaseHeadersService {
     this._logger.debug("Retrieving all shopping lists for user.!" + this.shoppingListUrl);
     let shoppingLists$ = this.httpClient
       .get(`${this.shoppingListUrl}`)
-      .map(this.mapShoppingLists).catch(handleError);  // HERE: This is new!
+      .map(this.mapShoppingLists).catch(handleError);
     return shoppingLists$;
   }
 
@@ -51,14 +51,13 @@ export class ShoppingListService extends BaseHeadersService {
     return shoppingList$;
   }
 
-  getByIdWithHighlight(shoppingList_id: string, dish_id: string, list_type: string, show_pantry: boolean) {
+  getByIdWithHighlight(shoppingList_id: string, dish_id: string, list_id: string, show_pantry: boolean) {
     var url = this.shoppingListUrl + "/" + shoppingList_id;
     if (dish_id) {
       url = url + "?highlightDish=" + dish_id;
 
-    }
-    else if (list_type) {
-      url = url + "?highlightListType=" + list_type;
+    } else if (list_id) {
+      url = url + "?highlightListId=" + list_id;
     } else if (show_pantry) {
       url = url + "?showPantry=true";
     }
@@ -69,29 +68,26 @@ export class ShoppingListService extends BaseHeadersService {
     return shoppingList$;
   }
 
-  getByType(list_type: string): Observable<IShoppingList> {
-    this._logger.debug("Retrieving shopping lists by type [" + list_type + "] for user.");
-    let shoppingList$ = this.httpClient
-      .get(`${this.shoppingListUrl}/type/${list_type}`)
-      .map(this.mapShoppingList)
-      .catch(handleError);
-    return shoppingList$;
+
+  getStarterLists(): Observable<IShoppingList[]> {
+    return this.getAll().pipe(
+      map((shoppingLists) => shoppingLists.filter(
+        list => list.is_starter == true)
+      ));
+
   }
 
   addShoppingListNew(dishIds: string[], mealPlanId: string,
                      addBase: boolean, addPickup: boolean,
-                     generatePlan: boolean, listType: string): Observable<HttpResponse<Object>> {
+                     generatePlan: boolean, listName: string = ""): Observable<HttpResponse<Object>> {
 
-    if (!listType) {
-      listType = ListType.General;
-    }
     var properties: IListGenerateProperties = <IListGenerateProperties>({
       dish_sources: dishIds,
       meal_plan_source: mealPlanId,
       add_from_base: addBase,
       add_from_pickup: addPickup,
       generate_mealplan: generatePlan,
-      list_type: listType,
+      list_name: listName
 
     });
     var url = this.shoppingListUrl;
@@ -133,46 +129,6 @@ export class ShoppingListService extends BaseHeadersService {
       .delete(url);
   }
 
-  toggleCrossedOffForItem(shoppingList_id: string,
-                          item_id: string,
-                          crossOff: boolean): Observable<Object> {
-    var url = this.shoppingListUrl + "/" + shoppingList_id + "/item/shop/" + item_id;
-    var params: string[] = new Array();
-    if (crossOff) {
-      params.push("crossOff=true");
-    } else {
-      params.push("crossOff=false");
-    }
-
-    if (params.length > 0) {
-      var paramstr = params.join("&");
-      url = url + "?" + paramstr;
-    }
-    return this
-      .httpClient
-      .post(url,
-        null);
-  }
-
-  crossOffAllItemsFromList(shoppingList_id: string, crossOff): Observable<Object> {
-    var url = this.shoppingListUrl + "/" + shoppingList_id + "/item/shop";
-    var params: string[] = new Array();
-    if (crossOff) {
-      params.push("crossOff=true");
-    } else {
-      params.push("crossOff=false");
-    }
-
-    if (params.length > 0) {
-      var paramstr = params.join("&");
-      url = url + "?" + paramstr;
-    }
-    return this
-      .httpClient
-      .post(url,
-        null);
-  }
-
   removeDishItemsFromShoppingList(list_id: string, dish_id: string) {
     var url = this.shoppingListUrl + "/" + list_id + "/dish/" + dish_id;
     return this
@@ -180,8 +136,8 @@ export class ShoppingListService extends BaseHeadersService {
       .delete(url);
   }
 
-  removeListItemsFromShoppingList(list_id: string, listSource: string) {
-    var url = this.shoppingListUrl + "/" + list_id + "/listtype/" + listSource;
+  removeListItemsFromShoppingList(list_id: string, fromListId: string) {
+    var url = this.shoppingListUrl + "/" + list_id + "/list/" + fromListId;
     return this
       .httpClient
       .delete(url);
@@ -201,8 +157,8 @@ export class ShoppingListService extends BaseHeadersService {
       .post(`${this.shoppingListUrl}/${shoppingList_id}/tag/${tag.tag_id}`, item);
   }
 
-  addListToShoppingList(shoppingList_id: string, list_type: string): Observable<Object> {
-    var url = this.shoppingListUrl + "/" + shoppingList_id + "/listtype/" + list_type;
+  addListToShoppingList(shoppingList_id: string, list_id: string): Observable<Object> {
+    var url = this.shoppingListUrl + "/" + shoppingList_id + "/list/" + list_id;
     return this
       .httpClient
       .post(url,

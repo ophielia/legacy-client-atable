@@ -57,11 +57,8 @@
           <div class="row justify-content-end text-menu-link"
                (click)="clearList()">Clear List
           </div>
-          <div *ngIf="!isListType(PICK_UP_LIST)" class="row justify-content-end text-menu-link"
-               (click)="addFromList(PICK_UP_LIST)">Add From Pick-Up List
-          </div>
-          <div *ngIf="!isListType(BASE_LIST)" class="row justify-content-end text-menu-link"
-               (click)="addFromList(BASE_LIST)">Add From Base List
+          <div *ngIf="!isStarterList()" class="row justify-content-end text-menu-link"
+               (click)="addFromList()">Add From Starter List
           </div>
         </div>
       </div>
@@ -107,11 +104,6 @@
 
 
       </div>
-
-      <div class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end"
-           (click)="shopWithThisList()">Shop!
-      </div>
-
 
       <div *ngIf="showLegend()" class="row menubar-flush-bottom main-color justify-content-end">
         <div class="col" style="padding:0px;">

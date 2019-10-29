@@ -12,7 +12,6 @@ import {MealPlanService} from "../../services/meal-plan.service";
 import {MealPlan} from "../../model/mealplan";
 import {Subscription} from "rxjs/Subscription";
 import {IListGenerateProperties} from "../../model/listgenerateproperties";
-import ListType from "../../model/list-type";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {DishFilterSelectCommService} from "../../app-common/dish-filter-select/dish-filter-select-comm.service";
 
@@ -217,8 +216,7 @@ export class ManageDishComponent implements OnInit {
 
   addDishesToNewList(listProperties: IListGenerateProperties) {
     var dishIdList = this.selectedDishes.map(d => d.dish_id);
-    this.shoppingListService.addShoppingListNew(dishIdList, null, listProperties.add_from_base,
-      listProperties.add_from_pickup, listProperties.generate_mealplan, ListType.General)
+    this.shoppingListService.addShoppingListNew(dishIdList, null, listProperties.add_from_base, listProperties.add_from_pickup, listProperties.generate_mealplan)
       .subscribe(r => {
         var headers = r.headers;
         var location = headers.get("Location");

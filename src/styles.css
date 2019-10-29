@@ -450,6 +450,10 @@ a:hover {
   color: #cccccc;
 }
 
+.dish-tag-element-centered {
+  text-align: center
+}
+
 .dish-tag-xl {
   font-size: x-large;
   min-width: 300px;

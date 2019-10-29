@@ -4,6 +4,7 @@ export class IListGenerateProperties {
   add_from_base: boolean;
   add_from_pickup: boolean;
   generate_mealplan: boolean;
+  list_name: string;
 
 }
 
@@ -17,6 +18,7 @@ export class ListGenerateProperties implements IListGenerateProperties {
   add_from_base: boolean;
   add_from_pickup: boolean;
   generate_mealplan: boolean;
+  list_name: string;
 
 }
 

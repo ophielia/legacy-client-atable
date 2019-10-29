@@ -13,11 +13,8 @@ import {SourceLegendService} from "../services/source-legend.service";
 import {ShoppingListItemsComponent} from "./shopping-list-items/shopping-list-items.component";
 import {AutoCompleteModule, CheckboxModule} from "primeng/primeng";
 import {SingleListComponentComponent} from "./single-list-component/single-list-component.component";
-import {ShoppingListComponent} from "./shopping-list/shopping-list.component";
-import {CrossOffItemComponent} from "./cross-off-item/cross-off-item.component";
 import {ColorTagsComponent} from "./color-tags/color-tags.component";
 import {WordTagsComponent} from "./word-tags/word-tags.component";
-import {QuickPickUpListComponent} from './quick-pick-up-list/quick-pick-up-list.component';
 import {EditPickupListComponent} from './edit-pickup-list/edit-pickup-list.component';
 
 
@@ -35,8 +32,8 @@ import {EditPickupListComponent} from './edit-pickup-list/edit-pickup-list.compo
   ],
   providers: [ShoppingListService, TagCommService, SourceLegendService],
   declarations: [ManageShoppingListComponent, EditShoppingListComponent,
-    ShoppingListItemsComponent, SingleListComponentComponent, ShoppingListComponent, CrossOffItemComponent,
-    ColorTagsComponent, WordTagsComponent, QuickPickUpListComponent, EditPickupListComponent]
+    ShoppingListItemsComponent, SingleListComponentComponent,
+    ColorTagsComponent, WordTagsComponent, EditPickupListComponent]
 })
 export class ShoppingListModule {
 }

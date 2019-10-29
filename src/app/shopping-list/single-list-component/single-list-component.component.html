@@ -1,6 +1,6 @@
-<div class="dish-tag-element-wide list-color">
-  {{displayText}}
-  <div class="dish-tag-element list-outline-color" (click)="editList(list)">{{isActive(list)?'shop':'edit'}}</div>
+<div class="dish-tag-element-wide list-color dish-tag-element-centered">
+  {{list.name}} {{list.is_starter? '(Starter)' : ''}}
+  <div class="dish-tag-element list-outline-color" (click)="editList(list)">edit</div>
   <ng-container *ngIf="list">
     <div class="dish-tag-element list-outline-color" (click)="deleteList(list.list_id)">delete</div>
     <div class="dish-tag-element list-outline-color">

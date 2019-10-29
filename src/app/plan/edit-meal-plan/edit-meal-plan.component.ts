@@ -1,15 +1,10 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.service";
 import {Dish} from "../../model/dish";
 import {IMealPlan} from "../../model/mealplan";
 import {MealPlanService} from "../../services/meal-plan.service";
-import {DishService} from "../../services/dish-service.service";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
-import {AlertService} from "app/services/alert.service";
-import ListType from "../../model/list-type";
-import {ITag} from "../../model/tag";
 import {Slot} from "../../model/slot";
 
 
@@ -116,8 +111,7 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
 
   generateListFromMealPlan(listProperties) {
     var dishIdList = this.selectedDishes.map(d => d.dish_id);
-    this.shoppingListService.addShoppingListNew(null, this.mealPlanId, listProperties.add_from_base,
-      listProperties.add_from_pickup, listProperties.generate_mealplan, ListType.General)
+    this.shoppingListService.addShoppingListNew(null, this.mealPlanId, listProperties.add_from_base, listProperties.add_from_pickup, listProperties.generate_mealplan)
       .subscribe(r => {
         var headers = r.headers;
         var location = headers.get("Location");

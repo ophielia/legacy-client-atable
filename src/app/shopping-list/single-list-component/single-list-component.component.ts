@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IShoppingList, ShoppingList} from "../../model/shoppinglist";
 import {Router} from "@angular/router";
-import ListType from "../../model/list-type";
 
 @Component({
   selector: 'at-single-list-component',
@@ -28,17 +27,8 @@ export class SingleListComponentComponent implements OnInit {
   }
 
   editList(list) {
-    if (!list) {
-      list = new ShoppingList();
-      list.list_type = this.listType;
-    }
     this.edit.emit(list);
   }
 
-  isActive(list) {
-    if (!list) {
-      return false;
-    }
-    return list.list_type == ListType.ActiveList;
-  }
+
 }
