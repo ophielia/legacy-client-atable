@@ -85,8 +85,7 @@ export class ShoppingListService extends BaseHeadersService {
     var properties: IListGenerateProperties = <IListGenerateProperties>({
       dish_sources: dishIds,
       meal_plan_source: mealPlanId,
-      add_from_base: addBase,
-      add_from_pickup: addPickup,
+      add_from_starter: addBase,
       generate_mealplan: generatePlan,
       list_name: listName
 

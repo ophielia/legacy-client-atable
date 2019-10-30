@@ -11,7 +11,6 @@ export class GenerateListComponent implements OnInit {
   @Input() showMealPlanOption: boolean = true;
 
   addFromBase: boolean = true;
-  addFromPickUp: boolean = true;
   saveMealPlan: boolean = true;
 
   constructor() {
@@ -25,8 +24,7 @@ export class GenerateListComponent implements OnInit {
 
   propertiesSelected() {
     var properties: IListGenerateProperties = <IListGenerateProperties>({
-      add_from_base: this.addFromBase,
-      add_from_pickup: this.addFromPickUp,
+      add_from_starter: this.addFromBase,
       generate_mealplan: this.saveMealPlan,
     });
     this.generateProperties.emit(properties);

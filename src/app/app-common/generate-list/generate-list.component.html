@@ -3,9 +3,6 @@
     <input type="checkbox" [checked]="addFromBase"
            class="george" (change)="addFromBase = !addFromBase"/>
   </div>
-  <div class="row">Add Pickup List Items
-    <input type="checkbox" [checked]="addFromPickUp"
-           class="george" (change)="addFromPickUp = !addFromPickUp"/></div>
   <div *ngIf="showMealPlanOption" class="row">Save as Meal Plan
     <input type="checkbox" [checked]="saveMealPlan"
            class="george" (change)="saveMealPlan = !saveMealPlan"/></div>

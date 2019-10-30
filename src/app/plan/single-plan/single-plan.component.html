@@ -1,5 +1,7 @@
-<div>
-  <div>{{plan.name}}</div>
-  <div (click)="editPlan(plan.meal_plan_id)">Edit</div>
-  <div (click)="deletePlan(plan.meal_plan_id)">Delete</div>
+<div class="dish-tag-element-wide plan-color dish-tag-element-centered">
+  {{plan.name}}
+  <div class="dish-tag-element plan-outline-color" (click)="editPlan(plan.meal_plan_id)">Edit</div>
+    <div class="dish-tag-element plan-outline-color" (click)="deletePlan(plan.meal_plan_id)">Delete</div>
+
+
 </div>

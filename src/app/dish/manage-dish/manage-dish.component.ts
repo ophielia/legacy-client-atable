@@ -216,7 +216,7 @@ export class ManageDishComponent implements OnInit {
 
   addDishesToNewList(listProperties: IListGenerateProperties) {
     var dishIdList = this.selectedDishes.map(d => d.dish_id);
-    this.shoppingListService.addShoppingListNew(dishIdList, null, listProperties.add_from_base, listProperties.add_from_pickup, listProperties.generate_mealplan)
+    this.shoppingListService.addShoppingListNew(dishIdList, null, listProperties.add_from_starter, listProperties.add_from_pickup, listProperties.generate_mealplan)
       .subscribe(r => {
         var headers = r.headers;
         var location = headers.get("Location");

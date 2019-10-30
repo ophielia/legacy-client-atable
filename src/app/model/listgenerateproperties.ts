@@ -1,8 +1,7 @@
 export class IListGenerateProperties {
   dish_sources: string[];
   meal_plan_source: string;
-  add_from_base: boolean;
-  add_from_pickup: boolean;
+  add_from_starter: boolean;
   generate_mealplan: boolean;
   list_name: string;
 
@@ -15,8 +14,7 @@ export class ListGenerateProperties implements IListGenerateProperties {
 
   dish_sources: string[];
   meal_plan_source: string;
-  add_from_base: boolean;
-  add_from_pickup: boolean;
+  add_from_starter: boolean;
   generate_mealplan: boolean;
   list_name: string;
 
