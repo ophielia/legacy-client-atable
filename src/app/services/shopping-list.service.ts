@@ -12,7 +12,7 @@ import {NGXLogger} from "ngx-logger";
 import {throwError} from "rxjs";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {map} from "rxjs/operators";
-import {ShoppingListPut} from "../model/shoppinglistput";
+import {IShoppingListPut, ShoppingListPut} from "../model/shoppinglistput";
 
 @Injectable()
 export class ShoppingListService extends BaseHeadersService {
@@ -206,12 +206,26 @@ export class ShoppingListService extends BaseHeadersService {
     // create put object for call
     var shoppingListPut = new ShoppingListPut();
     shoppingListPut.name = shoppingList.name;
-    shoppingListPut.is_starter = shoppingList.is_starter;
+    shoppingListPut.is_starter_list = shoppingList.is_starter;
     var url = this.shoppingListUrl + "/" + shoppingList.list_id;
+    return this.updateShoppingList(shoppingList.list_id, shoppingListPut);
+  }
+
+  updateShoppingListStarterStatus(shoppingList: IShoppingList) {
+    // create put object for call
+    var shoppingListPut = new ShoppingListPut();
+    shoppingListPut.name = shoppingList.name;
+    shoppingListPut.is_starter_list = true;
+    var url = this.shoppingListUrl + "/" + shoppingList.list_id;
+    return this.updateShoppingList(shoppingList.list_id, shoppingListPut);
+  }
+
+  private updateShoppingList(listId:string, shoppingList: IShoppingListPut) {
+    var url = this.shoppingListUrl + "/" + listId;
     return this
       .httpClient
       .put(url,
-        JSON.stringify(shoppingListPut), {observe: 'response'});
+        JSON.stringify(shoppingList), {observe: 'response'});
   }
 }
 

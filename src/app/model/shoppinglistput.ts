@@ -1,6 +1,6 @@
 export interface IShoppingListPut {
   name: string;
-  is_starter: boolean;
+  is_starter_list: boolean;
 }
 
 export class ShoppingListPut implements IShoppingListPut {
@@ -8,6 +8,6 @@ export class ShoppingListPut implements IShoppingListPut {
   }
 
   name: string;
-  is_starter: boolean;
+  is_starter_list: boolean;
 }
 

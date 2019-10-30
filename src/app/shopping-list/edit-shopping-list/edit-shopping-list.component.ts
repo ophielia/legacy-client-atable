@@ -48,6 +48,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private showItemLegends: boolean = true;
   private unsubscribe: Subscription[] = [];
   errorMessage: any;
+  showMakeStarter: boolean;
 
 
   constructor(private route: ActivatedRoute,
@@ -91,6 +92,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           this.shoppingList = p;
           this.generateLegend();
           this.checkSpecialCategories();
+          this.showMakeStarter = !this.shoppingList.is_starter
         });
       this.unsubscribe.push($sub);
     } else {
@@ -100,6 +102,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           this.shoppingList = p;
           this.generateLegend();
           this.checkSpecialCategories();
+          this.showMakeStarter = !this.shoppingList.is_starter
         });
       this.unsubscribe.push($sub);
     }
@@ -371,5 +374,15 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
     this.unsubscribe.push($sub);
     this.isEditListName = !this.isEditListName;
+  }
+
+  makeStarterList() {
+    var $sub = this.shoppingListService.updateShoppingListStarterStatus(this.shoppingList)
+      .subscribe(r => {
+        this.getShoppingList(this.shoppingList.list_id);
+      });
+
+    this.unsubscribe.push($sub);
+
   }
 }

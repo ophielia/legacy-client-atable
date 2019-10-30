@@ -51,6 +51,9 @@
            class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-conteønt-end">
         <div class="col">
 
+          <div *ngIf="showMakeStarter" class="row justify-content-end text-menu-link"
+               (click)="makeStarterList()">Make Starter List
+          </div>
           <div *ngIf="!showPantryItems" class="row justify-content-end text-menu-link"
                (click)="togglePantryItems()">Show Pantry Items
           </div>
