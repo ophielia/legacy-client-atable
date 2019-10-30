@@ -33,7 +33,8 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private shoppingList: IShoppingList;
   private listLayoutList: ListLayout[];
   private listLegend: Map<string, string>;
-  private starterListId: number;
+  private starterListId: string;
+  private isEditListName: boolean = false;
 
   private highlightDishId: string;
   private highlightListId: string;
@@ -47,7 +48,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private showItemLegends: boolean = true;
   private unsubscribe: Subscription[] = [];
   errorMessage: any;
-  private activeListExists: boolean = false;
 
 
   constructor(private route: ActivatedRoute,
@@ -133,7 +133,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       });
     this.unsubscribe.push($sub);
   }
-
 
   changeListLayout(layoutId: string) {
     var $sub = this.shoppingListService
@@ -243,7 +242,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.getShoppingList(this.shoppingList.list_id);
   }
 
-
   removeDish(source: ItemSource) {
     var $sub = this.shoppingListService.removeDishItemsFromShoppingList(this.shoppingList.list_id, source.id)
       .subscribe(r => {
@@ -294,8 +292,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   addFromList() {
     this.listLegend = null;
-
-    var $sub = this.shoppingListService.addListToShoppingList(this.shoppingList.list_id, this.starterListId)
+    var $sub = this.shoppingListService.addListToShoppingList(this.shoppingList.list_id, this.starterListId.toString())
       .subscribe(r => {
         this.highlightListId = this.starterListId;
         this.highlightDishId = null;
@@ -305,42 +302,16 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.unsubscribe.push($sub);
   }
 
-
-
-  processModalSelection(modal_result: string) {
-    console.log(modal_result + 'modal result');
-    if (modal_result == 'replace') {
-      console.log('replace');
-      this.setListActive(true);
-    } else {
-      console.log('active');
-      this.setListActive(false);
-    }
-  }
-
-  setListActive(replaceList: boolean) {
-    this.shoppingListService.setListActive(this.shoppingList.list_id, replaceList)
-      .subscribe(r => {
-        var headers = r.headers;
-        var location = headers.get("Location");
-        var splitlocation = location.split("/");
-        var id = splitlocation[splitlocation.length - 1];
-        this.shoppingListId = id;
-        this.router.navigate(["list/shop/", id]);
-      });
-  }
-
-
   isStarterList() {
     return this.shoppingList.is_starter;
   }
+
   showLegend() {
     if (this.shoppingList.dish_sources.length > 0) {
       return true;
     }
     return this.shoppingList.list_sources.length > 0;
   }
-
 
   toggleMenu() {
     this.showMenu = !this.showMenu;
@@ -386,5 +357,19 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
         }
           });
     this.unsubscribe.push($sub);
+  }
+
+  toggleListName() {
+    this.isEditListName = !this.isEditListName;
+  }
+
+  saveListName() {
+    var $sub = this.shoppingListService.updateShoppingListName(this.shoppingList)
+      .subscribe(r => {
+        this.getShoppingList(this.shoppingList.list_id);
+      });
+
+    this.unsubscribe.push($sub);
+    this.isEditListName = !this.isEditListName;
   }
 }

@@ -15,7 +15,6 @@ import {AutoCompleteModule, CheckboxModule} from "primeng/primeng";
 import {SingleListComponentComponent} from "./single-list-component/single-list-component.component";
 import {ColorTagsComponent} from "./color-tags/color-tags.component";
 import {WordTagsComponent} from "./word-tags/word-tags.component";
-import {EditPickupListComponent} from './edit-pickup-list/edit-pickup-list.component';
 
 
 @NgModule({
@@ -33,7 +32,7 @@ import {EditPickupListComponent} from './edit-pickup-list/edit-pickup-list.compo
   providers: [ShoppingListService, TagCommService, SourceLegendService],
   declarations: [ManageShoppingListComponent, EditShoppingListComponent,
     ShoppingListItemsComponent, SingleListComponentComponent,
-    ColorTagsComponent, WordTagsComponent, EditPickupListComponent]
+    ColorTagsComponent, WordTagsComponent]
 })
 export class ShoppingListModule {
 }

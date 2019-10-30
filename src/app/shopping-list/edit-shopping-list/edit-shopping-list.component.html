@@ -1,5 +1,25 @@
 <div class="container" *ngIf="shoppingList">
-  <div class="row page-title list-text-color">Edit {{shoppingList.list_type}}</div>
+  <div class="row page-title list-text-color">Edit List -
+  <span>
+             <ng-container *ngIf="!isEditListName">
+            <span style="padding-top:5px">{{shoppingList.name}}</span>
+            <span class="icon-button-sm" (click)="toggleListName()"
+            ><span class="fa-edit fa"></span></span>
+          </ng-container>
+
+          <div *ngIf="isEditListName" class="input-group searchbox-group" style="max-width:135px;">
+            <input type="text" class="form-control searchbox"
+                   aria-describedby="search-query"
+                   placeholder="{{shoppingList.name}}"
+                   [(ngModel)]="shoppingList.name"
+                   (keyup.enter)="saveListName()"
+            />
+            <span (click)="saveListName()" class="input-group-addon searchbox-group-button" id="search-query"><span
+              class="fa-check fa"></span></span>
+          </div>
+
+  </span>
+  </div>
   <div class="row">
     <div class="col-9" style="padding-left:0px;">
 
@@ -161,14 +181,4 @@
   </div>
 
 
-  <app-modal #modal1 [autoHide]="0" (modalResult)="processModalSelection($event)">
-    <div class="app-modal-body">
-      There's an active list already!
-      <div>
-        <button class="buttonclick" value="add">Add to List</button>
-        <button class="buttonclick" value="replace">Replace List</button>
-      </div>
-    </div>
-
-  </app-modal>
 </div>

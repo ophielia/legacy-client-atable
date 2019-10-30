@@ -12,6 +12,7 @@ import {NGXLogger} from "ngx-logger";
 import {throwError} from "rxjs";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {map} from "rxjs/operators";
+import {ShoppingListPut} from "../model/shoppinglistput";
 
 @Injectable()
 export class ShoppingListService extends BaseHeadersService {
@@ -179,25 +180,6 @@ export class ShoppingListService extends BaseHeadersService {
         null);
   }
 
-  deleteShoppingList(shoppingListId: string) {
-    var url: string = this.shoppingListUrl + '/' + shoppingListId;
-
-    return this
-      .httpClient
-      .delete(`${url}`);
-  }
-
-
-  setListActive(shoppingListId: string, replaceList: boolean): Observable<HttpResponse<Object>> {
-    var generateType = replaceList ? 'Replace' : 'Add';
-    var url = this.shoppingListUrl + "/" + shoppingListId
-      + "?generateType=" + generateType;
-    var observable$ = this
-      .httpClient
-      .put(`${url}`, null, {observe: 'response'});
-    return observable$;
-  }
-
   mapShoppingLists(object: Object): IShoppingList[] {
     let embeddedObj = object["_embedded"];
     if (embeddedObj) {
@@ -219,6 +201,18 @@ export class ShoppingListService extends BaseHeadersService {
     return this
       .httpClient
       .delete(url);
+  }
+
+  updateShoppingListName(shoppingList: IShoppingList) {
+    // create put object for call
+    var shoppingListPut = new ShoppingListPut();
+    shoppingListPut.name = shoppingList.name;
+    shoppingListPut.is_starter = shoppingList.is_starter;
+    var url = this.shoppingListUrl + "/" + shoppingList.list_id;
+    return this
+      .httpClient
+      .put(url,
+        JSON.stringify(shoppingListPut), {observe: 'response'});
   }
 }
 
