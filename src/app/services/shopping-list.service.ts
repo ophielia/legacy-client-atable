@@ -78,9 +78,9 @@ export class ShoppingListService extends BaseHeadersService {
 
   }
 
-  addShoppingListNew(dishIds: string[], mealPlanId: string,
-                     addBase: boolean, addPickup: boolean,
-                     generatePlan: boolean, listName: string = ""): Observable<HttpResponse<Object>> {
+  addShoppingList(dishIds: string[], mealPlanId: string,
+                  addBase: boolean,
+                  generatePlan: boolean, listName: string = ""): Observable<HttpResponse<Object>> {
 
     var properties: IListGenerateProperties = <IListGenerateProperties>({
       dish_sources: dishIds,

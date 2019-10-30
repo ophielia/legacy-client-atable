@@ -10,7 +10,6 @@ import {Router} from "@angular/router";
 export class SingleListComponentComponent implements OnInit {
 
   @Input() list: ShoppingList;
-  @Input() listType: string;
   @Input() displayText: string = "List";
   @Output() delete: EventEmitter<String> = new EventEmitter<String>();
   @Output() edit: EventEmitter<ShoppingList> = new EventEmitter<ShoppingList>();

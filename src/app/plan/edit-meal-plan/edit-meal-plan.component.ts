@@ -111,7 +111,7 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
 
   generateListFromMealPlan(listProperties) {
     var dishIdList = this.selectedDishes.map(d => d.dish_id);
-    this.shoppingListService.addShoppingListNew(null, this.mealPlanId, listProperties.add_from_starter, listProperties.add_from_pickup, listProperties.generate_mealplan)
+    this.shoppingListService.addShoppingList(null, this.mealPlanId, listProperties.add_from_starter, listProperties.add_from_pickup, listProperties.generate_mealplan)
       .subscribe(r => {
         var headers = r.headers;
         var location = headers.get("Location");

@@ -7,7 +7,6 @@ export interface IShoppingList {
   user_id: string;
   created: number;
   updated: number;
-  list_type: string;
   layout_type: string;
   item_count: number;
   is_starter: boolean;
@@ -24,7 +23,6 @@ export class ShoppingList implements IShoppingList {
   user_id: string;
   created: number;
   updated: number;
-  list_type: string;
   layout_type: string;
   item_count: number;
   dish_sources: IItemSource[];

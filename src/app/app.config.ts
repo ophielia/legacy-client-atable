@@ -1,4 +1,5 @@
 import {NgModule, InjectionToken} from '@angular/core';
+import { environment } from './../environments/environment';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
@@ -9,7 +10,7 @@ export class AppConfig {
 }
 
 export const APP_DI_CONFIG: AppConfig = {
-  apiEndpoint: 'http://localhost:8182/v1/',
+  apiEndpoint: environment.apiUrl,
   defaultRatingPower: 3,
   defaultShoppingListName: "Shopping List"
 };

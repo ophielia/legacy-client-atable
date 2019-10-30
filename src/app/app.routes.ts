@@ -6,10 +6,10 @@ import {ListLayoutListComponent} from "./legacy/list-layout-list/list-layout-lis
 import {TagTagAssignToolComponent} from "./legacy/tag-tag-assign-tool/tag-tag-assign-tool.component";
 import {TargetListComponent} from "./legacy/target-list/target-list.component";
 import {RatingTagAssignToolComponent} from "./legacy/rating-tag-assign-tool/rating-tag-assign-tool.component";
-import {LandingPadComponent} from "app/dashboard/landing-pad/landing-pad.component";
+import {ManageShoppingListComponent} from "./shopping-list/shopping-list-manage/shopping-list-manage.component";
 
 const routes: Routes = [
-  {path: 'home', component: LandingPadComponent},
+  {path: 'home', component: ManageShoppingListComponent},
   {path: 'login', component: LoginComponent},
   {path: 'add', component: AddTagComponent},
   {path: 'listlayout/list', component: ListLayoutListComponent},

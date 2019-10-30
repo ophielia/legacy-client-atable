@@ -58,8 +58,8 @@ export class ManageShoppingListComponent implements OnInit, OnDestroy {
     this.generalLists = lists;
   }
 
-  createShoppingList(listType) {
-    var $sub = this.shoppingListService.addShoppingListNew(null, null, false, false, false)
+  createShoppingList() {
+    var $sub = this.shoppingListService.addShoppingList(null, null, false, false, null)
       .subscribe(r => {
         var headers = r.headers;
         var location = headers.get("Location");
