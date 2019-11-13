@@ -33,6 +33,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private shoppingList: IShoppingList;
   private listLayoutList: ListLayout[];
   private listLegend: Map<string, string>;
+  private listOfLists: IShoppingList[] ;
   private starterListId: string;
   private isEditListName: boolean = false;
 
@@ -49,6 +50,8 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
   errorMessage: any;
   showMakeStarter: boolean;
+
+  private showAllLists: boolean;
 
 
   constructor(private route: ActivatedRoute,
@@ -77,7 +80,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       })
     this.getAllTags()
     this.getAllDishes();
-    this.getStarterList();
+    this.getFilteredLists();
   }
 
   ngOnDestroy(): void {
@@ -293,9 +296,9 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.highlightDishId = null;
   }
 
-  addFromList() {
+  addFromList(fromListId: string) {
     this.listLegend = null;
-    var $sub = this.shoppingListService.addListToShoppingList(this.shoppingList.list_id, this.starterListId.toString())
+    var $sub = this.shoppingListService.addListToShoppingList(this.shoppingList.list_id, fromListId)
       .subscribe(r => {
         this.highlightListId = this.starterListId;
         this.highlightDishId = null;
@@ -351,6 +354,11 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleShowAllLists() {
+    this.showAllLists = !this.showAllLists;
+
+  }
+
 
   private getStarterList() {
     var $sub = this.shoppingListService.getStarterLists()
@@ -359,6 +367,30 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           this.starterListId = lists[0].list_id;
         }
           });
+    this.unsubscribe.push($sub);
+  }
+
+
+  private getFilteredLists() {
+    this.listOfLists = []
+    var $sub = this.shoppingListService.getAll()
+      .subscribe( lists => {
+        for (let list of lists) {
+          // don't include this list
+          if (list.list_id == this.shoppingListId) {
+            continue;
+          }
+         // check for starter, and fill in starter
+          if (list.is_starter) {
+            this.starterListId = list.list_id;
+          }
+          // add to list
+          this.listOfLists.push(list);
+        }
+
+
+
+      });
     this.unsubscribe.push($sub);
   }
 

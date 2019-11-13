@@ -80,9 +80,18 @@
           <div class="row justify-content-end text-menu-link"
                (click)="clearList()">Clear List
           </div>
-          <div *ngIf="!isStarterList()" class="row justify-content-end text-menu-link"
-               (click)="addFromList()">Add From Starter List
-          </div>
+
+          <div class="row justify-content-end text-menu-link"
+               (click)="toggleShowAllLists()">Add From List</div>
+          <ng-container *ngIf="showAllLists">
+         <!-- <div *ngIf="!isStarterList()" style="text-align:right"
+               (click)="addFromList(starterListId)"> Starter List</div>-->
+            <div *ngFor="let singlelist of listOfLists" style="text-align:right"
+                 (click)="addFromList(singlelist.list_id)">
+              {{singlelist.name}}
+            <span *ngIf="starterListId == singlelist.list_id">(Starter)</span>
+            </div>
+          </ng-container>
         </div>
       </div>
 
