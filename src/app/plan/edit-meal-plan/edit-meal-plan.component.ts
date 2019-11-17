@@ -6,6 +6,7 @@ import {ShoppingListService} from "../../services/shopping-list.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
 import {Slot} from "../../model/slot";
+import {IShoppingList} from "../../model/shoppinglist";
 
 
 @Component({
@@ -23,6 +24,9 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
   sub: any;
   unsubscribe: Subscription[] = [];
   private mealPlanId: string;
+  private listOfLists: IShoppingList[] = [];
+  private starterListId: string;
+  private isShowAddToList: boolean = false;
 
 
   constructor(private mealPlanService: MealPlanService,
@@ -40,6 +44,7 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
       this.loadMealPlan();
     });
     this.unsubscribe.push($sub);
+    this.getLists()
   }
 
   ngOnDestroy() {
@@ -61,6 +66,9 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
 
   toggleGenerateList() {
     this.isShowGenerateList = !this.isShowGenerateList;
+  }
+  toggleAddToList() {
+    this.isShowAddToList = !this.isShowAddToList;
   }
 
   saveMealPlanName() {
@@ -141,6 +149,34 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
     this.router.navigate(['plan/fillin', meal_plan_id]);
   }
 
+  private getLists() {
+    this.listOfLists = []
+    var $sub = this.shoppingListService.getAll()
+      .subscribe( lists => {
+        for (let list of lists) {
+          // don't include this list
+          // check for starter, and fill in starter
+          if (list.is_starter) {
+            this.starterListId = list.list_id;
+          }
+          // add to list
+          this.listOfLists.push(list);
+        }
+
+
+
+      });
+    this.unsubscribe.push($sub);
+  }
+
+
+  addMealPlanToList(fromListId: string) {
+    var $sub = this.shoppingListService.addMealPlanToShoppingList(fromListId, this.mealPlan.meal_plan_id)
+      .subscribe(r => {
+        this.router.navigate(['/list/edit/', fromListId]);
+      });
+    this.unsubscribe.push($sub);
+  }
 
   generateShoppingList() {
     this.shoppingListService.generateShoppingList(this.mealPlan.meal_plan_id)

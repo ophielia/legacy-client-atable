@@ -45,6 +45,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private showAddDish: boolean;
   private showAddItem: boolean;
   private showMenu: boolean;
+  private showListLegend: boolean = true;
   private showPantryItems: boolean = true;
   private showItemLegends: boolean = true;
   private unsubscribe: Subscription[] = [];
@@ -52,6 +53,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   showMakeStarter: boolean;
 
   private showAllLists: boolean;
+  private showItemLegend: boolean;
 
 
   constructor(private route: ActivatedRoute,
@@ -95,7 +97,9 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           this.shoppingList = p;
           this.generateLegend();
           this.checkSpecialCategories();
-          this.showMakeStarter = !this.shoppingList.is_starter
+          this.showMakeStarter = !this.shoppingList.is_starter;
+          this.showListLegend = this.evaluateShowLegend();
+          this.showItemLegend = this.evaluateShowItemLegend();
         });
       this.unsubscribe.push($sub);
     } else {
@@ -105,7 +109,9 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           this.shoppingList = p;
           this.generateLegend();
           this.checkSpecialCategories();
-          this.showMakeStarter = !this.shoppingList.is_starter
+          this.showMakeStarter = !this.shoppingList.is_starter;
+          this.showListLegend = this.evaluateShowLegend();
+          this.showItemLegend = this.evaluateShowItemLegend();
         });
       this.unsubscribe.push($sub);
     }
@@ -312,9 +318,26 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     return this.shoppingList.is_starter;
   }
 
-  showLegend() {
-    if (this.shoppingList.dish_sources.length > 0) {
-      return true;
+  evaluateShowSources() {
+    var thisListIsTheStarter = this.shoppingList.is_starter;
+    if (thisListIsTheStarter) {
+      return false;
+    }
+    return this.showItemLegend || this.showListLegend;
+  }
+
+  evaluateShowItemLegend() {
+    var thisListIsTheStarter = this.shoppingList.is_starter;
+    if (thisListIsTheStarter) {
+      return false;
+    }
+    return this.shoppingList.dish_sources.length > 0;
+  }
+
+  evaluateShowLegend() {
+    var thisListIsTheStarter = this.shoppingList.is_starter;
+    if (thisListIsTheStarter) {
+      return false;
     }
     return this.shoppingList.list_sources.length > 0;
   }

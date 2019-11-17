@@ -165,6 +165,14 @@ export class ShoppingListService extends BaseHeadersService {
         null);
   }
 
+  addMealPlanToShoppingList(shoppingList_id: string, mealPlanId: string): Observable<Object> {
+    var url = this.shoppingListUrl + "/" + shoppingList_id + "/mealplan/" + mealPlanId;
+    return this
+      .httpClient
+      .put(url,
+        null);
+  }
+
   addDishToShoppingList(shoppingList_id: string, dish_id: string): Observable<HttpResponse<Object>> {
     return this
       .httpClient

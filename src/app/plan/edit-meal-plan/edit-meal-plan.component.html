@@ -58,6 +58,14 @@
           <div class="row justify-content-end text-menu-link" (click)="goToRateMealPlan(mealPlan.meal_plan_id)">Rate
             Meal Plan
           </div>
+          <div class="row justify-content-end text-menu-link" (click)="toggleAddToList()">Add to List</div>
+          <ng-container *ngIf="isShowAddToList" >
+            <div *ngFor="let singlelist of listOfLists" style="text-align:right"
+                 (click)="addMealPlanToList(singlelist.list_id)">
+              {{singlelist.name}}
+              <span *ngIf="starterListId == singlelist.list_id">(Starter)</span>
+            </div>
+          </ng-container>
           <div class="row justify-content-end text-menu-link" (click)="toggleGenerateList()">Generate List</div>
           <div *ngIf="isShowGenerateList" class="row justify-content-end text-menu-link">
             <at-generate-list [showMealPlanOption]="false"

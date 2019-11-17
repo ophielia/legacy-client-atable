@@ -32,7 +32,7 @@
             </div>
 
             <at-shopping-list-items [category]="category" [legendMap]="listLegend"
-                                    [showItemLegends]="showItemLegends" [listId]="shoppingList.list_id"
+                                    [showItemLegends]="evaluateShowSources()" [listId]="shoppingList.list_id"
                                     (listUpdated)="getShoppingList(shoppingList.list_id)"></at-shopping-list-items>
 
           </div>
@@ -84,9 +84,7 @@
           <div class="row justify-content-end text-menu-link"
                (click)="toggleShowAllLists()">Add From List</div>
           <ng-container *ngIf="showAllLists">
-         <!-- <div *ngIf="!isStarterList()" style="text-align:right"
-               (click)="addFromList(starterListId)"> Starter List</div>-->
-            <div *ngFor="let singlelist of listOfLists" style="text-align:right"
+              <div *ngFor="let singlelist of listOfLists" style="text-align:right"
                  (click)="addFromList(singlelist.list_id)">
               {{singlelist.name}}
             <span *ngIf="starterListId == singlelist.list_id">(Starter)</span>
@@ -137,13 +135,13 @@
 
       </div>
 
-      <div *ngIf="showLegend()" class="row menubar-flush-bottom main-color justify-content-end">
+      <div *ngIf="showListLegend || showItemLegend" class="row menubar-flush-bottom main-color justify-content-end">
         <div class="col" style="padding:0px;">
 
 
           <div class="row justify-content-center">
             <div class="legend-table">
-
+              <ng-container *ngIf="showItemLegend">
               <div *ngFor="let source of shoppingList.dish_sources"
                    class="legend-row">
                 <div class="legend-cell" (click)="highlightDish(source);">
@@ -159,6 +157,7 @@
 
                 </div>
               </div>
+              </ng-container>
 
               <div *ngFor="let source of shoppingList.list_sources"
                    class="legend-row">
@@ -178,14 +177,14 @@
 
             </div>
           </div>
+          <ng-container *ngIf="showItemLegend">
           <div *ngIf="!showItemLegends" class="row justify-content-end" style="padding-right:10px;"
                (click)="toggleShowItemLegends()">show sources
           </div>
           <div *ngIf="showItemLegends" class="row justify-content-end" style="padding-right:10px;"
                (click)="toggleShowItemLegends()">hide sources
           </div>
-
-
+          </ng-container>
         </div>
       </div>
 
