@@ -38,4 +38,10 @@ export class ShoppingListItemsComponent implements OnInit {
     }
     return item.dish_sources.length > 0 || item.list_sources.length > 0;
   }
+
+  crossedOutClass(item: Item) {
+    if (item.crossed_off_ts) {
+      return "crossedOutClass";
+    }
+  }
 }

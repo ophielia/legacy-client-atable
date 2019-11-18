@@ -42,13 +42,13 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   private showListLayouts: boolean;
   private showSources: boolean = false;
-  private showAddDish: boolean;
-  private showAddItem: boolean;
-  private showMenu: boolean;
   private showListLegend: boolean = true;
   private showPantryItems: boolean = true;
   private showItemLegends: boolean = true;
   private unsubscribe: Subscription[] = [];
+  private showAddDish: boolean;
+  private showAddItem: boolean;
+  private showMenu: boolean;
   errorMessage: any;
   showMakeStarter: boolean;
 
@@ -277,7 +277,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.listLegend = null;
     var $sub = this.shoppingListService.addDishToShoppingList(this.shoppingList.list_id, dish.dish_id)
       .subscribe(t => {
-        this.highlightDishId = dish.dish_id;
+        this.highlightDishId = this.shoppingList.is_starter ? null : dish.dish_id;
         this.getShoppingList(this.shoppingList.list_id);
         this.showAddDish = false;
       });
@@ -306,7 +306,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.listLegend = null;
     var $sub = this.shoppingListService.addListToShoppingList(this.shoppingList.list_id, fromListId)
       .subscribe(r => {
-        this.highlightListId = this.starterListId;
+        this.highlightListId = null;
         this.highlightDishId = null;
         this.getShoppingList(this.shoppingList.list_id);
       });

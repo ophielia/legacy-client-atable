@@ -82,6 +82,9 @@ export class ShoppingListService extends BaseHeadersService {
                   addBase: boolean,
                   generatePlan: boolean, listName: string = ""): Observable<HttpResponse<Object>> {
 
+    if (listName = "") {
+      listName = this.config.defaultShoppingListName;
+    }
     var properties: IListGenerateProperties = <IListGenerateProperties>({
       dish_sources: dishIds,
       meal_plan_source: mealPlanId,
