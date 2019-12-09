@@ -9,7 +9,9 @@
       <div *ngFor="let item of subcategory.items"
            class="dish-menubar-text-color content-panel-text"
            (dblclick)="removeTagFromList(item)">
-        {{item.tag.name}}
+              <span> {{item.crossed_off ? 'style="text-decoration:line-through;"' : ''}}>
+        {{item.tag.name}}</span>
+
         <ng-container>
           <span *ngIf="item.used_count > 1 && !showItemLegends">({{item.used_count}})</span>
 
@@ -29,7 +31,8 @@
   <div class="col-6 dish-menubar-text-color content-panel-text" *ngFor="let item of category.items"
        (dblclick)="removeTagFromList(item)">
     <div class="row">
-      {{item.tag.name}}
+              <span class="{{item.crossed_off ? 'itemCrossedOff': ''}}">
+                {{item.tag.name}}</span>
       <ng-container *ngIf="!(category.is_frequent)">
         <span *ngIf="item.used_count > 1 && !showItemLegends">({{item.used_count}})</span>
         <span *ngIf="showLegends(item)" class="legend-combined-box">
