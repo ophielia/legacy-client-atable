@@ -32,7 +32,7 @@
             </div>
 
             <at-shopping-list-items [category]="category" [legendMap]="listLegend"
-                                    [showItemLegends]="evaluateShowSources()" [listId]="shoppingList.list_id"
+                                    [showItemLegends]="showItemLegends && !shoppingList.is_starter" [listId]="shoppingList.list_id"
                                     (listUpdated)="getShoppingList(shoppingList.list_id)"></at-shopping-list-items>
 
           </div>
@@ -110,7 +110,6 @@
 
         </div>
       </div>
-
       <div *ngIf="showMenu"
            class="row dish-menubar-text-color menubar-flush-middle dish-menu-dropdown-color justify-content-end {{showAddItem?'':'broken-list-fix'}}">
         <div class="col">
@@ -177,6 +176,7 @@
 
             </div>
           </div>
+
           <ng-container *ngIf="showSources">
           <div *ngIf="!showItemLegends" class="row justify-content-end" style="padding-right:10px;"
                (click)="toggleShowItemLegends()">show sources
