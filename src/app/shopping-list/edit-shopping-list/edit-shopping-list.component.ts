@@ -100,6 +100,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           this.showMakeStarter = !this.shoppingList.is_starter;
           this.showListLegend = this.evaluateShowLegend();
           this.showItemLegend = this.evaluateShowItemLegend();
+          this.showSources = this.evaluateShowSources()
         });
       this.unsubscribe.push($sub);
     } else {
@@ -112,6 +113,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           this.showMakeStarter = !this.shoppingList.is_starter;
           this.showListLegend = this.evaluateShowLegend();
           this.showItemLegend = this.evaluateShowItemLegend();
+          this.showSources = this.evaluateShowSources()
         });
       this.unsubscribe.push($sub);
     }
