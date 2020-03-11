@@ -17,6 +17,8 @@ import {ItemSource} from "app/model/item-source";
 import {RatingUpdateInfo} from "./rating-update-info";
 import {IRatingInfo, RatingInfo} from "./rating-info";
 import {DishRatingInfo, IDishRatingInfo} from "./dish-rating-info";
+import {User} from "./user";
+import RoleType from "./role-type";
 
 export default class MappingUtils {
 
@@ -72,6 +74,7 @@ export default class MappingUtils {
     return tag;
   }
 
+
   private static _toDish(r: any): Dish {
     let dish = <Dish>({
         dish_id: r.dish_id,
@@ -83,6 +86,19 @@ export default class MappingUtils {
       })
     ;
     return dish;
+  }
+
+  private static _toUser(r: any) {
+
+    let user = <User>({
+      email: r.email,
+    creation_date: r.creation_date,
+    user_name: r.user_name,
+    roles: r.roles,
+    token: r.token
+
+    });
+    return user;
   }
 
   private static _toRatingUpdateInfo(r: any): RatingUpdateInfo {
@@ -208,6 +224,11 @@ export default class MappingUtils {
 
     }
     return drilldown;
+  }
+
+  static toUser(r: any): User {
+    let user = MappingUtils._toUser(r.user)
+    return user;
   }
 
   static toDish(r: any): Dish {
@@ -377,4 +398,7 @@ export default class MappingUtils {
 
     return dish;
   }
+
+
+
 }

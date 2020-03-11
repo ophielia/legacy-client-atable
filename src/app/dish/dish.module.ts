@@ -16,6 +16,8 @@ import {ManageDishComponent} from './manage-dish/manage-dish.component';
 import {PlanModule} from "../plan/plan.module";
 import {DishFilterSelectCommService} from "../app-common/dish-filter-select/dish-filter-select-comm.service";
 import {EditDishComponent} from "./edit-dish/edit-dish.component";
+import {AuthGuard} from "../handlers/auth-guard";
+import {RoleGuard} from "../handlers/role-guard";
 
 @NgModule({
   imports: [
