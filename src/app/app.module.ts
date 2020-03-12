@@ -17,6 +17,9 @@ import {MyErrorHandler} from "./handlers/my-error-handler";
 
 import {MyTokenInterceptor} from "./handlers/my-token-interceptor";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {DishFilterSelectCommService} from "./app-common/dish-filter-select/dish-filter-select-comm.service";
+import {AuthGuard} from "./handlers/auth-guard";
+import {RoleGuard} from "./handlers/role-guard";
 
 
 @NgModule({
@@ -46,7 +49,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     // include alert service in app module providers
     AlertService,
     {provide: ErrorHandler, useClass: MyErrorHandler},
-    {provide: HTTP_INTERCEPTORS, useClass: MyTokenInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: MyTokenInterceptor, multi: true},
+    AuthGuard, RoleGuard
   ],
   bootstrap: [AppComponent]
 })

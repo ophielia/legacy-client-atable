@@ -10,13 +10,13 @@ import {ManageShoppingListComponent} from "./shopping-list/shopping-list-manage/
 
 const routes: Routes = [
   {path: 'home', component: ManageShoppingListComponent},
-  {path: 'login', component: LoginComponent},
+  {path: 'login', component: LoginComponent} , /*
   {path: 'add', component: AddTagComponent},
   {path: 'listlayout/list', component: ListLayoutListComponent},
   {path: 'tools/tagtotag', component: TagTagAssignToolComponent},
   {path: 'targets/list', component: TargetListComponent},
   {path: 'tools/dishtotag', component: DishTagAssignToolComponent},
-  {path: 'tools/ratingtag', component: RatingTagAssignToolComponent},
+  {path: 'tools/ratingtag', component: RatingTagAssignToolComponent},*/
   {path: '', redirectTo: 'home', pathMatch: 'full'}
 ];
 

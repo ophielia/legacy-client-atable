@@ -14,24 +14,26 @@ import {ProposalEditComponent} from "app/legacy/proposal-edit/proposal-edit.comp
 import {RatingTagAssignToolComponent} from "./rating-tag-assign-tool/rating-tag-assign-tool.component";
 import {LayoutSubcategoryToolComponent} from "./layout-subcategory-tool/layout-subcategory-tool.component";
 import {DeleteTagComponent} from "./delete-tag/delete-tag.component";
+import {AddDishCreateComponent} from "../dish/add-dish-create/add-dish-create.component";
+import {RoleGuard} from "../handlers/role-guard";
 
 const legacyRoutes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'add', component: AddTagComponent},
-  {path: 'edit/:id', component: EditTagComponent},
-  {path: 'listlayout/list', component: ListLayoutListComponent},
-  {path: 'listlayout/edit/:id', component: EditListLayoutComponent},
-  {path: 'listlayout/assign/:id', component: ListTagAssignToolComponent},
-  {path: 'listlayout/tools/category/:id', component: LayoutSubcategoryToolComponent},
-  {path: 'tools/tagtotag', component: TagTagAssignToolComponent},
-  {path: 'tools/delete', component: DeleteTagComponent},
-  {path: 'targets/list', component: TargetListComponent},
-  {path: 'targets/edit/:id', component: TargetEditComponent},
-  {path: 'proposal/edit/:id', component: ProposalEditComponent},
-  {path: 'tools/dishtotag', component: DishTagAssignToolComponent},
-  {path: 'tools/ratingtag', component: RatingTagAssignToolComponent},
-  {path: '', redirectTo: 'dish/list', pathMatch: 'full'}
+  {path: 'add', component: AddTagComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'edit/:id', component: EditTagComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'listlayout/list', component: ListLayoutListComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'listlayout/edit/:id', component: EditListLayoutComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'listlayout/assign/:id', component: ListTagAssignToolComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'listlayout/tools/category/:id', component: LayoutSubcategoryToolComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'tools/tagtotag', component: TagTagAssignToolComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'tools/delete', component: DeleteTagComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'targets/list', component: TargetListComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'targets/edit/:id', component: TargetEditComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'proposal/edit/:id',component: ProposalEditComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'tools/dishtotag',component: DishTagAssignToolComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'tools/ratingtag',component: RatingTagAssignToolComponent,canActivate: [RoleGuard],data: {expectedRole: 'ROLE_ADMIN'}}
+
 ];
 
 export const legacyRouting = RouterModule.forRoot(legacyRoutes);

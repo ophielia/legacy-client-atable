@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {AuthenticationService} from '../services/authentication.service';
 import decode from 'jwt-decode';
-import MappingUtils from "../model/mapping-utils";
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -10,8 +9,7 @@ export class RoleGuard implements CanActivate {
 
   }
 
-  canActivate(route: ActivatedRouteSnapshot): boolean {    // this will be passed from the route config
-    // on the data property
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {    // on the data property
     const expectedRole = route.data.expectedRole;
     const userString = localStorage.getItem('currentUser');    // decode the token to get its payload
     const user = JSON.parse(userString)
@@ -21,7 +19,7 @@ export class RoleGuard implements CanActivate {
       !this.auth.isAuthenticated() ||
       !user.roles.includes(expectedRole)
     ) {
-      this.router.navigate(['login']);
+      this.router.navigate(['login'], {queryParams: {returnUrl: state.url}});
       return false;
     }
     return true;
