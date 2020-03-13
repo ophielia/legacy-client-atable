@@ -13,6 +13,8 @@ import {throwError} from "rxjs";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {map} from "rxjs/operators";
 import {IShoppingListPut, ShoppingListPut} from "../model/shoppinglistput";
+import {TargetSlot} from "../model/target-slot";
+import {ItemOperationPut} from "../model/item-operation-put";
 
 @Injectable()
 export class ShoppingListService extends BaseHeadersService {
@@ -112,24 +114,24 @@ export class ShoppingListService extends BaseHeadersService {
 
   removeItemFromShoppingList(shoppingList_id: string,
                              item_id: string,
+                             tag_id: string,
                              remove_all: boolean,
                              dish_id: string): Observable<Object> {
-    var url = this.shoppingListUrl + "/" + shoppingList_id + "/item/" + item_id;
-    var params: string[] = new Array();
-    if (dish_id) {
-      params.push("sourceId=" + dish_id);
-    }
-    if (remove_all) {
-      params.push("removeEntireItem=true");
-    }
 
-    if (params.length > 0) {
-      var paramstr = params.join("&");
-      url = url + "?" + paramstr;
+    var tagIds: Array<string> = [tag_id];
+    let itemOperation = <ItemOperationPut>({
+      destination_list_id: '0',
+    operation: 'Remove',
+    tag_ids: tagIds
     }
+    );
+    var url: string= this.shoppingListUrl + "/" + shoppingList_id + "/item"
+    var payload = JSON.stringify(itemOperation);
     return this
       .httpClient
-      .delete(url);
+      .put(`${url}`,
+        payload);
+
   }
 
   removeDishItemsFromShoppingList(list_id: string, dish_id: string) {

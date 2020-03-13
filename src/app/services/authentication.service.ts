@@ -7,6 +7,8 @@ import "rxjs/add/observable/throw";
 import {throwError} from "rxjs";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {APP_CONFIG, AppConfig} from "../app.config";
+import {User} from "../model/user";
+import MappingUtils from "../model/mapping-utils";
 
 @Injectable()
 export class AuthenticationService {
@@ -32,10 +34,11 @@ export class AuthenticationService {
     }), httpOptions)
       .map((response: HttpResponse<any>) => {
         // login successful if there's a jwt token in the response
+        let user = this.mapUser(response);
         let token = response["token"];
-        if (token) {
+        if (user) {
           // store username and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify({username: username, token: token}));
+          localStorage.setItem('currentUser', JSON.stringify(user));
 
           // return true to indicate successful login
           return true;
@@ -55,5 +58,18 @@ export class AuthenticationService {
   logout(): void {
     // clear token remove user from local storage to log user out
     localStorage.removeItem('currentUser');
+  }
+
+  // ...
+  public isAuthenticated(): boolean {
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    var token = currentUser && currentUser.token;
+    // true or false
+    //return !this.jwtHelper.isTokenExpired(token);
+    return token != null
+
+  }
+  private mapUser(object: Object): User {
+    return MappingUtils.toUser(object);
   }
 }

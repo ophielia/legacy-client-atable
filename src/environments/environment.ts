@@ -5,5 +5,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8182/v1/'
+  apiUrl: 'http://localhost:8182/'
+  //apiUrl: 'http://list-shop-seedbeta.apps.us-west-2.starter.openshift-online.com/'
+ // apiUrl: 'http://list-shop-dev-seedbeta.apps.us-west-2.starter.openshift-online.com/'
 };

@@ -28,6 +28,7 @@ export class ShoppingListItemsComponent implements OnInit {
   removeTagFromList(item: Item) {
 
     var $sub = this.shoppingListService.removeItemFromShoppingList(this.listId, item.item_id,
+      item.tag.tag_id,
       true, this.category.dish_id)  // note - always remove entire item
       .subscribe(t => this.listUpdated.emit(true));
   }

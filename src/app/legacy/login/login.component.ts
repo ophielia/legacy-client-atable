@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import {AuthenticationService} from '../../services/authentication.service';
 
@@ -13,14 +13,18 @@ export class LoginComponent implements OnInit {
   model: any = {};
   loading = false;
   error = '';
+  private returnUrl: string;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
     // reset login status
     this.authenticationService.logout();
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   login() {
@@ -29,7 +33,7 @@ export class LoginComponent implements OnInit {
       .subscribe(result => {
         if (result === true) {
           // login successful
-          this.router.navigate(['home']);
+          this.router.navigateByUrl(this.returnUrl);
         } else {
           // login failed
           this.error = 'Username or password is incorrect';

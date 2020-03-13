@@ -7,17 +7,26 @@ import {AddDishFinishComponent} from "./add-dish-finish/add-dish-finish.componen
 import {ManageDishComponent} from "./manage-dish/manage-dish.component";
 import {AddDishCreateComponent} from "./add-dish-create/add-dish-create.component";
 import {EditDishComponent} from "./edit-dish/edit-dish.component";
+import {AuthGuard} from "../handlers/auth-guard";
+import {RoleGuard} from "../handlers/role-guard";
 
 const dishRoutes: Routes = [
   {path: 'home', component: LandingPadComponent},
-  {path: 'adddish/ratings/:id', component: AddDishRatingComponent},
-  {path: 'adddish', component: AddDishCreateComponent},
-  {path: 'adddish/general/:id', component: AddDishGeneralComponent},
-  {path: 'adddish/ingredients/:id', component: AddDishIngredientComponent},
-  {path: 'adddish/finish/:id', component: AddDishFinishComponent},
-  {path: 'editdish/:id', component: EditDishComponent},
-  {path: 'managedishes', component: ManageDishComponent},
-  {path: '', redirectTo: 'dish/list', pathMatch: 'full'}
+  {path: 'adddish/ratings/:id', component: AddDishRatingComponent,canActivate: [AuthGuard]},
+  {path: 'adddish/general/:id', component: AddDishGeneralComponent,canActivate: [AuthGuard]},
+  {path: 'adddish/ingredients/:id', component: AddDishIngredientComponent,canActivate: [AuthGuard]},
+  {path: 'adddish/finish/:id', component: AddDishFinishComponent,canActivate: [AuthGuard]},
+  {path: 'editdish/:id', component: EditDishComponent,canActivate: [AuthGuard]},
+  { path: 'managedishes', component: ManageDishComponent,canActivate: [AuthGuard]},
+  {path: '', redirectTo: 'dish/list', pathMatch: 'full'},
+  {
+    path: 'adddish',
+    component: AddDishCreateComponent,
+    canActivate: [RoleGuard],
+    data: {
+      expectedRole: 'ROLE_USER'
+    }
+  },
 ];
 
 export const dishRouting = RouterModule.forRoot(dishRoutes);
