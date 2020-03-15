@@ -20,11 +20,13 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DishFilterSelectCommService} from "./app-common/dish-filter-select/dish-filter-select-comm.service";
 import {AuthGuard} from "./handlers/auth-guard";
 import {RoleGuard} from "./handlers/role-guard";
+import {ActionableDirective} from "./actionable.directive";
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    ActionableDirective,
     NavigationComponent,
     AddDishCreateComponent,
     AlertComponent,

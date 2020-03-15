@@ -25,7 +25,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class ModalComponent {
 
   public visible = false;
-  private visibleAnimate = false;
+  visibleAnimate = false;
   @Input() autoHide: number = 0;
   @Output() modalResult: EventEmitter<string> = new EventEmitter<string>();
 

@@ -47,7 +47,7 @@ export class DishFilterSelectComponent implements OnInit {
   private errorMessage: string;
   unsubscribe: Subscription[] = [];
   private alltags: ITag[];
-  private alltagsSearch: ITag[];
+  alltagsSearch: ITag[];
 
   constructor(private dishService: DishService,
               private tagCommService: TagCommService,
