@@ -14,7 +14,7 @@ import {TargetService} from "../../services/target.service";
 export class DinnerTonightOnHandComponent implements OnInit, OnDestroy {
 
   private selectedTags: ITag[] = [];
-  private alltagsSearch: ITag[];
+  alltagsSearch: ITag[];
   unsubscribe: Subscription[] = [];
 
   constructor(private tagService: TagsService,

@@ -24,7 +24,7 @@ import {DishService} from "../../services/dish-service.service";
 })
 export class EditShoppingListComponent implements OnInit, OnDestroy {
   @ViewChild('modal1') input;
-  private shoppingListId: any = ShoppingList;
+  public shoppingListId: any = ShoppingList;
   private allDishes: IDish[];
   private alltags: ITag[];
 

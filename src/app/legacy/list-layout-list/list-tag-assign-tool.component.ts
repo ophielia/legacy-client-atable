@@ -20,9 +20,9 @@ export class ListTagAssignToolComponent implements OnInit, OnDestroy {
   private unCatTagList: ITag[];
   private layoutId: string;
   private subGetId: any;
-  private listLayout: ListLayout;
-  private loading: boolean = true;
-  private showToAdd: boolean = false;
+  public listLayout: ListLayout;
+  public loading: boolean = true;
+  public showToAdd: boolean = false;
   private addLocked: boolean = true;
   private deleteLocked: boolean = true;
 

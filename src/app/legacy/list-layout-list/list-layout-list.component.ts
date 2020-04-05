@@ -14,8 +14,8 @@ export class ListLayoutListComponent implements OnInit {
 
   private listLayoutService: ListLayoutService;
   allLayouts: { [id: string]: ListLayout; } = {};
-  private errorMessage: string;
-  private layoutTypes: string[];
+  public errorMessage: string;
+  public layoutTypes: string[];
 
   constructor(listLayoutService: ListLayoutService, private router: Router) {
     this.listLayoutService = listLayoutService;

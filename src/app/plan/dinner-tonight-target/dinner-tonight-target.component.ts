@@ -20,7 +20,7 @@ export class DinnerTonightTargetComponent implements OnInit, OnDestroy {
   target: Target;
 
   private selectedTags: ITag[] = [];
-  private alltagsSearch: ITag[];
+  alltagsSearch: ITag[];
   unsubscribe: Subscription[] = [];
 
   constructor(private tagService: TagsService,

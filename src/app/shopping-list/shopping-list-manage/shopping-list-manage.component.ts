@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 })
 export class ManageShoppingListComponent implements OnInit, OnDestroy {
 
-  private generalLists: ShoppingList[];
+  public generalLists: ShoppingList[];
 
   unsubscribe: Subscription[] = [];
 

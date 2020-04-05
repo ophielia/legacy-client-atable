@@ -18,7 +18,7 @@ import {ListLayoutCategory} from "../../model/listcategory";
 })
 export class LayoutSubcategoryToolComponent implements OnInit {
   private layoutId: string;
-  private listLayout: ListLayout;
+  listLayout: ListLayout;
 
 
   ratingSubTags: any[];

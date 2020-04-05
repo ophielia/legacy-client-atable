@@ -23,7 +23,7 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   tagTypeList: string[] = TagType.listAll();
   selectedTag: ITag;
   parentTags: ITag[];
-  private showToAdd: boolean = false;
+  public showToAdd: boolean = false;
   private subTagEvent: any;
   private createNewGroupFlag: boolean = false;
   currentSelectType: string = TagSelectType.All;
@@ -33,7 +33,7 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   tagsToAdd: ITag[];
   private editTagList: TagDrilldown[];
   private errorMessage: string;
-  private loading: boolean = false;
+  public loading: boolean = false;
 
   private layoutId: string;
   private listLayout: ListLayout;

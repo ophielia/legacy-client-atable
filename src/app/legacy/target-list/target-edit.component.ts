@@ -35,7 +35,7 @@ export class TargetEditComponent implements OnInit, OnDestroy {
   target: Target = <Target>{target_id: "", target_name: ""};
   sub: any;
   private errorMessage: string;
-  private proposalId: string;
+  public proposalId: string;
 
 
   constructor(private targetService: TargetService,

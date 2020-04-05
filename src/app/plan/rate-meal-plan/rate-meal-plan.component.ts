@@ -21,7 +21,7 @@ export class RateMealPlanComponent implements OnInit {
   private ratingInfo: RatingUpdateInfo;
   private headers: IRatingInfo[];
   private dishRatingInfo: DishRatingInfo[];
-  private loaded: boolean = false;
+  public  loaded: boolean = false;
 
   private currentIndex = 0;
   private ratingColumnCount = 5;

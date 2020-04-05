@@ -18,11 +18,11 @@ export class AddToMealPlanComponent implements OnInit {
 
   mealPlan: MealPlan;
   private mealPlanId: string;
-  private mealPlanDishes: Dish[] = [];
+  mealPlanDishes: Dish[] = [];
   filterTags: ITag[];
   tagSelectEvent: any;
   selectType: string = TagSelectType.Search;
-  private showSelectedMenu: boolean = false;
+  showSelectedMenu: boolean = false;
   unsubscribe: Subscription[] = [];
 
   constructor(private dishService: DishService,

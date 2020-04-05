@@ -12,7 +12,7 @@ import {MealPlan} from "../../model/mealplan";
 })
 export class ManagePlansComponent implements OnInit, OnDestroy {
   errorMessage: any;
-  private mealPlans: MealPlan[];
+  public mealPlans: MealPlan[];
 
   unsubscribe: Subscription[] = [];
 

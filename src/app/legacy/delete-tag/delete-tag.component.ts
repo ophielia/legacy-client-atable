@@ -18,7 +18,7 @@ export class DeleteTagComponent implements OnInit, OnDestroy {
   unsubscribe: Subscription[] = [];
   private tagToDelete: ITag;
   private tagForReplace: Tag;
-  private message: String;
+   message: String;
 
   constructor(private tagService: TagsService,
               private targetService: TargetService,

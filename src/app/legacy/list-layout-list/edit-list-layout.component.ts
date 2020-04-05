@@ -14,7 +14,7 @@ export class EditListLayoutComponent implements OnInit, OnDestroy {
   private subGetId: any;
   private showAdd: boolean = false;
   private showEdit: string;
-  private loaded: boolean = false;
+  public loaded: boolean = false;
 
   constructor(private listLayoutService: ListLayoutService,
               private route: ActivatedRoute,

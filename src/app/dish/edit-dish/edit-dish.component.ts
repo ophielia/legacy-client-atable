@@ -27,7 +27,7 @@ export class EditDishComponent implements OnInit, OnDestroy {
   browseAllDrilldowns: { [type: string]: TagDrilldown[] } = {};
   browseTagTypes: string[];
   expandFoldState: Map<string, boolean> = new Map<string, boolean>();
-  private isTagEntry: boolean;
+  public isTagEntry: boolean;
   private showBrowse: boolean = false;
 
 
