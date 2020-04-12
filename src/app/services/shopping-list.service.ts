@@ -3,7 +3,7 @@ import {AuthenticationService} from "./authentication.service";
 import {Observable} from "rxjs/Observable";
 import {IShoppingList} from "../model/shoppinglist";
 import MappingUtils from "../model/mapping-utils";
-import {Item} from "../model/item";
+import {IItem, Item} from "../model/item";
 import {ITag} from "../model/tag";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {BaseHeadersService} from "app/services/base-service";
@@ -146,6 +146,23 @@ export class ShoppingListService extends BaseHeadersService {
     return this
       .httpClient
       .delete(url);
+  }
+
+  removeItemsFromShoppingList(list_id: string) {
+
+    let itemOperation = <ItemOperationPut>({
+        destination_list_id: '0',
+        operation: 'RemoveCrossedOff',
+        tag_ids: []
+      }
+    );
+    let url: string= this.shoppingListUrl + "/" + list_id + "/item"
+    let payload = JSON.stringify(itemOperation);
+    return this
+      .httpClient
+      .put(`${url}`,
+        payload);
+
   }
 
   removeAllItemsFromList(shoppinglist_id: string) {

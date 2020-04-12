@@ -32,7 +32,8 @@
             </div>
 
             <at-shopping-list-items [category]="category" [legendMap]="listLegend"
-                                    [showItemLegends]="showItemLegends && !shoppingList.is_starter" [listId]="shoppingList.list_id"
+                                    [showItemLegends]="showItemLegends && !shoppingList.is_starter"
+                                    [listId]="shoppingList.list_id"
                                     (listUpdated)="getShoppingList(shoppingList.list_id)"></at-shopping-list-items>
 
           </div>
@@ -60,8 +61,14 @@
           <div *ngIf="showPantryItems" class="row justify-content-end text-menu-link"
                (click)="togglePantryItems()">Hide Pantry Items
           </div>
-          <div *ngIf="crossedOffExist" class="row justify-content-end text-menu-link"
-               (click)="togglePantryItems()">Hide Crossed Off Items
+          <div *ngIf="crossedOffExist && !crossedOffHidden" class="row justify-content-end text-menu-link"
+               (click)="toggleShowCrossedOff()">Hide Crossed Off Items
+          </div>
+          <div *ngIf="crossedOffExist && crossedOffHidden" class="row justify-content-end text-menu-link"
+               (click)="toggleShowCrossedOff()">Show Crossed Off Items
+          </div>
+          <div *ngIf="crossedOffExist && !crossedOffHidden" class="row justify-content-end text-menu-link"
+               (click)="removeCrossedOffItems()">Remove Crossed Off Items
           </div>
           <div class="row justify-content-end text-menu-link"
                (click)="toggleLayoutList()">Change Layout
