@@ -1,4 +1,4 @@
-import {Item} from "./item";
+import {IItem, Item} from "./item";
 export interface ICategory {
   override_class: string ;
   name: string;
@@ -7,19 +7,26 @@ export interface ICategory {
   category_type: string;
   is_frequent: boolean;
   dish_id: string;
+
+  allItems(): IItem[]
 }
 
 
 export class Category implements ICategory {
-  constructor() {
+  constructor(
+    public name: string,
+    public items: Item[],
+    public  subcategories: Category[],
+    public  category_type: string,
+    public  override_class: string,
+    public  is_frequent: boolean,
+    public   dish_id: string
+) {}
+
+  allItems(): IItem[] {
+    return this.items;
   }
 
-  name: string;
-  items: Item[];
-  subcategories: Category[];
-  category_type: string;
-  override_class: string;
-  is_frequent: boolean;
-  dish_id: string;
+
 }
 

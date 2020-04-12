@@ -18,7 +18,6 @@ import {RatingUpdateInfo} from "./rating-update-info";
 import {IRatingInfo, RatingInfo} from "./rating-info";
 import {DishRatingInfo, IDishRatingInfo} from "./dish-rating-info";
 import {User} from "./user";
-import RoleType from "./role-type";
 
 export default class MappingUtils {
 
@@ -140,13 +139,16 @@ export default class MappingUtils {
   }
 
   private static _toCategory(r: any): Category {
-    let category = <Category>({
-      name: r.name,
-      items: r.items.map(MappingUtils._toItem),
-      category_type: r.category_type,
-      subcategories: r.subcategories ? r.subcategories.map(MappingUtils._toCategory) : null
+    let category = new Category(
+      r.name,
+      r.items.map(MappingUtils._toItem),
+      (r.subcategories ? r.subcategories.map(MappingUtils._toCategory) : null),
+      r.category_type,
+      null,
+      false,
+      null
+  ) ;
 
-    });
 
     if (MappingUtils.showConsoleLogs) {
       console.log('Parsed category:', category);

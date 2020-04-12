@@ -60,6 +60,9 @@
           <div *ngIf="showPantryItems" class="row justify-content-end text-menu-link"
                (click)="togglePantryItems()">Hide Pantry Items
           </div>
+          <div *ngIf="crossedOffExist" class="row justify-content-end text-menu-link"
+               (click)="togglePantryItems()">Hide Crossed Off Items
+          </div>
           <div class="row justify-content-end text-menu-link"
                (click)="toggleLayoutList()">Change Layout
           </div>

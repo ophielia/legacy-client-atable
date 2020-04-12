@@ -25,15 +25,15 @@ import {DishService} from "../../services/dish-service.service";
 export class EditShoppingListComponent implements OnInit, OnDestroy {
   @ViewChild('modal1') input;
   public shoppingListId: any = ShoppingList;
-  private allDishes: IDish[];
-  private alltags: ITag[];
+  public allDishes: IDish[];
+  public alltags: ITag[];
 
   private tagTypes: string;
   private tagSelectEvent: any;
   private shoppingList: IShoppingList;
-  private listLayoutList: ListLayout[];
+  public listLayoutList: ListLayout[];
   private listLegend: Map<string, string>;
-  private listOfLists: IShoppingList[] ;
+  public listOfLists: IShoppingList[] ;
   private starterListId: string;
   private isEditListName: boolean = false;
 
@@ -44,6 +44,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private showSources: boolean = false;
   private showListLegend: boolean = true;
   private showPantryItems: boolean = true;
+  private crossedOffExist: boolean = true;
   private showItemLegends: boolean = true;
   private unsubscribe: Subscription[] = [];
   private showAddDish: boolean;
@@ -72,14 +73,14 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.subscribe(params => {
       let id = params['id'];
-      console.log('getting dish with id: ', id);
+      console.log('getting list with id: ', id);
       this.getShoppingList(id);
     });
     this.getListLayouts();
     this.tagSelectEvent = this.tagCommService.selectEvent
       .subscribe(selectevent => {
         this.addTagToList(selectevent);
-      })
+      });
     this.getAllTags()
     this.getAllDishes();
     this.getFilteredLists();
@@ -97,6 +98,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           this.shoppingList = p;
           this.generateLegend();
           this.checkSpecialCategories();
+          this.findCrossedOff();
           this.showMakeStarter = !this.shoppingList.is_starter;
           this.showListLegend = this.evaluateShowLegend();
           this.showItemLegend = this.evaluateShowItemLegend();
@@ -110,6 +112,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           this.shoppingList = p;
           this.generateLegend();
           this.checkSpecialCategories();
+          this.findCrossedOff();
           this.showMakeStarter = !this.shoppingList.is_starter;
           this.showListLegend = this.evaluateShowLegend();
           this.showItemLegend = this.evaluateShowItemLegend();
@@ -183,6 +186,30 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     return defaultClass;
   }
 
+  findCrossedOff() {
+    if (!this.shoppingList.categories || this.shoppingList.categories.length == 0) {
+      return;
+    }
+
+    var allItems = this.shoppingList.categories
+      .map(c => c.allItems().filter(i => i.crossed_off))
+
+    var crossedOffItems = allItems
+      .reduce(function(a,b){ return a.concat(b) }, []);
+
+
+    this.crossedOffExist = crossedOffItems.length > 0;
+
+  }
+
+
+
+
+
+
+
+
+
   checkSpecialCategories() {
     if (!this.shoppingList.categories || this.shoppingList.categories.length == 0) {
       return;
@@ -201,7 +228,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       || category.category_type == CategoryType.HighlightList) {
       // find category in legend
       var search: string = category.name;
-      var overrideName = null;
+
       // set display class in category
       for (let entry of this.shoppingList.dish_sources) {
         console.log(entry.display);
@@ -215,7 +242,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
         }
         break;
       }
-      if (!overrideName) {
+
         for (let entry of this.shoppingList.list_sources) {
           console.log(entry.display);
           if (search != entry.display) {
@@ -224,7 +251,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           category.override_class = this.listLegend.get(entry.display);
           break;
         }
-      }
+
     }
   }
 
