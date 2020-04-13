@@ -50,6 +50,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private crossedOffHidden: boolean = false;
   private showItemLegends: boolean = true;
   private unsubscribe: Subscription[] = [];
+  private removedItems: IItem[] = [];
   private showAddDish: boolean;
   private showAddItem: boolean;
   private showMenu: boolean;
@@ -58,6 +59,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   private showAllLists: boolean;
   private showItemLegend: boolean;
+
 
 
   constructor(private route: ActivatedRoute,
@@ -135,7 +137,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.unsubscribe.push($sub);
   }
 
-  private addTagToList(tag: Tag) {
+  addTagToList(tag: Tag) {
     // add tag to list as item in back end
     let $sub = this.shoppingListService.addTagItemToShoppingList(this.shoppingList.list_id, tag)
       .subscribe(() => {
@@ -255,6 +257,14 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.getShoppingList(this.shoppingList.list_id);
   }
 
+  reAddItem(item: IItem) {
+    this.removedItems = this.removedItems.filter(i => i.item_id != item.item_id );
+    if (item.tag) {
+      this.addTagToList(item.tag);
+    }
+
+  }
+
   removeDish(source: ItemSource) {
     let $sub = this.shoppingListService.removeDishItemsFromShoppingList(this.shoppingList.list_id, source.id)
       .subscribe(() => {
@@ -314,6 +324,11 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
     this.unsubscribe.push($sub);
   }
+
+  markItemRemoved(item: IItem) {
+    this.removedItems.push(item);
+  }
+
   evaluateShowSources() {
     let thisListIsTheStarter = this.shoppingList.is_starter;
     if (thisListIsTheStarter) {
@@ -476,7 +491,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   }
 
-  private getCrossedOff(shoppingList: IShoppingList):IItem[] {
+  private static getCrossedOff(shoppingList: IShoppingList):IItem[] {
     if (!shoppingList.categories || shoppingList.categories.length == 0) {
       return [];
     }
@@ -489,7 +504,9 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   }
 
   private determineCrossedOff(shoppingList: IShoppingList) {
-    this.crossedOffExist = this.getCrossedOff(shoppingList).length > 0;
+    this.crossedOffExist = EditShoppingListComponent.getCrossedOff(shoppingList).length > 0;
 
   }
+
+
 }

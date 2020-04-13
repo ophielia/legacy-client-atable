@@ -7,7 +7,7 @@
             ><span class="fa-edit fa"></span></span>
           </ng-container>
 
-          <div *ngIf="isEditListName" class="input-group searchbox-group" style="max-width:135px;">
+          <span *ngIf="isEditListName" class="input-group searchbox-group" style="max-width:135px;">
             <input type="text" class="form-control searchbox"
                    aria-describedby="search-query"
                    placeholder="{{shoppingList.name}}"
@@ -16,15 +16,15 @@
             />
             <span (click)="saveListName()" class="input-group-addon searchbox-group-button" id="search-query"><span
               class="fa-check fa"></span></span>
-          </div>
+          </span>
 
   </span>
   </div>
   <div class="row">
-    <div class="col-9" style="padding-left:0px;">
+    <div class="col-9" style="padding-left:0;">
 
 
-      <div class="row justify-content-between" style="margin-left:0px">
+      <div class="row justify-content-between" style="margin-left:0">
         <div *ngFor="let category of shoppingList.categories, let i = index" class="col-6">
           <div class="content-panel legend-1-outline category-light col " style="margin-right:2px">
             <div class="clearfix" *ngIf="i % 2 == 0"></div>
@@ -34,7 +34,8 @@
             <at-shopping-list-items [category]="category" [legendMap]="listLegend"
                                     [showItemLegends]="showItemLegends && !shoppingList.is_starter"
                                     [listId]="shoppingList.list_id"
-                                    (listUpdated)="getShoppingList(shoppingList.list_id)"></at-shopping-list-items>
+                                    (listUpdated)="getShoppingList(shoppingList.list_id)"
+                                    (itemRemoved)="markItemRemoved($event)"></at-shopping-list-items>
 
           </div>
         </div>
@@ -131,12 +132,12 @@
                            [selectType]="'Assign'"
                            [allowAdd]="true"
                            [showCancelButton]="true"
-                           [addOverlayClass]="darker-menu-color"
+                           [addOverlayClass]="'darker-menu-color'"
                            [showText]="'Add Item'"
                            [passedInputStyle]="'menubar-input'"
                            [tagList]="alltags"
                            (tagSelected)="addTagToList($event)"
-                           (cancelAddTag)="toggleAddItem(true)"></at-tag-select>
+                           (cancelAddTag)="toggleAddItem()"></at-tag-select>
           </div>
 
         </div>
@@ -145,7 +146,7 @@
       </div>
 
       <div *ngIf="showListLegend || showItemLegend" class="row menubar-flush-bottom main-color justify-content-end">
-        <div class="col" style="padding:0px;">
+        <div class="col" style="padding:0;">
 
 
           <div class="row justify-content-center">
@@ -195,6 +196,16 @@
                (click)="toggleShowItemLegends()">hide sources
           </div>
           </ng-container>
+        </div>
+      </div>
+
+      <div *ngIf="removedItems.length > 0" class="row menubar-flush inline-menu-panel main-color-outline">
+        <div class="col">
+          <div style="font-weight:bolder">Recently Removed</div>
+          <div *ngFor="let selItem of removedItems"
+               (dblclick)="reAddItem(selItem)">
+            {{selItem.tag.name}}
+          </div>
         </div>
       </div>
 
