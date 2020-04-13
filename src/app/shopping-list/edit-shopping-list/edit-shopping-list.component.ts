@@ -499,12 +499,14 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     let allItems = shoppingList.categories
       .map(c => c.allItems().filter(i => i.crossed_off));
 
+    //return allItems;
     return allItems
       .reduce(function(a,b){ return a.concat(b) }, []);
   }
 
   private determineCrossedOff(shoppingList: IShoppingList) {
-    this.crossedOffExist = EditShoppingListComponent.getCrossedOff(shoppingList).length > 0;
+    let crossedOff = EditShoppingListComponent.getCrossedOff(shoppingList);
+    this.crossedOffExist = crossedOff.length > 0;
 
   }
 

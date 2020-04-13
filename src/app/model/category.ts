@@ -24,7 +24,12 @@ export class Category implements ICategory {
 ) {}
 
   allItems(): IItem[] {
-    return this.items;
+    var allitems = [];
+    allitems = allitems.concat(this.items);
+    for (let cat of this.subcategories) {
+      allitems = allitems.concat(cat.allItems());
+    }
+    return allitems;
   }
 
 

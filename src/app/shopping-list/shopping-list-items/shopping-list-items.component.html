@@ -9,7 +9,7 @@
       <div *ngFor="let item of subcategory.items"
            class="dish-menubar-text-color content-panel-text"
            (dblclick)="removeTagFromList(item)">
-              <span> {{item.crossed_off ? 'style="text-decoration:line-through;"' : ''}}>
+              <span class="{{item.crossed_off ? 'itemCrossedOff': ''}}">
         {{item.tag.name}}</span>
 
         <ng-container>
