@@ -5,8 +5,22 @@
       <input #dishNameBox class=" atinput-dish form-control input-lg"
              name="dishName"
              type="text"
-             placeholder="dish name" required
+             placeholder="Dish name" required
              [(ngModel)]="dishName"/>
+     <br/>
+
+      <input  class=" atinput-dish form-control input-lg"
+             name="dishDescription"
+             type="text"
+             placeholder="Description"
+             [(ngModel)]="dishDescription"/>
+      <br/>
+      <input  class=" atinput-dish form-control input-lg"
+             name="dishReference"
+             type="text"
+             placeholder="Reference"
+             [(ngModel)]="dishReference"/>
+
     </div>
     <div class="col">
       <div class="row" *ngFor="let tag of dishTypes">

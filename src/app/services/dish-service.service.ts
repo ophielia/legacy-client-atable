@@ -46,10 +46,15 @@ export class DishService extends BaseHeadersService {
     return dish$;
   }
 
-  addDish(newDishName: string, tags?: ITag[]): Observable<HttpResponse<Object>> {
+  addDish(newDishName: string,
+          description: string,
+          reference: string,
+          tags?: ITag[]): Observable<HttpResponse<Object>> {
 
     var newDish: Dish = <Dish>({
       name: newDishName,
+      description: description,
+      reference: reference
     });
 
     if (tags) {

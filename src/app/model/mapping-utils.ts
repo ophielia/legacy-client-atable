@@ -79,8 +79,9 @@ export default class MappingUtils {
         dish_id: r.dish_id,
         name: r.name,
         description: r.description,
+        reference: r.reference,
         user_id: r.user_id,
-      last_added: r.last_added,
+        last_added: r.last_added,
         tags: r.tags.map(MappingUtils._toTag)
       })
     ;

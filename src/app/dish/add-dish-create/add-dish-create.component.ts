@@ -17,6 +17,8 @@ export class AddDishCreateComponent implements OnInit, OnDestroy {
   defaultPower: number;
   dishTypes: ITag[] = [];
   dishName: string;
+  dishDescription: string;
+  dishReference: string;
   defaultRatingTags: ITag[];
 
   constructor(private dishService: DishService,
@@ -44,7 +46,7 @@ export class AddDishCreateComponent implements OnInit, OnDestroy {
     // put tags in dish
     let tags: ITag[] = [];
 
-    this.dishService.addDish(this.dishName, tags)
+    this.dishService.addDish(this.dishName, this.dishDescription, this.dishReference, tags)
       .subscribe(r => {
           var headers = r.headers;
           var location = headers.get("Location");
