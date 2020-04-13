@@ -448,6 +448,11 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.showItemLegend = this.evaluateShowItemLegend();
     this.showSources = this.evaluateShowSources();
     this.retrievedShoppingList = p;
+    // check for starter and pantry
+    if (this.shoppingList.is_starter && this.showPantryItems) {
+      this.showPantryItems = false;
+      this.getShoppingList(this.shoppingListId);
+    }
   }
 
   private filterForDisplay(shoppingList: IShoppingList):IShoppingList {

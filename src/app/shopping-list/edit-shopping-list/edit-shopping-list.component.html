@@ -55,10 +55,10 @@
           <div *ngIf="showMakeStarter" class="row justify-content-end text-menu-link"
                (click)="makeStarterList()">Make Starter List
           </div>
-          <div *ngIf="!showPantryItems" class="row justify-content-end text-menu-link"
+          <div *ngIf="showMakeStarter && !showPantryItems" class="row justify-content-end text-menu-link"
                (click)="togglePantryItems()">Show Pantry Items
           </div>
-          <div *ngIf="showPantryItems" class="row justify-content-end text-menu-link"
+          <div *ngIf="showMakeStarter && showPantryItems" class="row justify-content-end text-menu-link"
                (click)="togglePantryItems()">Hide Pantry Items
           </div>
           <div *ngIf="crossedOffExist && !crossedOffHidden" class="row justify-content-end text-menu-link"
