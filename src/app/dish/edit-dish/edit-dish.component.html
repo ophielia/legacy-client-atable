@@ -2,16 +2,16 @@
   <div class="row page-title dish-text-color">Edit Dish</div>
   <div class="row">
     <div class="col-9" style="padding-left:0px;">
-      <div class="row menubar dish-menubar-text-color menu-color menubar-header justify-content-start">
+      <div style ="padding-bottom:5px" class="row menubar dish-menubar-text-color menu-color menubar-header justify-content-start">
         <div>
 
-          <ng-container *ngIf="!isEditDishName">
+          <ng-container *ngIf="!isEditDishText">
             <span style="padding-top:5px">{{dishName}}</span>
             <span class="icon-button-sm" (click)="showEditDishName()"
             ><span class="fa-edit fa"></span></span>
           </ng-container>
 
-          <div *ngIf="isEditDishName" class="input-group searchbox-group" style="max-width:135px;">
+          <div *ngIf="isEditDishText" class="input-group searchbox-group" style="max-width:135px;">
             <input type="text" class="form-control searchbox"
                    aria-describedby="search-query"
                    placeholder="{{dish.name}}"
@@ -23,6 +23,70 @@
           </div>
         </div>
 
+
+      </div>
+
+      <div class="row menubar-flush inline-menu-panel main-color-outline">
+        <div class="col-5 text-left form-inline">
+          <div *ngIf="!isEditDishText" >Reference: {{dish.reference}}</div>
+
+          <div *ngIf="isEditDishText"  class="form-group">
+            <label class="control-label">Reference:</label>
+            <input type="text"
+                   class="form-control searchboy"
+                   aria-describedby="search-query"
+                   style="padding-top: 2px;padding-bottom: 2px;"
+                   placeholder="{{dish.reference}}"
+                   [(ngModel)]="dishReference"
+                   (keyup.enter)="saveDishReference()"
+            />
+            <span (click)="saveDishReference()" class="input-group-addon searchbox-group-button"
+                  id="search-query"
+                  style="
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height:  32px;
+"><span
+              class="fa-check fa"></span></span>
+          </div>
+        </div>
+        <div class="col-7 text-left form-inline">
+          <div *ngIf="!isEditDishText" >Description: {{dish.description}}</div>
+
+          <div *ngIf="isEditDishText"  class="form-group">
+            <label class="control-label">Description:</label>
+            <input type="text"
+                   class="form-control searchboy"
+                   aria-describedby="search-query"
+                   style="padding-top: 2px;padding-bottom: 2px;"
+                   placeholder="{{dish.description}}"
+                   [(ngModel)]="dishDescription"
+                   (keyup.enter)="saveDishDescription()"
+            />
+            <span (click)="saveDishDescription()" class="input-group-addon searchbox-group-button"
+                  id="search-query"
+                  style="
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height:  32px;
+"><span
+              class="fa-check fa"></span></span>
+          </div>
+        </div>
+        <!-- <div class="col-5">
+           <div *ngIf="!isEditDishText" >Description: {{dish.description}}</div>
+           <div *ngIf="isEditDishText" class="input-group searchbox-group" style="max-width:135px;">
+             <input type="text" class="form-control searchbox"
+                    aria-describedby="search-query"
+                    placeholder="{{dish.description}}"
+                    [(ngModel)]="dishDescription"
+                    (keyup.enter)="saveDishDescription()"
+             />
+             <span (click)="saveDishDescription()" class="input-group-addon searchbox-group-button" id="search-query"><span
+               class="fa-check fa"></span></span>
+           </div>
+         </div>
+ -->
 
       </div>
 
@@ -49,8 +113,14 @@
                                             class="fa-list fa standalone-button"></span></div>
 
       </div>
+
+
       <div class="row menubar-flush-middle dish-menubar-text-color dish-menu-dropdown-color justify-content-end">
+
+
         <div class="col">
+
+
           <div *ngIf="!isTagEntry" class="row justify-content-end text-menu-link" (click)="showTagEntry()">Add Tag</div>
           <ng-container *ngIf="isTagEntry">
             <div class="row justify-content-end text-menu-link border-bottom-1">

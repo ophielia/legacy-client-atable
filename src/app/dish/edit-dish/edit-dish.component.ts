@@ -22,13 +22,15 @@ export class EditDishComponent implements OnInit, OnDestroy {
   dishTags: Tag[] = [];
 
   unsubscribe: Subscription[] = [];
-  isEditDishName: boolean = false;
+  isEditDishText: boolean = false;
   selectedTags: Tag[] = [];
   browseAllDrilldowns: { [type: string]: TagDrilldown[] } = {};
   browseTagTypes: string[];
   expandFoldState: Map<string, boolean> = new Map<string, boolean>();
   public isTagEntry: boolean;
   private showBrowse: boolean = false;
+  dishReference: string;
+  dishDescription: string;
 
 
   constructor(private route: ActivatedRoute,
@@ -93,13 +95,15 @@ export class EditDishComponent implements OnInit, OnDestroy {
       .subscribe(p => {
         this.dish = p;
         this.dishName = p.name;
+        this.dishDescription = p.description;
+        this.dishReference = p.reference;
         this.setDishTags(p.tags);
       });
     this.unsubscribe.push(sub$);
   }
 
   showEditDishName() {
-    this.isEditDishName = true;
+    this.isEditDishText = true;
   }
 
   setDishTags(tags: Tag[]) {
@@ -110,10 +114,25 @@ export class EditDishComponent implements OnInit, OnDestroy {
 
   saveDishName() {
     this.dish.name = this.dishName;
+    this.saveDish();
+  }
+
+
+  saveDishReference() {
+    this.dish.reference = this.dishReference;
+    this.saveDish();
+  }
+
+  saveDishDescription() {
+    this.dish.description = this.dishDescription;
+    this.saveDish();
+  }
+
+  private saveDish() {
     let sub$ = this.dishService.saveDish(this.dish)
       .subscribe(d => {
         this.getDish(this.dishId);
-        this.isEditDishName = false;
+        this.isEditDishText = false;
       });
 
     this.unsubscribe.push(sub$);
@@ -170,4 +189,5 @@ export class EditDishComponent implements OnInit, OnDestroy {
   goToList(dish_id: string) {
     this.router.navigate(['managedishes']);
   }
+
 }
