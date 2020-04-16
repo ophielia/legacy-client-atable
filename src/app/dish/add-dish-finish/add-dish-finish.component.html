@@ -1,9 +1,45 @@
 <div class="container">
-  <div class="row page-title dish-text-color">All Finished!</div>
+  <div class="row page-title dish-text-color">Dish Complete</div>
   <div class="row">
-    <div class="col-3">
-      <at-dish-window *ngIf="dish" [dish]="dish" [tagTypes]="'DishType,Ratings,Ingredient,TagType'"></at-dish-window>
+    <div class="col-12" style="padding-left:0px;">
+
+      <div style ="padding-bottom:5px" class="row menubar dish-menubar-text-color menu-color menubar-header justify-content-between">
+        <div class="col-8">
+            <span style="padding-top:5px">{{dish.name}}</span>
+        </div>
+
+        <div  style="text-align:end;padding-top:8px" class="col-4 justify-content-end align-items-center">
+        <span style="padding-left:3px;padding-bottom: 3px;"
+              class="standard-button-sm dish-color menubar-buttons"
+        (click)="goToList()">Goto List</span>
+        <span style="padding-left:3px;padding-bottom: 3px;"
+              class="standard-button-sm dish-color menubar-buttons"
+        (click)="goToCreateDish()">Add Another</span>
+        </div>
+      </div>
+
+      <div class="row menubar-flush inline-menu-panel dish-outline-color">
+        <div class="col-5 text-left form-inline">
+          <div>Reference: {{dish.reference}}</div>
+        </div>
+        <div class="col-7 text-left form-inline">
+          <div>Description: {{dish.description}}</div>
+    </div>
+
+      </div>
+
+      <div class="row" style="margin-left:0px">
+        <div *ngFor="let tag of dish.tags, let i = index" style="margin:5px">
+          <div class="clearfix" *ngIf="i % 3 == 0"></div>
+          <div atTagBrowseStyle [tag]="tag" [isOutline]="true"
+               [origClass]="'dish-tag-element dish-tag-element-spaced '">{{tag.name}}
+          </div>
+        </div>
+      </div>
+
+
     </div>
 
   </div>
+
 </div>

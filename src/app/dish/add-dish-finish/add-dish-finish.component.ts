@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Dish} from "../../model/dish";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DishService} from "../../services/dish-service.service";
+import {TagsService} from "../../services/tags.service";
 
 @Component({
   selector: 'at-add-dish-finish',
@@ -14,7 +15,8 @@ export class AddDishFinishComponent implements OnInit {
   dish: Dish;
 
   constructor(private route: ActivatedRoute,
-              private dishService: DishService) {
+              private dishService: DishService,
+              private router: Router) {
     this.dishId = this.route.snapshot.params['id'];
   }
 
@@ -33,5 +35,13 @@ export class AddDishFinishComponent implements OnInit {
       .subscribe(p => {
         this.dish = p;
       });
+  }
+
+  goToList() {
+    this.router.navigate(['managedishes']);
+  }
+
+  goToCreateDish() {
+    this.router.navigate(['adddish']);
   }
 }
