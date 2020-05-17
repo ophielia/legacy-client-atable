@@ -31,7 +31,9 @@
         <div *ngFor="let slot of mealPlan.slots, let i = index" style="margin:5px">
           <div class="clearfix" *ngIf="i % 3 == 0"></div>
 
-          <div class="dish-tag-element plan-color" (dblclick)="selectSlot(slot)">{{slot.dish.name}}
+          <div class="dish-tag-element plan-color" (dblclick)="selectSlot(slot)">
+            <div>{{slot.dish.name}}</div>
+            <div *ngIf="slot.dish.reference != '' ">ref: {{slot.dish.reference}}</div>
           </div>
         </div>
 

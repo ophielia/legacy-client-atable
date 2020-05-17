@@ -51,7 +51,7 @@ export class EditMealPlanComponent implements OnInit, OnDestroy {
     this.unsubscribe.forEach(s => s.unsubscribe());
   }
 
-  loadMealPlan() {
+    loadMealPlan() {
     var $sub = this.mealPlanService
       .getById(this.mealPlanId)
       .subscribe(p => {
