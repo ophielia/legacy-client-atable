@@ -69,7 +69,14 @@ export class AuthenticationService {
     return token != null
 
   }
-  private mapUser(object: Object): User {
+
+  public isAdmin(): boolean {
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  return currentUser.roles.includes('ROLE_ADMIN');
+}
+
+private mapUser(object: Object): User {
     return MappingUtils.toUser(object);
   }
+
 }

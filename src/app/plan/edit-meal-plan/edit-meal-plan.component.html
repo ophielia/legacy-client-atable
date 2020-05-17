@@ -33,7 +33,7 @@
 
           <div class="dish-tag-element plan-color" (dblclick)="selectSlot(slot)">
             <div>{{slot.dish.name}}</div>
-            <div *ngIf="slot.dish.reference != '' ">ref: {{slot.dish.reference}}</div>
+            <div *ngIf="slot.dish.reference">ref: {{slot.dish.reference}}</div>
           </div>
         </div>
 

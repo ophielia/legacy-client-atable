@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
+import {AuthenticationService} from "../services/authentication.service";
+
 @Component({
   selector: 'at-navigation',
   templateUrl: './navigation.component.html',
@@ -7,10 +9,15 @@ import {Component, OnInit} from '@angular/core';
 })
 export class NavigationComponent implements OnInit {
 
-  constructor() {
+  private isLoggedIn: Boolean
+  private isAdmin: Boolean
+
+  constructor(private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
+    this.isLoggedIn = this.authenticationService.isAuthenticated()
+    this.isAdmin = this.authenticationService.isAdmin()
   }
 
 }
