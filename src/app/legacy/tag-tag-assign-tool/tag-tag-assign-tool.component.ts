@@ -79,7 +79,11 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
     this.tagService
       .getAllParentTags(this.currentTagType)
       .subscribe(p => {
-          this.parentTags = p;
+          this.parentTags = p.sort((a, b) => {
+            if (a.name < b.name) return -1;
+            else if (a.name > b.name) return 1;
+            else return 0;
+          });
           this.loading = false;
         },
         e => this.errorMessage = e);
