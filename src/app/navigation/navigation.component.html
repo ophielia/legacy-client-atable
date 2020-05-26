@@ -13,8 +13,9 @@
     </div>
 
     <div class="navbar-menu-point-div float-right">
-      <div *ngIf="!isLoggedIn" class="navbar-menu-point"  routerLinkActive="active" href="/login">Login</div>
-      <div *ngIf="isLoggedIn" class="navbar-menu-point">Logout</div>
+      <div class="navbar-menu-point"  routerLinkActive="active" href="/login">Login</div>
+      <!-- <div *ngIf="!isLoggedIn" class="navbar-menu-point"  routerLinkActive="active" href="/login">Login</div>
+      <div *ngIf="isLoggedIn" class="navbar-menu-point">Logout</div>-->
       <div *ngIf="isAdmin" class="dropdown show float-right">
         <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">
