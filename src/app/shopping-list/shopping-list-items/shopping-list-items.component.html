@@ -15,11 +15,11 @@
         <ng-container>
           <span *ngIf="item.used_count > 1 && !showItemLegends">({{item.used_count}})</span>
 
-          <at-color-tags *ngIf="showLegends(item)"
+        <!-- MM  <at-color-tags *ngIf="showLegends(item)"
                          [item]="item"
                          [legendMap]="legendMap">
 
-          </at-color-tags>
+          </at-color-tags> -->
 
 
         </ng-container>
@@ -35,6 +35,7 @@
                 {{item.tag.name}}</span>
       <ng-container *ngIf="!(category.is_frequent)">
         <span *ngIf="item.used_count > 1 && !showItemLegends">({{item.used_count}})</span>
+        <!-- MM
         <span *ngIf="showLegends(item)" class="legend-combined-box">
 
         <ng-container *ngFor="let dishSource of item.dish_sources">
@@ -44,7 +45,7 @@
               <span class="{{legendLookup(listSource.display)}} legend-combined-box-element"></span>
 
         </ng-container>
-    </span>
+    </span> -->
       </ng-container>
     </div>
   </div>

@@ -46,10 +46,13 @@ export class ShoppingListItemsComponent implements OnInit {
   }
 
   showLegends(item: Item) {
-    if (!this.showItemLegends) {
+   return false;
+   /* MM  if (!this.showItemLegends) {
       return false;
     }
     return item.dish_sources.length > 0 || item.list_sources.length > 0;
+
+    */
   }
 
 }

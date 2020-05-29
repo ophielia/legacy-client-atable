@@ -1,5 +1,6 @@
 import {Category} from "./category";
 import {IItemSource} from "./item-source";
+import {ILegendSource} from "./legend-source";
 export interface IShoppingList {
   list_id: string;
   name: string;
@@ -12,6 +13,7 @@ export interface IShoppingList {
   is_starter: boolean;
   dish_sources: IItemSource[];
   list_sources: IItemSource[];
+  legend: ILegendSource[];
 }
 
 export class ShoppingList implements IShoppingList {
@@ -29,5 +31,6 @@ export class ShoppingList implements IShoppingList {
   list_sources: IItemSource[];
   name: string;
   is_starter: boolean;
+  legend: ILegendSource[];
 }
 
