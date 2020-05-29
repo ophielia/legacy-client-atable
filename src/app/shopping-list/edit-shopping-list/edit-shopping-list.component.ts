@@ -9,13 +9,13 @@ import {Subscription} from "rxjs/Subscription";
 import {ListLayout} from "../../model/listlayout";
 import {ListLayoutService} from "app/services/list-layout.service";
 import {ItemSource} from "../../model/item-source";
-import {SourceLegendService} from "../../services/source-legend.service";
 import {ICategory} from "../../model/category";
-import CategoryType from "../../model/category-type";
 import TagType from "../../model/tag-type";
 import {IDish} from "../../model/dish";
 import {DishService} from "../../services/dish-service.service";
 import {IItem} from "../../model/item";
+import {LegendService} from "../../services/legend.service";
+import {LegendPoint} from "../../model/legend-point";
 
 
 @Component({
@@ -34,7 +34,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private shoppingList: IShoppingList;
   private retrievedShoppingList: IShoppingList;
   public listLayoutList: ListLayout[];
-  private listLegend: Map<string, string>;
+  private listLegend:  Map<string, LegendPoint>;
   public listOfLists: IShoppingList[] ;
   private starterListId: string;
   private isEditListName: boolean = false;
@@ -68,7 +68,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
               private listLayoutService: ListLayoutService,
               private dishService: DishService,
               private tagService: TagsService,
-              private legendService: SourceLegendService,
+              private legendService: LegendService,
               private tagCommService: TagCommService) {
     this.shoppingListId = this.route.snapshot.params['id'];
     this.tagTypes = TagType.Ingredient + "," + TagType.NonEdible;
@@ -94,8 +94,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe.forEach(s => s.unsubscribe());
   }
-
-
 
   getShoppingList(id: string) {
     let $sub;
@@ -156,77 +154,11 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.unsubscribe.push($sub);
   }
 
-  generateLegend() {
-    if (!this.listLegend) {
-      this.listLegend = this.legendService.createLegendForSources(this.shoppingList.dish_sources, this.shoppingList.list_sources);
-    }
-    this.shoppingList.dish_sources.forEach(s => {
-      let classname = this.listLegend.get(s.id);
-      if (classname) {
-        s.disp_class = classname;
-      }
-    });
-    this.shoppingList.list_sources.forEach(s => {
-      let classname = this.listLegend.get(s.display);
-      if (classname) {
-        s.disp_class = classname;
-      }
-    });
-  }
-
   getCategoryDispClass(defaultClass: string, category: ICategory) {
     if (category.override_class) {
       return category.override_class;
     }
     return defaultClass;
-  }
-
-
-
-
-  checkSpecialCategories() {
-    if (!this.shoppingList.categories || this.shoppingList.categories.length == 0) {
-      return;
-    }
-    // get first category
-    let category: ICategory = this.shoppingList.categories[0];
-
-    if (category.name == CategoryType.Frequent) {
-      category.is_frequent = true;
-    }
-    if (!this.listLegend) {
-      return;
-    }
-    // check if it's connected with a dish
-    if (category.category_type == CategoryType.Highlight
-      || category.category_type == CategoryType.HighlightList) {
-      // find category in legend
-      let search: string = category.name;
-
-      // set display class in category
-      for (let entry of this.shoppingList.dish_sources) {
-        console.log(entry.display);
-        if (search != entry.display) {
-          continue;
-        }
-        let id = entry.id;
-        if (this.listLegend.get(id)) {
-          category.override_class = this.listLegend.get(id);
-          category.dish_id = id;
-        }
-        break;
-      }
-
-        for (let entry of this.shoppingList.list_sources) {
-          console.log(entry.display);
-          if (search != entry.display) {
-            continue;
-          }
-          category.override_class = this.listLegend.get(entry.display);
-          break;
-        }
-
-    }
   }
 
   highlightDish(source: ItemSource) {
@@ -361,10 +293,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleLayoutList() {
-    this.showListLayouts = !this.showListLayouts;
-  }
-
   togglePantryItems() {
     this.showPantryItems = !this.showPantryItems;
     this.getShoppingList(this.shoppingList.list_id);
@@ -391,28 +319,6 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   toggleShowAllLists() {
     this.showAllLists = !this.showAllLists;
 
-  }
-  private getFilteredLists() {
-    this.listOfLists = [];
-    let $sub = this.shoppingListService.getAll()
-      .subscribe( lists => {
-        for (let list of lists) {
-          // don't include this list
-          if (list.list_id == this.shoppingListId) {
-            continue;
-          }
-         // check for starter, and fill in starter
-          if (list.is_starter) {
-            this.starterListId = list.list_id;
-          }
-          // add to list
-          this.listOfLists.push(list);
-        }
-
-
-
-      });
-    this.unsubscribe.push($sub);
   }
 
   toggleListName() {
@@ -456,18 +362,26 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private processRetrievedShoppingList(p: IShoppingList) {
     this.determineCrossedOff(p);
     this.shoppingList = this.filterForDisplay(p);
-    this.generateLegend();
-    this.checkSpecialCategories();
+    this.listLegend = this.legendService.processLegend(p.legend);
     this.showMakeStarter = !this.shoppingList.is_starter;
     this.showListLegend = this.evaluateShowLegend();
     this.showItemLegend = this.evaluateShowItemLegend();
     this.showSources = this.evaluateShowSources();
     this.retrievedShoppingList = p;
     // check for starter and pantry
-    if (this.shoppingList.is_starter && this.showPantryItems) {
+ /* MM
+        if (this.shoppingList.is_starter && this.showPantryItems) {
       this.showPantryItems = false;
       this.getShoppingList(this.shoppingListId);
     }
+*/
+    /*
+            // sort legend points by display
+      unsortedLegendPoints.sort((a,b) => {
+        return (a.display < b.display) ? -1 : 1;
+      });
+     */
+
   }
 
   private filterForDisplay(shoppingList: IShoppingList):IShoppingList {
@@ -510,5 +424,78 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   }
 
+  private getFilteredLists() {
+    this.listOfLists = [];
+    let $sub = this.shoppingListService.getAll()
+      .subscribe( lists => {
+        for (let list of lists) {
+          // don't include this list
+          if (list.list_id == this.shoppingListId) {
+            continue;
+          }
+          // check for starter, and fill in starter
+          if (list.is_starter) {
+            this.starterListId = list.list_id;
+          }
+          // add to list
+          this.listOfLists.push(list);
+        }
 
+
+
+      });
+    this.unsubscribe.push($sub);
+  }
+
+/*
+toggleLayoutList() {
+    this.showListLayouts = !this.showListLayouts;
+  }
+
+  checkSpecialCategories() {
+    if (!this.shoppingList.categories || this.shoppingList.categories.length == 0) {
+      return;
+    }
+    // get first category
+    let category: ICategory = this.shoppingList.categories[0];
+
+    if (category.name == CategoryType.Frequent) {
+      category.is_frequent = true;
+    }
+    if (!this.listLegend) {
+      return;
+    }
+    // check if it's connected with a dish
+    if (category.category_type == CategoryType.Highlight
+      || category.category_type == CategoryType.HighlightList) {
+      // find category in legend
+      let search: string = category.name;
+
+      // set display class in category
+      for (let entry of this.shoppingList.dish_sources) {
+        console.log(entry.display);
+        if (search != entry.display) {
+          continue;
+        }
+        let id = entry.id;
+        if (this.listLegend.get(id)) {
+          category.override_class = this.listLegend.get(id);
+          category.dish_id = id;
+        }
+        break;
+      }
+
+        for (let entry of this.shoppingList.list_sources) {
+          console.log(entry.display);
+          if (search != entry.display) {
+            continue;
+          }
+          category.override_class = this.listLegend.get(entry.display);
+          break;
+        }
+
+    }
+  }
+
+ */
 }

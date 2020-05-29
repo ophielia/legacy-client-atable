@@ -3,6 +3,7 @@ import {Category} from "../../model/category";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {IItem, Item} from "../../model/item";
 import {Subscription} from "rxjs/Subscription";
+import {LegendPoint} from "../../model/legend-point";
 
 @Component({
   selector: 'at-shopping-list-items',
@@ -12,7 +13,7 @@ import {Subscription} from "rxjs/Subscription";
 export class ShoppingListItemsComponent implements OnInit {
   private unsubscribe: Subscription[] = [];
   @Input() category: Category;
-  @Input() legendMap: Map<string, string>;
+  @Input() legendMap: Map<string, LegendPoint>;
   @Input() listId: string;
   @Input() showItemLegends: boolean = true;
   @Output() listUpdated = new EventEmitter<boolean>();
@@ -46,13 +47,10 @@ export class ShoppingListItemsComponent implements OnInit {
   }
 
   showLegends(item: Item) {
-   return false;
-   /* MM  if (!this.showItemLegends) {
+     if (!this.showItemLegends) {
       return false;
     }
-    return item.dish_sources.length > 0 || item.list_sources.length > 0;
-
-    */
-  }
+    return item.source_keys.length > 0;
+}
 
 }
