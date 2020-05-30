@@ -38,7 +38,9 @@
         <span *ngIf="showLegends(item)" class="legend-combined-box">
         <ng-container *ngFor="let dishSource of item.source_keys">
           <!--<span class="{{legendLookup(dishSource.id)}} legend-combined-box-element"></span>-->
-          <span><img src="assets/images/legend/colors/blue/bowl.png" width="15" height="15"/></span>
+
+          <span *ngIf="iconSourceForKey(dishSource)">
+            <img [src]="iconSourceForKey(dishSource)" width="15" height="15"/></span>
         </ng-container>
     </span>
         <!-- MM

@@ -83,7 +83,7 @@ export class LegendService {
       this.legendLookup = new Map();
       for (var i = 0 ; i< resultPoints.length; i++) {
       let legendPoint = resultPoints[i];
-      this.legendLookup[legendPoint.key] = legendPoint;
+      this.legendLookup.set(legendPoint.key, legendPoint);
     }
 
       // return legend points

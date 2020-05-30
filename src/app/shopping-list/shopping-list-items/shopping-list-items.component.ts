@@ -53,4 +53,13 @@ export class ShoppingListItemsComponent implements OnInit {
     return item.source_keys.length > 0;
 }
 
+iconSourceForKey(key: string) : string {
+    // assets/images/legend/colors/blue/bowl.png
+    let  point = this.legendMap.get(key);
+    if (!point) {
+      return null;
+    }
+    return "assets/images/legend/colors/" + point.color + "/" + point.icon + ".png";
+}
+
 }
