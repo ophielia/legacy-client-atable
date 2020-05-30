@@ -145,10 +145,8 @@ export default class MappingUtils {
       r.name,
       r.items.map(MappingUtils._toItem),
       (r.subcategories ? r.subcategories.map(MappingUtils._toCategory) : null),
-      r.category_type,
       null,
-      false,
-      null
+      false
   ) ;
 
 

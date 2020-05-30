@@ -31,7 +31,7 @@
             <div class="row {{getCategoryDispClass('list-color',category)}} justify-content-center"> {{category.name}}
             </div>
 
-            <at-shopping-list-items [category]="category" [legendMap]="listLegend"
+            <at-shopping-list-items [category]="category" [legendMap]="listLegendMap"
                                     [showItemLegends]="showItemLegends && !shoppingList.is_starter"
                                     [listId]="shoppingList.list_id"
                                     (listUpdated)="getShoppingList(shoppingList.list_id)"
@@ -145,41 +145,25 @@
 
       </div>
 
-      <div *ngIf="showListLegend || showItemLegend" class="row menubar-flush-bottom main-color justify-content-end">
+      <div *ngIf="canShowLegend" class="row menubar-flush-bottom main-color justify-content-end">
         <div class="col" style="padding:0;">
 
 
-          <div class="row justify-content-center">
+          <div class="row justify-content-center" style="margin-right:0px">
             <div class="legend-table">
-              <ng-container *ngIf="showItemLegend">
-              <div *ngFor="let source of shoppingList.dish_sources"
+
+              <div *ngFor="let source of legendList"
                    class="legend-row">
-                <div class="legend-cell" (click)="highlightDish(source);">
-                  <span class="legend-box {{source.disp_class}}"></span>
+                <div class="legend-cell" (click)="highlightSource(source.key);">
+                  <span *ngIf="iconSourceForKey(source.key)" class="legend-box">
+            <img [src]="iconSourceForKey(source.key)" width="20" height="20"/></span>
 
                 </div>
-                <div class="legend-cell text-capitalize" (click)="highlightDish(source);">
+                <div class="legend-cell text-capitalize" (click)="highlightSource(source.key);">
                   <span>{{source.display}}</span>
 
                 </div>
-                <div class="legend-cell text-capitalize" (click)="removeDish(source);">
-                  <span class="fa-trash fa"></span>
-
-                </div>
-              </div>
-              </ng-container>
-
-              <div *ngFor="let source of shoppingList.list_sources"
-                   class="legend-row">
-                <div class="legend-cell" (click)="highlightList(source)">
-                  <span class="legend-box {{source.disp_class}}"></span>
-
-                </div>
-                <div class="legend-cell text-capitalize" (click)="highlightList(source)">
-                  <span>{{source.display}}</span>
-
-                </div>
-                <div class="legend-cell text-capitalize" (click)="removeList(source);">
+                <div class="legend-cell text-capitalize" (click)="removeDishOrList(source.key);">
                   <span class="fa-trash fa"></span>
 
                 </div>
@@ -188,7 +172,7 @@
             </div>
           </div>
 
-          <ng-container *ngIf="showSources">
+          <ng-container *ngIf="canShowLegend">
           <div *ngIf="!showItemLegends" class="row justify-content-end" style="padding-right:10px;"
                (click)="toggleShowItemLegends()">show sources
           </div>

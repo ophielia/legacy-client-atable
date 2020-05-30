@@ -7,7 +7,7 @@ import {LegendIconSource} from "../model/legend-icon-source";
 
 @Injectable()
 export class LegendService {
-
+  static FREQUENT = "sfrequent"
   static ICON_COLORS = ["orange", "blue", "red", "vanilla"];
   static ICON_IMAGES = ["saltandpepper", "skimmer", "spatula2", "grill", "bowl", "cutting board", "fork", "grater", "grill", "ketchup bottle", "knife", "ladle", "measuring cup", "pot", "rollingpin"];
 
@@ -20,7 +20,7 @@ export class LegendService {
   processLegend(sources: Array<LegendSource>): Map<string, LegendPoint> {
 
     var existingSources: Array<LegendIconSource> = [];
-    var existingLegends: Array<LegendPoint> = [];
+    var existingLegends:LegendPoint[] = [];
     var apiToAdd: Array<LegendSource> = [];
     // loop through new sources
     //   - pulling existing legends (and their icon sources, separately saved)
@@ -29,7 +29,7 @@ export class LegendService {
       var newLegend = sources[i];
       var matchFound = false;
 
-      this.legendLookup.forEach((existing, key) => {
+      this.legendLookup.forEach((existing: LegendPoint, key: string) => {
         if (!matchFound && existing.key == newLegend.key) {
           matchFound = true;
           let legendSource = new LegendIconSource();
@@ -49,8 +49,8 @@ export class LegendService {
       let newSources = this.retrieveNewListSources(existingSources, apiToAdd.length);
 
       // assemble new ShoppingListLegend - collect LegendPoints
-      var unsortedLegendPoints: LegendPoint[] = [];
-      unsortedLegendPoints.concat( existingLegends);
+      var unsortedLegendPoints: LegendPoint[] = existingLegends;
+
       // add new legend points
       for (let source of apiToAdd) {
         var toAdd = new LegendPoint();
@@ -60,9 +60,9 @@ export class LegendService {
       }
 
       // sort by name
-    unsortedLegendPoints.sort((a, b) => {
-      return a.display.toLowerCase().localeCompare(b.display.toLowerCase());
-    });
+      unsortedLegendPoints.sort((a, b) => {
+        return a.display.toLowerCase().localeCompare(b.display.toLowerCase());
+      });
 
       // fill in LegendPointSource when empty
       var sourcePointIndex = 0;
