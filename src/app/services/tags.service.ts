@@ -33,8 +33,16 @@ export class TagsService extends BaseHeadersService {
 
 
   getAll(): Observable<ITag[]> {
+    return this.getAllExtended( false);
+  }
+
+  getAllExtended(extendedInfo: Boolean): Observable<ITag[]> {
+    var url = this.tagUrl
+      if (extendedInfo) {
+        url = url + "?extended=true";
+      }
     let tags$ = this.httpClient
-      .get(`${this.tagUrl}`)
+      .get(`${url}`)
       .map(this.mapTagsClient).catch(handleError);
     return tags$;
   }
