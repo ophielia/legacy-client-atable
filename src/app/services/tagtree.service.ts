@@ -12,7 +12,7 @@ import {Subscription} from "rxjs/Subscription";
 export class TagTreeService implements OnInit, OnDestroy {
   static instance: TagTreeService;
   static refreshPeriod = 5 * 60 * 1000;
-  static  BASE_GROUP: number = 0;
+  static  BASE_GROUP: string = "0";
 
   unsubscribe: Subscription[] = [];
   private _tagTree: TagTree;

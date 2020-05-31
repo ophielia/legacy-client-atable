@@ -50,7 +50,7 @@ export class ShoppingListItemsComponent implements OnInit {
      if (!this.showItemLegends) {
       return false;
     }
-    return item.source_keys.length > 0;
+    return item.source_keys && item.source_keys.length > 0;
 }
 
 iconSourceForKey(key: string) : string {

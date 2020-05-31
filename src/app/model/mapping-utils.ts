@@ -187,8 +187,6 @@ export default class MappingUtils {
     let item = <Item>({
       list_id: r.list_id,
       item_id: r.item_id,
-      dish_sources: [], //r.dish_sources != null ? r.dish_sources.map(MappingUtils._toItemSource) : null,
-      list_sources: [], //r.list_sources != null ? r.list_sources.map(MappingUtils._toItemSource) : null,
       source_keys: r.source_keys,
       added: r.added,
       tag_id: r.tag_id,
