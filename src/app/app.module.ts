@@ -20,7 +20,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AuthGuard} from "./handlers/auth-guard";
 import {RoleGuard} from "./handlers/role-guard";
 import {ActionableDirective} from "./actionable.directive";
-import {LegendService} from "./services/legend.service";
+
 
 
 @NgModule({
@@ -50,7 +50,6 @@ import {LegendService} from "./services/legend.service";
   providers: [
     // include alert service in app module providers
     AlertService,
-    LegendService,
     {provide: ErrorHandler, useClass: MyErrorHandler},
     {provide: HTTP_INTERCEPTORS, useClass: MyTokenInterceptor, multi: true},
     AuthGuard, RoleGuard

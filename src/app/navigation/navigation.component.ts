@@ -10,7 +10,7 @@ import {AuthenticationService} from "../services/authentication.service";
 export class NavigationComponent implements OnInit {
 
   private isLoggedIn: Boolean
-  private isAdmin: Boolean
+  isAdmin: Boolean
 
   constructor(private authenticationService: AuthenticationService) {
   }

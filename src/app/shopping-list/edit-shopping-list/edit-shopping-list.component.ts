@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {Component, OnDestroy, OnInit, ViewChild, SkipSelf} from "@angular/core";
 import {TagCommService} from "../../legacy/drilldown/tag-drilldown-select.service";
 import {IShoppingList, ShoppingList} from "../../model/shoppinglist";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -59,13 +59,13 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
 
+
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private shoppingListService: ShoppingListService,
               private listLayoutService: ListLayoutService,
               private dishService: DishService,
               private tagService: TagsService,
-              private legendService: LegendService,
+              public legendService: LegendService,
               private tagCommService: TagCommService) {
     this.shoppingListId = this.route.snapshot.params['id'];
     this.tagTypes = TagType.Ingredient + "," + TagType.NonEdible;
@@ -94,7 +94,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   getShoppingList(id: string) {
     let $sub = this.shoppingListService
-      .getByIdWithPantry(id, this.showPantryItems)
+      .getById(id)
       .subscribe(p => {
         this.processRetrievedShoppingList(p);
       });
@@ -319,10 +319,12 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   }
 
   private prepareLegend(list: IShoppingList) {
-    this.listLegendMap = this.legendService.processLegend(list.legend);
+    let legendMap = this.legendService.processLegend(list.legend);
     var collectedValue: LegendPoint[] = [];
-    this.listLegendMap.forEach((value: LegendPoint, key: string) => {
+    this.listLegendMap = new Map();
+    legendMap.forEach((value: LegendPoint, key: string) => {
       collectedValue.push(value);
+      this.listLegendMap.set(key,value);
     });
     collectedValue.sort((a, b) => {
       return a.display.toLowerCase().localeCompare(b.display.toLowerCase());
@@ -332,8 +334,8 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   private processRetrievedShoppingList(p: IShoppingList) {
     this.determineCrossedOff(p);
-    this.shoppingList = this.filterForDisplay(p);
     this.prepareLegend(p);
+    this.shoppingList = this.filterForDisplay(p);
     this.showMakeStarter = !this.shoppingList.is_starter;
     this.canShowLegend = this.newEvaluateShowLegend();
 
@@ -360,13 +362,19 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
         this.hideCrossedOff(category);
       }
     }
-    if (this.highlightSourceId) {
+    if (this.highlightSourceId || this.showPantryItems) {
       shoppingList.categories = this.pullCategoryByTag(this.highlightSourceId, shoppingList);
     }
     return shoppingList;
   }
 
-  private pullCategoryByTag(highlightId: string, shoppingList: IShoppingList) {
+  private pullCategoryByTag(sourceId: string, shoppingList: IShoppingList) {
+    var beep = "bop";
+    if (!sourceId && !this.showPantryItems) {
+      return;
+    }
+    var highlightId = sourceId ? sourceId : LegendService.FREQUENT;
+
     var newCategories = [];
     var pulledItems = [];
     for (let category of shoppingList.categories) {
@@ -384,7 +392,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     // now, make new category
     var name;
     var is_frequent = false;
-    if (this.highlightSourceId == LegendService.FREQUENT) {
+    if (highlightId == LegendService.FREQUENT) {
       name = "Frequent";
       is_frequent = true;
     } else {

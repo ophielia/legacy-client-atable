@@ -5,16 +5,26 @@ import {LegendPoint} from "../model/legend-point";
 import {LegendIconSource} from "../model/legend-icon-source";
 
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class LegendService {
   static FREQUENT = "sfrequent"
   static ICON_COLORS = ["orange", "blue", "red", "vanilla"];
   static ICON_IMAGES = ["saltandpepper", "skimmer", "spatula2", "grill", "bowl", "cutting board", "fork", "grater", "grill", "ketchup bottle", "knife", "ladle", "measuring cup", "pot", "rollingpin"];
-
+  static instance: LegendService;
   legendLookup = new Map();
 
   constructor() {
-// ready to fill
+    // If the static reference doesn't exist
+    // (i.e. the class has never been instantiated before)
+    // set it to the newly instantiated object of this class
+    if (!LegendService.instance) {
+      LegendService.instance = this;
+    }
+
+    // Return the static instance of the class
+    // Which will only ever be the first instance
+    // Due to the if statement above
+    return LegendService.instance;
   }
 
   processLegend(sources: Array<LegendSource>): Map<string, LegendPoint> {
