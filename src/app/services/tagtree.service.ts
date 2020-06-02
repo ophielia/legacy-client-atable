@@ -5,7 +5,7 @@ import {TagTree} from './tagtree.object';
 import {Subscription} from "rxjs/Subscription";
 import {ITag} from "../model/tag";
 import {Observable, of, pipe} from "rxjs";
-import {filter, map} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import TagType from "../model/tag-type";
 
 
@@ -72,12 +72,11 @@ export class TagTreeService implements OnDestroy {
     if (!this.isLoading) {
       return of(this._tagTree);
     }
+    console.log("starting event listener")
 
-    return this.loadingEvent.map(() => {
+    return this.loadingEvent.map(event => {
       return this._tagTree;
-    });
-
-
+    })
   }
 
 

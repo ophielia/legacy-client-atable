@@ -37,10 +37,10 @@ export class TagTree {
   }
 
   private addTagToParentNode(tag: ITag) {
-    let parentId = tag.parent_id;
-
+    let parentId = tag.parent_id ? tag.parent_id : "0";
     // pull parent node
     var parent = this._lookupRelations.get(parentId);
+
     if (!parent) {
       // doesn't exist - make node with dummy values
       parent = new TagTreeNode("", "", false, false);
@@ -89,7 +89,7 @@ export class TagTree {
 
 
   allContentList(id: string, isAbbreviated: Boolean, groupsOnly: boolean, tagTypes: TagType[]): ITag[] {
-    let requestedNode = this._lookupRelations[id];
+    let requestedNode = this._lookupRelations.get(id);
     if (!requestedNode) {
       return [];
     }
@@ -146,8 +146,8 @@ export class TagTree {
       if (!childNode) {
         continue;
       }
-      var childNodeMatch = tagTypes.indexOf(baseNode.tag_type) >= 0;
-      var groupEligible = !groupsOnly || (groupsOnly && baseNode.isGroup());
+      var childNodeMatch = tagTypes.indexOf(childNode.tag_type) >= 0;
+      var groupEligible = !groupsOnly || (groupsOnly && childNode.isGroup());
 
       if (childNodeMatch && groupEligible) {
         filteredChildren.push(childNode);
