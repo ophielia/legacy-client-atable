@@ -1,14 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ITag} from "../../model/tag";
-import {ListLayoutCategory} from "../../model/listcategory";
 import {ListLayout} from "../../model/listlayout";
-import {ListLayoutService} from "../../services/list-layout.service";
 import {TagsService} from "../../services/tags.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import TagType from "../../model/tag-type";
 import {TagDrilldown} from "../../model/tag-drilldown";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 import TagSelectType from "../../model/tag-select-type";
+import {TagTreeService} from "../../services/tagtree.service";
+import {TagTree} from "../../services/tagtree.object";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'at-tag-tag-assign-tool',
@@ -34,6 +35,7 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   private editTagList: TagDrilldown[];
   private errorMessage: string;
   public loading: boolean = false;
+  unsubscribe: Subscription[] = [];
 
   private layoutId: string;
   private listLayout: ListLayout;
@@ -41,36 +43,44 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   private deleteLocked: boolean = true;
   private editTag: ITag;
 
+  navigationList: ITag[];
+  private contentList: ITag[];
+
   constructor(private tagCommService: TagCommService,
               private tagService: TagsService,
+              private tagTreeService: TagTreeService,
               private route: ActivatedRoute) {
     this.layoutId = this.route.snapshot.params['id'];
   }
 
   ngOnInit() {
-    this.subTagEvent = this.tagCommService.selectEvent
+   /* this.subTagEvent = this.tagCommService.selectEvent
       .subscribe(selectevent => {
         this.selectEditTag(selectevent);
       })
+      unsubscribe.push(this.subTagEvent);
+      */
     this.editTagList = [];
     this.categoryTags = [];
     this.retrieveTagDrilldown();
     this.retrieveParentTags();
+this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
   }
 
   ngOnDestroy() {
-    this.subTagEvent.unsubscribe;
+    this.unsubscribe.forEach(s => s.unsubscribe());
   }
 
   retrieveTagDrilldown() {
     this.editTagList = [];
-    this.tagService
+    //MM remember this
+    /*this.tagService
       .getTagDrilldownList(this.currentTagType)
       .subscribe(p => {
           this.editTagList = p;
           this.loading = false;
         },
-        e => this.errorMessage = e);
+        e => this.errorMessage = e);*/
   }
 
   retrieveParentTags() {
@@ -79,11 +89,12 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
     this.tagService
       .getAllParentTags(this.currentTagType)
       .subscribe(p => {
-          this.parentTags = p.sort((a, b) => {
+          p.sort((a, b) => {
             if (a.name < b.name) return -1;
             else if (a.name > b.name) return 1;
             else return 0;
           });
+        this.parentTags = p;
           this.loading = false;
         },
         e => this.errorMessage = e);
@@ -241,4 +252,17 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   }
 
 
+  private fillTagTreeLists(tagId: string, tagType: TagType) {
+    this.loading = true;
+    var $sub = this.tagTreeService.tagTree().subscribe( tagTree => {
+      this.loading = false;
+      this.contentList = tagTree.allContentList(TagTree.BASE_GROUP, false, false ,[tagType]);
+    });
+    this.unsubscribe.push($sub);
+    /*var $anothersub = this.tagTreeService.allContentList(TagTree.BASE_GROUP,false, false, [tagType]).subscribe( taglist => {
+      this.contentList = taglist;
+      this.loading = false;
+    });
+    this.unsubscribe.push($anothersub);*/
+  }
 }

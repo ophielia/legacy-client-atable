@@ -1,19 +1,22 @@
-import {Injectable, OnDestroy, OnInit} from '@angular/core';
+import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
 import 'rxjs/add/operator/filter';
-import {LegendSource} from "../model/legend-source";
-import {LegendPoint} from "../model/legend-point";
-import {LegendIconSource} from "../model/legend-icon-source";
 import {TagsService} from "./tags.service";
-import { TagTree } from './tagtree.object';
+import {TagTree} from './tagtree.object';
 import {Subscription} from "rxjs/Subscription";
+import {ITag} from "../model/tag";
+import {Observable, of, pipe} from "rxjs";
+import {filter, map} from "rxjs/operators";
+import TagType from "../model/tag-type";
 
 
 @Injectable({providedIn: 'root'})
-export class TagTreeService implements OnInit, OnDestroy {
+export class TagTreeService implements OnDestroy {
   static instance: TagTreeService;
   static refreshPeriod = 5 * 60 * 1000;
-  static  BASE_GROUP: string = "0";
 
+  loadingEvent: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+  private isLoading: boolean = false;
+  loadingSubscription: Subscription;
   unsubscribe: Subscription[] = [];
   private _tagTree: TagTree;
   private _lastLoaded: number;
@@ -23,6 +26,7 @@ export class TagTreeService implements OnInit, OnDestroy {
     // (i.e. the class has never been instantiated before)
     // set it to the newly instantiated object of this class
     if (!TagTreeService.instance) {
+      this.createOrRefreshTagTree();
       TagTreeService.instance = this;
     }
 
@@ -32,33 +36,54 @@ export class TagTreeService implements OnInit, OnDestroy {
     return TagTreeService.instance;
   }
 
-  ngOnInit() {
-    this.createTagTree();
-
-
-  }
 
   ngOnDestroy() {
     this.unsubscribe.forEach(s => s.unsubscribe());
   }
 
-  private createTagTree() {
+  navigationList(tagId: string): Observable<ITag[]> {
+    const returnWhenLoaded = pipe(
+      map((tagTree: TagTree) => tagTree.navigationList(tagId))
+    );
+
+    return returnWhenLoaded(this.tagTree());
+  }
+
+  allContentList(id: string, isAbbreviated: Boolean, groupsOnly: boolean, tagTypes: TagType[]): Observable<ITag[]> {
+    const returnWhenLoaded = pipe(
+      map((tagTree: TagTree) => tagTree.allContentList(id, isAbbreviated, groupsOnly, tagTypes))
+    );
+
+    return returnWhenLoaded(this.tagTree());
+  }
+
+  private createOrRefreshTagTree() {
+    this.isLoading = true;
     let sub$ = this.tagService.getAllExtended(true).subscribe((value) => {
       this._tagTree = new TagTree(value);
       this._lastLoaded = new Date().getTime();
+      this.isLoading = false;
+      this.loadingEvent.emit(false);
     });
     this.unsubscribe.push(sub$);
   }
 
-  tagTree(): TagTree {
-    if (this.refreshTagTree()) {
-      this.createTagTree();
+  tagTree(): Observable<TagTree> {
+    if (!this.isLoading) {
+      return of(this._tagTree);
     }
-    return this._tagTree;
+
+    return this.loadingEvent.map(() => {
+      return this._tagTree;
+    });
+
+
   }
 
-  private refreshTagTree() {
-var limit = this._lastLoaded + TagTreeService.refreshPeriod;
-return (new Date().getTime()) > limit;
+
+  private tagTreeNeedsRefresh() {
+    var limit = this._lastLoaded + TagTreeService.refreshPeriod;
+    return (new Date().getTime()) > limit;
   }
+
 }

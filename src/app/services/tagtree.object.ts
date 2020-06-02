@@ -1,9 +1,9 @@
-import {ITag} from "../model/tag";
-import {TagTreeService} from "./tagtree.service";
+import {ITag, Tag} from "../model/tag";
 import TagType from "../model/tag-type";
 
 
 export class TagTree {
+  public static  BASE_GROUP = "0";
   private _lookupDisplay = new Map<string, ITag>();
   private _lookupRelations = new Map<string, TagTreeNode>();
 
@@ -29,7 +29,10 @@ export class TagTree {
     }
 
     // fill in base tag display
-    var baseDisplay = this._lookupDisplay.get(TagTreeService.BASE_GROUP);
+    var baseDisplay = this._lookupDisplay.get(TagTree.BASE_GROUP);
+    if (!baseDisplay) {
+      baseDisplay =new Tag();
+    }
     baseDisplay.name = "All";
   }
 
@@ -59,7 +62,7 @@ export class TagTree {
       return returnList;
     }
 
-    if (tagId == TagTreeService.BASE_GROUP) {
+    if (tagId == TagTree.BASE_GROUP) {
       returnList.push(navDisplay);
       return returnList;
     }
@@ -91,7 +94,7 @@ export class TagTree {
       return [];
     }
 
-    if (id == TagTreeService.BASE_GROUP) {
+    if (id == TagTree.BASE_GROUP) {
       return this.baseContentList(isAbbreviated, groupsOnly, tagTypes);
     }
 
@@ -131,7 +134,7 @@ export class TagTree {
   }
 
   private baseContentList(isAbbreviated: Boolean, groupsOnly: boolean, tagTypes: TagType[]): ITag[] {
-    var baseNode = this._lookupRelations.get(TagTreeService.BASE_GROUP);
+    var baseNode = this._lookupRelations.get(TagTree.BASE_GROUP);
     if (!baseNode) {
       return [];
     }

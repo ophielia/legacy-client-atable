@@ -13,11 +13,24 @@
     <div class="row">
       <div class="col-md-12"><h4>Select Area</h4></div>
     </div>
-    <ng-container *ngIf="!loading">
+
+    <div>Navigation
+      <div *ngIf="loading">
+      loading
+      </div>
+      <ng-container *ngIf="!loading">
+      <div class="row card" style="margin:5px"
+           *ngFor="let tag of contentList">
+        {{tag.name}}
+      </div>
+      </ng-container>
+    </div>
+    <div>Tags</div>
+   <!-- <ng-container *ngIf="!loading">
       <div class="row" *ngFor="let tag of editTagList">
         <div class="col-md-8">
           <at-tag-drilldown-container [tagDrilldown]="tag" [selectType]="currentSelectType">
-            <!--<at-tag-drilldown-container [parentSelect]="true" [tagDrilldown]="tag">-->
+
 
           </at-tag-drilldown-container>
         </div>
@@ -46,7 +59,7 @@
         </span>
         </div>
       </div>
-    </ng-container>
+    </ng-container>-->
 
   </div>
 
