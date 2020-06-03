@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ITag} from "../../model/tag";
-import {ListLayout} from "../../model/listlayout";
 import {TagsService} from "../../services/tags.service";
 import {ActivatedRoute} from "@angular/router";
 import TagType from "../../model/tag-type";
@@ -8,7 +7,7 @@ import {TagDrilldown} from "../../model/tag-drilldown";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 import TagSelectType from "../../model/tag-select-type";
 import {TagTreeService} from "../../services/tagtree.service";
-import {TagTree} from "../../services/tagtree.object";
+import {ContentType, TagTree} from "../../services/tagtree.object";
 import {Subscription} from "rxjs/Subscription";
 
 @Component({
@@ -18,18 +17,15 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   hopperTags: ITag[];
-  showToRemove: boolean = false;
   doShowAddTag: boolean = false;
   currentTagType: string = TagType.Rating;
   tagTypeList: string[] = TagType.listAll();
   selectedTag: ITag;
+  selectedParentTagId: string = "0";
   parentTags: ITag[];
   public showToAdd: boolean = false;
-  private subTagEvent: any;
-  private createNewGroupFlag: boolean = false;
+  createNewGroupFlag: boolean = false;
   currentSelectType: string = TagSelectType.All;
-
-  tagsToRemove: ITag[];
   categoryTags: ITag[];
   tagsToAdd: ITag[];
   private editTagList: TagDrilldown[];
@@ -38,13 +34,11 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   unsubscribe: Subscription[] = [];
 
   private layoutId: string;
-  private listLayout: ListLayout;
   private addLocked: boolean = true;
-  private deleteLocked: boolean = true;
-  private editTag: ITag;
+  editTag: ITag;
 
   navigationList: ITag[];
-  private contentList: ITag[];
+  contentList: ITag[];
 
   constructor(private tagCommService: TagCommService,
               private tagService: TagsService,
@@ -54,34 +48,16 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-   /* this.subTagEvent = this.tagCommService.selectEvent
-      .subscribe(selectevent => {
-        this.selectEditTag(selectevent);
-      })
-      unsubscribe.push(this.subTagEvent);
-      */
     this.editTagList = [];
     this.categoryTags = [];
-    this.retrieveTagDrilldown();
     this.retrieveParentTags();
-this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
+    this.fillTagTreeLists(TagTree.BASE_GROUP, this.currentTagType);
   }
 
   ngOnDestroy() {
     this.unsubscribe.forEach(s => s.unsubscribe());
   }
 
-  retrieveTagDrilldown() {
-    this.editTagList = [];
-    //MM remember this
-    /*this.tagService
-      .getTagDrilldownList(this.currentTagType)
-      .subscribe(p => {
-          this.editTagList = p;
-          this.loading = false;
-        },
-        e => this.errorMessage = e);*/
-  }
 
   retrieveParentTags() {
     this.parentTags = [];
@@ -100,7 +76,7 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
         e => this.errorMessage = e);
   }
 
-  selectEditTag(tag: TagDrilldown) {
+  selectEditTag(tag: ITag) {
     this.showToAdd = true;
     if (!this.hopperTags) {
       this.hopperTags = [];
@@ -109,7 +85,8 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
   }
 
   navigateTags(tagId: string) {
-    this.fillTagTreeLists(tagId, false);
+    this.selectedParentTagId = tagId;
+    this.fillTagTreeLists(tagId, this.currentTagType);
   }
 
 
@@ -136,8 +113,9 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
 
     this.tagService
       .assignTagsToTag(this.selectedTag.tag_id, idstring)
-      .subscribe(r => {
-        this.retrieveTagDrilldown();
+      .subscribe(() => {
+        this.tagTreeService.refreshTagTree();
+        this.fillTagTreeLists(this.selectedParentTagId, this.currentTagType)
         this.retrieveParentTags();
       });
   }
@@ -147,8 +125,9 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
     this.loading = true;
     this.tagService
       .assignTagsToBaseTag(this.hopperTags)
-      .subscribe(r => {
-        this.retrieveTagDrilldown();
+      .subscribe( () => {
+        this.tagTreeService.refreshTagTree();
+        this.fillTagTreeLists(this.selectedParentTagId, this.currentTagType);
         this.retrieveParentTags();
       });
     this.hopperTags = [];
@@ -160,7 +139,7 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
 
   changeTagType(tagtype: string) {
     this.currentTagType = tagtype;
-    this.retrieveTagDrilldown();
+    this.fillTagTreeLists(TagTree.BASE_GROUP, this.currentTagType);
     this.retrieveParentTags()
     this.hopperTags = [];
   }
@@ -179,27 +158,14 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
       var id = splitlocation[splitlocation.length - 1];
       var listofids = tagsToAdd.map(t => t.tag_id).join(",");
       this.tagService.assignTagsToTag(id, listofids)
-        .subscribe(r => {
+        .subscribe(() => {
           this.retrieveParentTags();
-          this.retrieveTagDrilldown();
+          this.tagTreeService.refreshTagTree();
+          this.fillTagTreeLists(this.selectedParentTagId, this.currentSelectType);
         })
       ;
     });
 
-  }
-
-  selectTagToAdd(tag: ITag) {
-    if (this.addLocked) {
-      return;
-    }
-    this.deleteLocked = true;
-    if (!this.tagsToAdd) {
-      this.tagsToAdd = [];
-    }
-    this.tagsToAdd.push(tag);
-    this.editTagList = this.editTagList
-      .filter(p => p !== tag);
-    this.showToAdd = true;
   }
 
   removeFromTagsToAdd(tag: ITag) {
@@ -226,17 +192,15 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
         t.name = updateTag.name;
       }
     })
-    this.editTag == null;
+    this.editTag = null;
   }
 
   showEditTag(tag_id: string) {
     if (!this.editTag) {
       return false;
     }
-    if (this.editTag.tag_id == tag_id) {
-      return true;
-    }
-    return false;
+    return this.editTag.tag_id == tag_id;
+
   }
 
   showAddTag() {
@@ -249,20 +213,21 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
 
   addNewTag(tagname: string) {
     this.tagService.addTag(tagname, this.currentTagType)
-      .subscribe(r => {
+      .subscribe(() => {
         console.log(`added!!! this.tagName`);
-        this.retrieveTagDrilldown();
+        this.tagTreeService.refreshTagTree();
+        this.fillTagTreeLists(this.selectedParentTagId, this.currentTagType);
       });
   }
 
 
   private fillTagTreeLists(tagId: string, tagType: TagType) {
     this.loading = true;
-    var $sub = this.tagTreeService.allContentList(tagId, false, false ,[tagType])
-      .subscribe( tagList => {
-      this.loading = false;
-      this.contentList = tagList;
-    });
+    var $sub = this.tagTreeService.allContentList(tagId, ContentType.Direct, false, false, [tagType])
+      .subscribe(tagList => {
+        this.loading = false;
+        this.contentList = tagList;
+      });
     this.unsubscribe.push($sub);
 
     var $navsub = this.tagTreeService.navigationList(tagId)

@@ -18,10 +18,11 @@
         loading
       </div>
       <ng-container *ngIf="!loading">
-        <ng-container  *ngFor="let tag of navigationList">
-        <div class="dish-tag-element-centered list-color" style="margin:5px">
-          {{tag.name}}
-        </div>
+        <ng-container *ngFor="let tag of navigationList">
+          <div class="dish-tag-element-centered list-color" style="margin:5px"
+               (click)="navigateTags(tag.tag_id)">
+            {{tag.name}}
+          </div>
         </ng-container>
       </ng-container>
     </div>
@@ -30,28 +31,20 @@
         loading
       </div>
       <ng-container *ngIf="!loading">
-        <ng-container  *ngFor="let tag of contentList">
-          <div *ngIf="tag.is_group" class="dish-tag-element-centered dish-color" style="margin:5px">
+        <ng-container *ngFor="let tag of contentList">
+          <div *ngIf="tag.is_group" class="dish-tag-element-centered dish-color" style="margin:5px"
+               (click)="navigateTags(tag.tag_id)">
             {{tag.name}}
           </div>
-          <div *ngIf="!tag.is_group" class="dish-tag-element-centered dish-outline-color" style="margin:5px">
-            {{tag.name}}
+          <div *ngIf="!tag.is_group" class="dish-tag-element-centered dish-outline-color" style="margin:5px"
+               (click)="selectEditTag(tag)">
+            {{tag.name}}  <span style="margin-left:3px" [routerLink]="['/edit', tag.tag_id]"><fa [name]="'pencil'"></fa></span>
           </div>
         </ng-container>
       </ng-container>
     </div>
-   <!-- <ng-container *ngIf="!loading">
-      <div class="row" *ngFor="let tag of editTagList">
-        <div class="col-md-8">
-          <at-tag-drilldown-container [tagDrilldown]="tag" [selectType]="currentSelectType">
-
-
-          </at-tag-drilldown-container>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-8">
+    <div class="row">
+      <div class="col-md-8">
         <span *ngIf="showAddTag()">
                          <div class="input-group">
                  <input #addTagBox class="form-control input-lg" type="text"
@@ -67,13 +60,16 @@
       </span>
                </div>
         </span>
-          <span *ngIf="!showAddTag()">
+        <span *ngIf="!showAddTag()">
         <button class="btn btn-success btn"
                 (click)="toggleAddTag()">Add Tag </button>
         </span>
-        </div>
       </div>
-    </ng-container>-->
+    </div>
+    <ng-container *ngIf="!loading">
+
+
+    </ng-container>
 
   </div>
 

@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
 import 'rxjs/add/operator/filter';
 import {TagsService} from "./tags.service";
-import {TagTree} from './tagtree.object';
+import {ContentType, TagTree} from './tagtree.object';
 import {Subscription} from "rxjs/Subscription";
 import {ITag} from "../model/tag";
 import {Observable, of, pipe} from "rxjs";
@@ -16,7 +16,6 @@ export class TagTreeService implements OnDestroy {
 
   loadingEvent: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   private isLoading: boolean = false;
-  loadingSubscription: Subscription;
   unsubscribe: Subscription[] = [];
   private _tagTree: TagTree;
   private _lastLoaded: number;
@@ -49,23 +48,12 @@ export class TagTreeService implements OnDestroy {
     return returnWhenLoaded(this.tagTree());
   }
 
-  allContentList(id: string, isAbbreviated: Boolean, groupsOnly: boolean, tagTypes: TagType[]): Observable<ITag[]> {
+  allContentList(id: string, contentType: ContentType, isAbbreviated: boolean, groupsOnly: boolean, tagTypes: TagType[]): Observable<ITag[]> {
     const returnWhenLoaded = pipe(
-      map((tagTree: TagTree) => tagTree.allContentList(id, isAbbreviated, groupsOnly, tagTypes))
+      map((tagTree: TagTree) => tagTree.contentList(id,contentType, isAbbreviated, groupsOnly, tagTypes))
     );
 
     return returnWhenLoaded(this.tagTree());
-  }
-
-  private createOrRefreshTagTree() {
-    this.isLoading = true;
-    let sub$ = this.tagService.getAllExtended(true).subscribe((value) => {
-      this._tagTree = new TagTree(value);
-      this._lastLoaded = new Date().getTime();
-      this.isLoading = false;
-      this.loadingEvent.emit(false);
-    });
-    this.unsubscribe.push(sub$);
   }
 
   tagTree(): Observable<TagTree> {
@@ -79,10 +67,23 @@ export class TagTreeService implements OnDestroy {
     })
   }
 
+  private createOrRefreshTagTree() {
+    this.isLoading = true;
+    let sub$ = this.tagService.getAllExtended(true).subscribe((value) => {
+      this._tagTree = new TagTree(value);
+      this._lastLoaded = new Date().getTime();
+      this.isLoading = false;
+      this.loadingEvent.emit(false);
+    });
+    this.unsubscribe.push(sub$);
+  }
 
   private tagTreeNeedsRefresh() {
     var limit = this._lastLoaded + TagTreeService.refreshPeriod;
     return (new Date().getTime()) > limit;
   }
 
+  refreshTagTree() {
+    this.createOrRefreshTagTree();
+  }
 }

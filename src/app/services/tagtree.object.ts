@@ -67,7 +67,7 @@ export class TagTree {
       return returnList;
     }
 
-    var parentId = navDisplay.tag_id
+    var parentId = navDisplay.tag_id ? navDisplay.parent_id : "0";
     var safety = 0;
     do {
       // get the node of parent id
@@ -76,7 +76,7 @@ export class TagTree {
         returnList.unshift(parentDisplay);// add the display at the beginning of the array
 
         // set the parent id
-        parentId = parentDisplay.parent_id;
+        parentId = parentDisplay.tag_id ? parentDisplay.parent_id : "0";
 
       }
       safety++;
@@ -84,39 +84,36 @@ export class TagTree {
     }
     while (safety < 50 && parentId != "0");
 
+    // add all display at the beginning
+    var allDisplay = new Tag();
+    allDisplay.tag_id = "0";
+    allDisplay.name = "All";
+    returnList.unshift(allDisplay);
+
+    returnList.push(navDisplay);
     return returnList;
   }
 
 
-  allContentList(id: string, isAbbreviated: Boolean, groupsOnly: boolean, tagTypes: TagType[]): ITag[] {
+  contentList(id: string, contentType: ContentType, isAbbreviated: boolean, groupsOnly: boolean, tagTypes: TagType[]): ITag[] {
     let requestedNode = this._lookupRelations.get(id);
     if (!requestedNode) {
       return [];
     }
 
     if (id == TagTree.BASE_GROUP) {
-      return this.baseContentList(isAbbreviated, groupsOnly, tagTypes);
+      return this.baseContentList(isAbbreviated, contentType, groupsOnly, tagTypes);
     }
 
     // gather all tags belonging to id
-    var allTags = this.allTags(requestedNode, groupsOnly);
-
-    return this.nodesToDisplays(allTags, groupsOnly);
-  }
-
-  directContentList(id: string, isAbbreviated: Boolean, groupsOnly: boolean, tagTypes: TagType[]): ITag[] {
-    let requestedNode = this._lookupRelations[id];
-    if (!requestedNode) {
-      return [];
+    var allChildrenTags;
+    if (contentType == ContentType.All) {
+      allChildrenTags = this.allTags(requestedNode, groupsOnly);
+    } else {
+      allChildrenTags = this.directTags(requestedNode, groupsOnly);
     }
 
-
-    // gather all tags belonging to id
-    var allTags = requestedNode.children
-      .map( id => this._lookupRelations.get(id))
-      .filter( node => tagTypes.indexOf(node.tag_type) >= 0);
-
-    return this.nodesToDisplays(allTags, groupsOnly);
+    return this.nodesToDisplays(allChildrenTags, groupsOnly);
   }
 
   private allTags(node: TagTreeNode, groupsOnly: boolean): TagTreeNode[] {
@@ -136,7 +133,23 @@ export class TagTree {
     return allOfThem;
   }
 
-  private baseContentList(isAbbreviated: Boolean, groupsOnly: boolean, tagTypes: TagType[]): ITag[] {
+  private directTags(node: TagTreeNode, groupsOnly: boolean): TagTreeNode[] {
+    var allOfThem: TagTreeNode[] = [];
+    for (var i = 0; i < node.children.length; i++) {
+      var childNodeId = node.children[i];
+      var childNode = this._lookupRelations.get(childNodeId);
+
+      if (childNode.isGroup()) {
+        allOfThem.push(childNode);
+      } else if (!groupsOnly) {
+        allOfThem.push(childNode);
+      }
+
+    }
+    return allOfThem;
+  }
+
+  private baseContentList(isAbbreviated: boolean, contentType: ContentType, groupsOnly: boolean, tagTypes: TagType[]): ITag[] {
     var baseNode = this._lookupRelations.get(TagTree.BASE_GROUP);
     if (!baseNode) {
       return [];
@@ -153,7 +166,7 @@ export class TagTree {
       var groupEligible = !groupsOnly || (groupsOnly && childNode.isGroup());
 
       if (childNodeMatch && groupEligible) {
-        if (childNode.isGroup()) {
+        if (childNode.isGroup() && ContentType.All) {
           filteredChildren = filteredChildren.concat(this.allTags(childNode, groupsOnly));
         } else {
           filteredChildren.push(childNode);
@@ -161,6 +174,7 @@ export class TagTree {
 
       }
     }
+
     return this.nodesToDisplays(filteredChildren, groupsOnly);
   }
 
@@ -225,4 +239,10 @@ export class TagTreeNode {
   isGroup(): boolean {
     return this.children && this.children.length > 0;
   }
+}
+
+
+export enum ContentType {
+  All,
+  Direct
 }
