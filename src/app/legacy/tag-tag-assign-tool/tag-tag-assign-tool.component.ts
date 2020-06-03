@@ -108,6 +108,10 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
     this.hopperTags.push(tag);
   }
 
+  navigateTags(tagId: string) {
+    this.fillTagTreeLists(tagId, false);
+  }
+
 
   selectAssignTag(tag: ITag) {
     this.selectedTag = tag;
@@ -254,15 +258,18 @@ this.fillTagTreeLists(TagTree.BASE_GROUP, TagType.Ingredient);
 
   private fillTagTreeLists(tagId: string, tagType: TagType) {
     this.loading = true;
-    var $sub = this.tagTreeService.tagTree().subscribe( tagTree => {
+    var $sub = this.tagTreeService.allContentList(tagId, false, false ,[tagType])
+      .subscribe( tagList => {
       this.loading = false;
-      this.contentList = tagTree.allContentList(TagTree.BASE_GROUP, false, false ,[tagType]);
+      this.contentList = tagList;
     });
     this.unsubscribe.push($sub);
-    /*var $anothersub = this.tagTreeService.allContentList(TagTree.BASE_GROUP,false, false, [tagType]).subscribe( taglist => {
-      this.contentList = taglist;
-      this.loading = false;
-    });
-    this.unsubscribe.push($anothersub);*/
+
+    var $navsub = this.tagTreeService.navigationList(tagId)
+      .subscribe( tagList => {
+        this.loading = false;
+        this.navigationList = tagList;
+      });
+    this.unsubscribe.push($navsub);
   }
 }

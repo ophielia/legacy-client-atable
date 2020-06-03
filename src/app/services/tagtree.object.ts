@@ -98,8 +98,8 @@ export class TagTree {
       return this.baseContentList(isAbbreviated, groupsOnly, tagTypes);
     }
 
-// gather all tags belonging to id
-    var allTags = this.allTags(requestedNode);
+    // gather all tags belonging to id
+    var allTags = this.allTags(requestedNode, groupsOnly);
 
     return this.nodesToDisplays(allTags, groupsOnly);
   }
@@ -119,14 +119,17 @@ export class TagTree {
     return this.nodesToDisplays(allTags, groupsOnly);
   }
 
-  private allTags(node: TagTreeNode): TagTreeNode[] {
+  private allTags(node: TagTreeNode, groupsOnly: boolean): TagTreeNode[] {
     var allOfThem: TagTreeNode[] = [];
     for (var i = 0; i < node.children.length; i++) {
       var childNodeId = node.children[i];
       var childNode = this._lookupRelations.get(childNodeId);
-      allOfThem.push(childNode);
+
       if (childNode.isGroup()) {
-        allOfThem = allOfThem.concat(this.allTags(childNode));
+        allOfThem = allOfThem.concat(this.allTags(childNode, groupsOnly));
+        allOfThem.push(childNode);
+      } else if (!groupsOnly) {
+        allOfThem.push(childNode);
       }
 
     }
@@ -150,7 +153,12 @@ export class TagTree {
       var groupEligible = !groupsOnly || (groupsOnly && childNode.isGroup());
 
       if (childNodeMatch && groupEligible) {
-        filteredChildren.push(childNode);
+        if (childNode.isGroup()) {
+          filteredChildren = filteredChildren.concat(this.allTags(childNode, groupsOnly));
+        } else {
+          filteredChildren.push(childNode);
+        }
+
       }
     }
     return this.nodesToDisplays(filteredChildren, groupsOnly);
@@ -174,6 +182,7 @@ export class TagTree {
         continue;
       }
       if (node.isGroup()) {
+        display.is_group = true;
         childGroups.push(display);
       } else if (!groupsOnly) {
         childTags.push(display);
@@ -206,6 +215,7 @@ export class TagTreeNode {
               tag_type: string,
               assign_select: boolean,
               search_select: boolean) {
+    this.tag_id = tag_id;
     this.tag_type = tag_type;
     this.assign_select = assign_select;
     this.search_select = search_select;

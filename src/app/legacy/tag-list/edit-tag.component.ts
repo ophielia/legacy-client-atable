@@ -21,7 +21,8 @@ export class EditTagComponent implements OnInit, OnDestroy {
     search_select: false,
     power: null,
     dishes: [],
-    is_inverted: false
+    is_inverted: false,
+    is_group: false
   };
   sub: any;
   private errorMessage: string;
