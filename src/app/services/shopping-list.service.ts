@@ -45,7 +45,7 @@ export class ShoppingListService extends BaseHeadersService {
   getByIdWithPantry(shoppingList_id: string, showPantry: boolean): Observable<IShoppingList> {
     var url = this.shoppingListUrl + "/" + shoppingList_id;
     if (showPantry) {
-      url = url + "?showPantry=" + showPantry;
+     // url = url + "?showPantry=" + showPantry;
     }
     let shoppingList$ = this.httpClient
       .get(url)
@@ -57,12 +57,13 @@ export class ShoppingListService extends BaseHeadersService {
   getByIdWithHighlight(shoppingList_id: string, dish_id: string, list_id: string, show_pantry: boolean) {
     var url = this.shoppingListUrl + "/" + shoppingList_id;
     if (dish_id) {
-      url = url + "?highlightDish=" + dish_id;
+      //MM lots of cleanup
+  //    url = url + "?highlightSource=" + dish_id;
 
     } else if (list_id) {
-      url = url + "?highlightListId=" + list_id;
+    //  url = url + "?highlightListId=" + list_id;
     } else if (show_pantry) {
-      url = url + "?showPantry=true";
+      //url = url + "?showPantry=true";
     }
     let shoppingList$ = this.httpClient
       .get(url)
@@ -115,8 +116,7 @@ export class ShoppingListService extends BaseHeadersService {
   removeItemFromShoppingList(shoppingList_id: string,
                              item_id: string,
                              tag_id: string,
-                             remove_all: boolean,
-                             dish_id: string): Observable<Object> {
+                             remove_all: boolean): Observable<Object> {
 
     var tagIds: Array<string> = [tag_id];
     let itemOperation = <ItemOperationPut>({

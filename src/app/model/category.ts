@@ -4,9 +4,7 @@ export interface ICategory {
   name: string;
   items: Item[];
   subcategories: ICategory[];
-  category_type: string;
   is_frequent: boolean;
-  dish_id: string;
 
   allItems(): IItem[]
 }
@@ -17,10 +15,8 @@ export class Category implements ICategory {
     public name: string,
     public items: Item[],
     public  subcategories: Category[],
-    public  category_type: string,
     public  override_class: string,
     public  is_frequent: boolean,
-    public   dish_id: string
 ) {}
 
   allItems(): IItem[] {

@@ -9,12 +9,9 @@ import {ShoppingListService} from "../services/shopping-list.service";
 import {TagCommService} from "../legacy/drilldown/tag-drilldown-select.service";
 import {shoppingListRouting} from "./shopping-list.routes";
 import {EditShoppingListComponent} from "./edit-shopping-list/edit-shopping-list.component";
-import {SourceLegendService} from "../services/source-legend.service";
 import {ShoppingListItemsComponent} from "./shopping-list-items/shopping-list-items.component";
 import {AutoCompleteModule, CheckboxModule} from "primeng/primeng";
 import {SingleListComponentComponent} from "./single-list-component/single-list-component.component";
-import {ColorTagsComponent} from "./color-tags/color-tags.component";
-import {WordTagsComponent} from "./word-tags/word-tags.component";
 
 
 @NgModule({
@@ -29,10 +26,9 @@ import {WordTagsComponent} from "./word-tags/word-tags.component";
     CheckboxModule
 
   ],
-  providers: [ShoppingListService, TagCommService, SourceLegendService],
+  providers: [ShoppingListService, TagCommService],
   declarations: [ManageShoppingListComponent, EditShoppingListComponent,
-    ShoppingListItemsComponent, SingleListComponentComponent,
-    ColorTagsComponent, WordTagsComponent]
+    ShoppingListItemsComponent, SingleListComponentComponent]
 })
 export class ShoppingListModule {
 }

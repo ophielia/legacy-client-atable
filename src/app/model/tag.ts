@@ -10,6 +10,7 @@ export interface ITag {
   assign_select: boolean;
   search_select: boolean;
   is_inverted: boolean;
+  is_group: boolean;
 }
 
 export class Tag implements ITag {
@@ -26,4 +27,5 @@ export class Tag implements ITag {
   assign_select: boolean;
   search_select: boolean;
   is_inverted: boolean;
+  is_group: boolean = false;
 }

@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ITag} from "../../model/tag";
-import {ListLayoutCategory} from "../../model/listcategory";
-import {ListLayout} from "../../model/listlayout";
-import {ListLayoutService} from "../../services/list-layout.service";
 import {TagsService} from "../../services/tags.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import TagType from "../../model/tag-type";
 import {TagDrilldown} from "../../model/tag-drilldown";
 import {TagCommService} from "../drilldown/tag-drilldown-select.service";
 import TagSelectType from "../../model/tag-select-type";
+import {TagTreeService} from "../../services/tagtree.service";
+import {ContentType, TagTree} from "../../services/tagtree.object";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'at-tag-tag-assign-tool',
@@ -17,61 +17,47 @@ import TagSelectType from "../../model/tag-select-type";
 })
 export class TagTagAssignToolComponent implements OnInit, OnDestroy {
   hopperTags: ITag[];
-  showToRemove: boolean = false;
   doShowAddTag: boolean = false;
   currentTagType: string = TagType.Rating;
   tagTypeList: string[] = TagType.listAll();
   selectedTag: ITag;
+  selectedParentTagId: string = "0";
   parentTags: ITag[];
   public showToAdd: boolean = false;
-  private subTagEvent: any;
-  private createNewGroupFlag: boolean = false;
+  createNewGroupFlag: boolean = false;
   currentSelectType: string = TagSelectType.All;
-
-  tagsToRemove: ITag[];
   categoryTags: ITag[];
   tagsToAdd: ITag[];
   private editTagList: TagDrilldown[];
   private errorMessage: string;
   public loading: boolean = false;
+  unsubscribe: Subscription[] = [];
 
   private layoutId: string;
-  private listLayout: ListLayout;
   private addLocked: boolean = true;
-  private deleteLocked: boolean = true;
-  private editTag: ITag;
+  editTag: ITag;
+
+  navigationList: ITag[];
+  contentList: ITag[];
 
   constructor(private tagCommService: TagCommService,
               private tagService: TagsService,
+              private tagTreeService: TagTreeService,
               private route: ActivatedRoute) {
     this.layoutId = this.route.snapshot.params['id'];
   }
 
   ngOnInit() {
-    this.subTagEvent = this.tagCommService.selectEvent
-      .subscribe(selectevent => {
-        this.selectEditTag(selectevent);
-      })
     this.editTagList = [];
     this.categoryTags = [];
-    this.retrieveTagDrilldown();
     this.retrieveParentTags();
+    this.fillTagTreeLists(TagTree.BASE_GROUP, this.currentTagType);
   }
 
   ngOnDestroy() {
-    this.subTagEvent.unsubscribe;
+    this.unsubscribe.forEach(s => s.unsubscribe());
   }
 
-  retrieveTagDrilldown() {
-    this.editTagList = [];
-    this.tagService
-      .getTagDrilldownList(this.currentTagType)
-      .subscribe(p => {
-          this.editTagList = p;
-          this.loading = false;
-        },
-        e => this.errorMessage = e);
-  }
 
   retrieveParentTags() {
     this.parentTags = [];
@@ -79,22 +65,28 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
     this.tagService
       .getAllParentTags(this.currentTagType)
       .subscribe(p => {
-          this.parentTags = p.sort((a, b) => {
+          p.sort((a, b) => {
             if (a.name < b.name) return -1;
             else if (a.name > b.name) return 1;
             else return 0;
           });
+        this.parentTags = p;
           this.loading = false;
         },
         e => this.errorMessage = e);
   }
 
-  selectEditTag(tag: TagDrilldown) {
+  selectEditTag(tag: ITag) {
     this.showToAdd = true;
     if (!this.hopperTags) {
       this.hopperTags = [];
     }
     this.hopperTags.push(tag);
+  }
+
+  navigateTags(tagId: string) {
+    this.selectedParentTagId = tagId;
+    this.fillTagTreeLists(tagId, this.currentTagType);
   }
 
 
@@ -121,8 +113,9 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
 
     this.tagService
       .assignTagsToTag(this.selectedTag.tag_id, idstring)
-      .subscribe(r => {
-        this.retrieveTagDrilldown();
+      .subscribe(() => {
+        this.tagTreeService.refreshTagTree();
+        this.fillTagTreeLists(this.selectedParentTagId, this.currentTagType)
         this.retrieveParentTags();
       });
   }
@@ -132,8 +125,9 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.tagService
       .assignTagsToBaseTag(this.hopperTags)
-      .subscribe(r => {
-        this.retrieveTagDrilldown();
+      .subscribe( () => {
+        this.tagTreeService.refreshTagTree();
+        this.fillTagTreeLists(this.selectedParentTagId, this.currentTagType);
         this.retrieveParentTags();
       });
     this.hopperTags = [];
@@ -145,7 +139,7 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
 
   changeTagType(tagtype: string) {
     this.currentTagType = tagtype;
-    this.retrieveTagDrilldown();
+    this.fillTagTreeLists(TagTree.BASE_GROUP, this.currentTagType);
     this.retrieveParentTags()
     this.hopperTags = [];
   }
@@ -164,27 +158,14 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
       var id = splitlocation[splitlocation.length - 1];
       var listofids = tagsToAdd.map(t => t.tag_id).join(",");
       this.tagService.assignTagsToTag(id, listofids)
-        .subscribe(r => {
+        .subscribe(() => {
           this.retrieveParentTags();
-          this.retrieveTagDrilldown();
+          this.tagTreeService.refreshTagTree();
+          this.fillTagTreeLists(this.selectedParentTagId, this.currentSelectType);
         })
       ;
     });
 
-  }
-
-  selectTagToAdd(tag: ITag) {
-    if (this.addLocked) {
-      return;
-    }
-    this.deleteLocked = true;
-    if (!this.tagsToAdd) {
-      this.tagsToAdd = [];
-    }
-    this.tagsToAdd.push(tag);
-    this.editTagList = this.editTagList
-      .filter(p => p !== tag);
-    this.showToAdd = true;
   }
 
   removeFromTagsToAdd(tag: ITag) {
@@ -211,17 +192,15 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
         t.name = updateTag.name;
       }
     })
-    this.editTag == null;
+    this.editTag = null;
   }
 
   showEditTag(tag_id: string) {
     if (!this.editTag) {
       return false;
     }
-    if (this.editTag.tag_id == tag_id) {
-      return true;
-    }
-    return false;
+    return this.editTag.tag_id == tag_id;
+
   }
 
   showAddTag() {
@@ -234,11 +213,28 @@ export class TagTagAssignToolComponent implements OnInit, OnDestroy {
 
   addNewTag(tagname: string) {
     this.tagService.addTag(tagname, this.currentTagType)
-      .subscribe(r => {
+      .subscribe(() => {
         console.log(`added!!! this.tagName`);
-        this.retrieveTagDrilldown();
+        this.tagTreeService.refreshTagTree();
+        this.fillTagTreeLists(this.selectedParentTagId, this.currentTagType);
       });
   }
 
 
+  private fillTagTreeLists(tagId: string, tagType: TagType) {
+    this.loading = true;
+    var $sub = this.tagTreeService.allContentList(tagId, ContentType.Direct, false, false, [tagType])
+      .subscribe(tagList => {
+        this.loading = false;
+        this.contentList = tagList;
+      });
+    this.unsubscribe.push($sub);
+
+    var $navsub = this.tagTreeService.navigationList(tagId)
+      .subscribe( tagList => {
+        this.loading = false;
+        this.navigationList = tagList;
+      });
+    this.unsubscribe.push($navsub);
+  }
 }

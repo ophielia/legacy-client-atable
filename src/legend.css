@@ -1,7 +1,10 @@
+.legend-highlight {
+  background-color: #3A8DAF;
+}
+
 .legend-box {
-  border-color: white;
-  border-width: 1px;
-  border-style: solid;
+margin-left: 5px;
+margin-right: 5px;
   width: 15px;
   height: 15px;
   display: inline-block;

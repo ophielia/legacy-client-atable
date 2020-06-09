@@ -1,4 +1,4 @@
-export default class TagType {
+  export default class TagType {
 
   static TagType: string = "TagType";
   static Rating: string = "Rating";

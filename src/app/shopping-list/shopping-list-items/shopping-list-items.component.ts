@@ -3,6 +3,7 @@ import {Category} from "../../model/category";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {IItem, Item} from "../../model/item";
 import {Subscription} from "rxjs/Subscription";
+import {LegendPoint} from "../../model/legend-point";
 
 @Component({
   selector: 'at-shopping-list-items',
@@ -12,7 +13,7 @@ import {Subscription} from "rxjs/Subscription";
 export class ShoppingListItemsComponent implements OnInit {
   private unsubscribe: Subscription[] = [];
   @Input() category: Category;
-  @Input() legendMap: Map<string, string>;
+  @Input() legendMap: Map<string, LegendPoint>;
   @Input() listId: string;
   @Input() showItemLegends: boolean = true;
   @Output() listUpdated = new EventEmitter<boolean>();
@@ -37,7 +38,7 @@ export class ShoppingListItemsComponent implements OnInit {
 
     let $sub = this.shoppingListService.removeItemFromShoppingList(this.listId, item.item_id,
       item.tag.tag_id,
-      true, this.category.dish_id)  // note - always remove entire item
+      true)  // note - always remove entire item
       .subscribe(() => {
         this.listUpdated.emit(true);
         this.itemRemoved.emit(item);
@@ -46,10 +47,19 @@ export class ShoppingListItemsComponent implements OnInit {
   }
 
   showLegends(item: Item) {
-    if (!this.showItemLegends) {
+     if (!this.showItemLegends) {
       return false;
     }
-    return item.dish_sources.length > 0 || item.list_sources.length > 0;
-  }
+    return item.source_keys && item.source_keys.length > 0;
+}
+
+iconSourceForKey(key: string) : string {
+    // assets/images/legend/colors/blue/bowl.png
+    let  point = this.legendMap.get(key);
+    if (!point) {
+      return null;
+    }
+    return "assets/images/legend/colors/" + point.color + "/" + point.icon + ".png";
+}
 
 }

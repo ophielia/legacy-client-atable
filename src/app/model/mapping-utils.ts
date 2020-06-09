@@ -18,6 +18,7 @@ import {RatingUpdateInfo} from "./rating-update-info";
 import {IRatingInfo, RatingInfo} from "./rating-info";
 import {DishRatingInfo, IDishRatingInfo} from "./dish-rating-info";
 import {User} from "./user";
+import {ILegendSource, LegendSource} from "./legend-source";
 
 export default class MappingUtils {
 
@@ -144,10 +145,8 @@ export default class MappingUtils {
       r.name,
       r.items.map(MappingUtils._toItem),
       (r.subcategories ? r.subcategories.map(MappingUtils._toCategory) : null),
-      r.category_type,
       null,
-      false,
-      null
+      false
   ) ;
 
 
@@ -157,6 +156,15 @@ export default class MappingUtils {
     }
 
     return category;
+  }
+
+  private static _toLegend(r: any) : LegendSource {
+
+    let legend = <ILegendSource>({
+      key: r.key,
+      display: r.display
+    });
+    return legend;
   }
 
   private static _toListLayoutCategory(r: any): ListLayoutCategory {
@@ -179,8 +187,7 @@ export default class MappingUtils {
     let item = <Item>({
       list_id: r.list_id,
       item_id: r.item_id,
-      dish_sources: r.dish_sources != null ? r.dish_sources.map(MappingUtils._toItemSource) : null,
-      list_sources: r.list_sources != null ? r.list_sources.map(MappingUtils._toItemSource) : null,
+      source_keys: r.source_keys,
       added: r.added,
       tag_id: r.tag_id,
       used_count: r.used_count,
@@ -282,9 +289,11 @@ export default class MappingUtils {
       item_count: r.shopping_list.item_count,
       updated: r.shopping_list.updated,
       layout_type: r.shopping_list.list_layout_type,
-      dish_sources: r.shopping_list.dish_sources != null ? r.shopping_list.dish_sources.map(MappingUtils._toItemSource) : null,
-      list_sources: r.shopping_list.list_sources != null ? r.shopping_list.list_sources.map(MappingUtils._toItemSource) : null,
-      categories: r.shopping_list.categories != null ? r.shopping_list.categories.map(MappingUtils._toCategory) : null
+      //MM clean up
+      dish_sources: [], //r.shopping_list.dish_sources != null ? r.shopping_list.dish_sources.map(MappingUtils._toItemSource) : null,
+      list_sources: [], //r.shopping_list.list_sources != null ? r.shopping_list.list_sources.map(MappingUtils._toItemSource) : null,
+      categories: r.shopping_list.categories != null ? r.shopping_list.categories.map(MappingUtils._toCategory) : null,
+      legend: r.shopping_list.legend != null ? r.shopping_list.legend.map(MappingUtils._toLegend) : []
     });
 
     if (MappingUtils.showConsoleLogs) {

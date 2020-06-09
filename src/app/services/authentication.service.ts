@@ -9,6 +9,8 @@ import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {User} from "../model/user";
 import MappingUtils from "../model/mapping-utils";
+import {UserDeviceInfo} from "../model/user-device-info";
+import {AuthorizePost} from "../model/authorize-post";
 
 @Injectable()
 export class AuthenticationService {
@@ -28,14 +30,18 @@ export class AuthenticationService {
         'Access-Control-Expose-Headers': 'Location',
       })
     }
-    return this.httpClient.post(this.authUrl, JSON.stringify({
-      username: username,
-      password: password
-    }), httpOptions)
+    // prepare device info
+    var deviceInfo = new UserDeviceInfo();
+    deviceInfo.client_type = "Web";
+    var authorizePost = new AuthorizePost();
+    authorizePost.password = password;
+    authorizePost.username = username;
+    authorizePost.device_info = deviceInfo
+    return this.httpClient.post(this.authUrl, JSON.stringify(authorizePost), httpOptions)
       .map((response: HttpResponse<any>) => {
         // login successful if there's a jwt token in the response
         let user = this.mapUser(response);
-        let token = response["token"];
+
         if (user) {
           // store username and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(user));
