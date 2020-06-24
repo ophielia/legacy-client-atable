@@ -169,13 +169,16 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   }
 
-  removeDishOrList(source: ItemSource) {
-    let $sub = this.shoppingListService.removeDishItemsFromShoppingList(this.shoppingList.list_id, source.id)
+  removeDishOrList(source: string) {
+    let $sub = this.shoppingListService.removeItemsByDishOrList(this.shoppingList.list_id, source)
       .subscribe(() => {
+        if (source == this.highlightListId) {
+          this.highlightSourceId = null;
+        }
         this.getShoppingList(this.shoppingList.list_id)
       });
     this.unsubscribe.push($sub);
-    if (this.highlightSourceId == source.id) {
+    if (this.highlightSourceId == source) {
       this.highlightSourceId = null;
     }
   }
@@ -362,14 +365,14 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
         this.hideCrossedOff(category);
       }
     }
-    if (this.highlightSourceId || this.showPantryItems) {
+    if (this.highlightSourceId || (this.showPantryItems && this.showMakeStarter)) {
       shoppingList.categories = this.pullCategoryByTag(this.highlightSourceId, shoppingList);
     }
     return shoppingList;
   }
 
   private pullCategoryByTag(sourceId: string, shoppingList: IShoppingList) {
-    var beep = "bop";
+
     if (!sourceId && !this.showPantryItems) {
       return;
     }

@@ -3,7 +3,7 @@ import {AuthenticationService} from "./authentication.service";
 import {Observable} from "rxjs/Observable";
 import {IShoppingList} from "../model/shoppinglist";
 import MappingUtils from "../model/mapping-utils";
-import {IItem, Item} from "../model/item";
+import {Item} from "../model/item";
 import {ITag} from "../model/tag";
 import {APP_CONFIG, AppConfig} from "../app.config";
 import {BaseHeadersService} from "app/services/base-service";
@@ -13,7 +13,6 @@ import {throwError} from "rxjs";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {map} from "rxjs/operators";
 import {IShoppingListPut, ShoppingListPut} from "../model/shoppinglistput";
-import {TargetSlot} from "../model/target-slot";
 import {ItemOperationPut} from "../model/item-operation-put";
 
 @Injectable()
@@ -45,7 +44,7 @@ export class ShoppingListService extends BaseHeadersService {
   getByIdWithPantry(shoppingList_id: string, showPantry: boolean): Observable<IShoppingList> {
     var url = this.shoppingListUrl + "/" + shoppingList_id;
     if (showPantry) {
-     // url = url + "?showPantry=" + showPantry;
+      // url = url + "?showPantry=" + showPantry;
     }
     let shoppingList$ = this.httpClient
       .get(url)
@@ -58,10 +57,10 @@ export class ShoppingListService extends BaseHeadersService {
     var url = this.shoppingListUrl + "/" + shoppingList_id;
     if (dish_id) {
       //MM lots of cleanup
-  //    url = url + "?highlightSource=" + dish_id;
+      //    url = url + "?highlightSource=" + dish_id;
 
     } else if (list_id) {
-    //  url = url + "?highlightListId=" + list_id;
+      //  url = url + "?highlightListId=" + list_id;
     } else if (show_pantry) {
       //url = url + "?showPantry=true";
     }
@@ -120,12 +119,12 @@ export class ShoppingListService extends BaseHeadersService {
 
     var tagIds: Array<string> = [tag_id];
     let itemOperation = <ItemOperationPut>({
-      destination_list_id: '0',
-    operation: 'Remove',
-    tag_ids: tagIds
-    }
+        destination_list_id: '0',
+        operation: 'Remove',
+        tag_ids: tagIds
+      }
     );
-    var url: string= this.shoppingListUrl + "/" + shoppingList_id + "/item"
+    var url: string = this.shoppingListUrl + "/" + shoppingList_id + "/item"
     var payload = JSON.stringify(itemOperation);
     return this
       .httpClient
@@ -134,14 +133,27 @@ export class ShoppingListService extends BaseHeadersService {
 
   }
 
-  removeDishItemsFromShoppingList(list_id: string, dish_id: string) {
-    var url = this.shoppingListUrl + "/" + list_id + "/dish/" + dish_id;
+  removeItemsByDishOrList(list_id: string, sourceTag: string) {
+    var type = sourceTag.substr(0, 1);
+    var id = sourceTag.slice(1);
+
+    console.log("type:" + type);
+    console.log("id:" + id);
+    if (type == 'd') {
+      return this.removeDishItems(list_id, id);
+    } else if (type == 'l') {
+      return this.removeListItems(list_id, id);
+    }
+  }
+
+  removeDishItems(list_id: string, id: string) {
+    var url = this.shoppingListUrl + "/" + list_id + "/dish/" + id;
     return this
       .httpClient
       .delete(url);
   }
 
-  removeListItemsFromShoppingList(list_id: string, fromListId: string) {
+  removeListItems(list_id: string, fromListId: string) {
     var url = this.shoppingListUrl + "/" + list_id + "/list/" + fromListId;
     return this
       .httpClient
@@ -156,7 +168,7 @@ export class ShoppingListService extends BaseHeadersService {
         tag_ids: []
       }
     );
-    let url: string= this.shoppingListUrl + "/" + list_id + "/item"
+    let url: string = this.shoppingListUrl + "/" + list_id + "/item"
     let payload = JSON.stringify(itemOperation);
     return this
       .httpClient
@@ -250,7 +262,7 @@ export class ShoppingListService extends BaseHeadersService {
     return this.updateShoppingList(shoppingList.list_id, shoppingListPut);
   }
 
-  private updateShoppingList(listId:string, shoppingList: IShoppingListPut) {
+  private updateShoppingList(listId: string, shoppingList: IShoppingListPut) {
     var url = this.shoppingListUrl + "/" + listId;
     return this
       .httpClient
