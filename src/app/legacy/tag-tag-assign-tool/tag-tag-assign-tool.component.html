@@ -33,8 +33,10 @@
       <ng-container *ngIf="!loading">
         <ng-container *ngFor="let tag of contentList">
           <div *ngIf="tag.is_group" class="dish-tag-element-centered dish-color" style="margin:5px"
-               (click)="navigateTags(tag.tag_id)">
-            {{tag.name}}
+          >
+            <span (click)="navigateTags(tag.tag_id)">{{tag.name}}</span>
+            <span style="padding-left:10px;" (click)="selectEditTag(tag)">
+            <fa [name]="'plus'"></fa></span>
           </div>
           <div *ngIf="!tag.is_group" class="dish-tag-element-centered dish-outline-color" style="margin:5px"
                (click)="selectEditTag(tag)">

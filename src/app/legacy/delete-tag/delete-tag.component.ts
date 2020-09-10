@@ -14,9 +14,9 @@ import {TargetService} from "../../services/target.service";
 export class DeleteTagComponent implements OnInit, OnDestroy {
 
   private selectedTags: ITag[] = [];
-  private alltagsSearch: ITag[];
+  alltagsSearch: ITag[];
   unsubscribe: Subscription[] = [];
-  private tagToDelete: ITag;
+   tagToDelete: ITag;
   private tagForReplace: Tag;
    message: String;
 
@@ -89,5 +89,14 @@ export class DeleteTagComponent implements OnInit, OnDestroy {
           this.ngOnInit()
         }
       });
+  }
+
+  cancel() {
+    this.tagToDelete = null;
+    this.tagForReplace = null;
+  }
+
+  showSummary() {
+    return this.hasDeleteTag() && !this.hasReplaceTag();
   }
 }

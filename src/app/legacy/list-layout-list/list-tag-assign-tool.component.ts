@@ -71,7 +71,7 @@ export class ListTagAssignToolComponent implements OnInit, OnDestroy {
     this.listLayoutService
       .getUncategorizedTags(id)
       .subscribe(p => {
-        this.unCatTagList = p;
+        this.unCatTagList = p.filter( t => !t.is_group)
         this.loading = false;
       });
   }

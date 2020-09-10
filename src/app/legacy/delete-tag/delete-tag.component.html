@@ -4,22 +4,26 @@
     <div class="col-9">
       <div class="row menubar dish-menubar-text-color menu-color justify-content-between">
         <div style="float:left">
-          <div class="input-group searchbox-group" style="width:555px;">
+          <div style="width:555px;">
             <ng-container *ngIf="!hasDeleteTag()">
               <span>Select Tag To Delete</span>
               <at-tag-select
                 [tagTypes]="'Ingredient,Rating,DishType,TagType,NonEdible'"
                 [selectType]="'Assign'"
-                [showText]="'replace tag'"
+                [showText]="'tag to delete'"
                 [tagList]="alltagsSearch"
                 [allowAdd]="true"
                 [showCancelButton]="true"
                 [passedInputStyle]="'menubar-input'"
-                (tagSelected)="selectTag($event)"
-                (cancelAddTag)="toggleTagEntry(true)"></at-tag-select>
+                (tagSelected)="selectTag($event)">
+                <!--(cancelAddTag)="toggleTagEntry(true)"  --></at-tag-select>
             </ng-container>
-            <ng-container *ngIf="hasDeleteTag() && !hasReplaceTag()">
-              <span>Select Tag For Replace</span>
+            <ng-container *ngIf="showSummary()">
+              <div>Replace Tag {{tagToDelete.name}}, Id {{tagToDelete.tag_id}} with ....</div>
+              <br />
+            </ng-container>
+            <div *ngIf="hasDeleteTag() && !hasReplaceTag()">
+              <span>Select Replacement Tag</span>
               <at-tag-select
                 [tagTypes]="'Ingredient,Rating,DishType,TagType,NonEdibles'"
                 [selectType]="'Assign'"
@@ -28,22 +32,14 @@
                 [allowAdd]="true"
                 [showCancelButton]="true"
                 [passedInputStyle]="'menubar-input'"
-                (tagSelected)="selectTag($event)"
-                (cancelAddTag)="toggleTagEntry(true)"></at-tag-select>
-            </ng-container>
-            <ng-container *ngIf="hasDeleteTag() && hasReplaceTag()">
-              <span>Replace Tag {{tagToDelete.name}} with Tag {{tagForReplace.name}}??</span>
+                (tagSelected)="selectTag($event)">
+              <!--(cancelAddTag)="toggleTagEntry(true)"  --></at-tag-select>
+            </div>
+            <ng-container   *ngIf="hasDeleteTag() && hasReplaceTag()">
+              <span>Replace Tag {{tagToDelete.name}} ({{tagToDelete.tag_id}}) with Tag {{tagForReplace.name}} ({{tagForReplace.tag_id}}) ??</span>
               <button class="dish-tag-element main-color" (click)="replaceTag()">Yes, do it.</button>
+              <button class="dish-tag-element main-color" (click)="cancel()">No, nevermind.</button>
             </ng-container>
-
-            <!--  <at-tag-select aria-describedby="filter-query"
-                           [selectType]="'Assign'"
-                           [tagTypes]=[tagTypes]="'Ingredient,Rating,DishType,TagType'"
-                           [showText]="'Select a tag to replace'"
-                           [allowAdd]="false"
-                           [tagList]="alltagsSearch"
-                          [passedInputStyle]="'menubar-input'"
-                           (tagSelected)="selectTag($event)"></at-tag-select>-->
           </div>
 
         </div>
