@@ -5,9 +5,9 @@
 
 export const environment = {
   production: false,
-  //apiUrl: 'https://aa2c5da6.ngrok.io/'
+  apiUrl: 'https://025757a40c3e.ngrok.io'
   //apiUrl: 'https://nastyvarmits.fr/api/'
-  apiUrl: 'http://localhost:8182/'
+  //apiUrl: 'http://localhost:8182/'
   //apiUrl: 'http://list-shop-seedbeta.apps.us-west-2.starter.openshift-online.com/'
  // apiUrl: 'http://list-shop-dev-seedbeta.apps.us-west-2.starter.openshift-online.com/'
 };
