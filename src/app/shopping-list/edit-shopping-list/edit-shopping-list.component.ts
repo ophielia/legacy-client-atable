@@ -187,7 +187,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.listLegendMap = null;
     let $sub = this.shoppingListService.addDishToShoppingList(this.shoppingList.list_id, dish.dish_id)
       .subscribe(() => {
-        this.highlightSourceId = this.shoppingList.is_starter ? null : dish.dish_id;
+        this.highlightSourceId = this.shoppingList.is_starter ? null : "d" + dish.dish_id;
         this.getShoppingList(this.shoppingList.list_id);
         this.showAddDish = false;
       });
