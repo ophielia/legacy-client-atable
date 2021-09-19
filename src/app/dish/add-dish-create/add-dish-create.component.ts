@@ -45,6 +45,7 @@ export class AddDishCreateComponent implements OnInit, OnDestroy {
     this.logger.debug("Creating new dish [" + this.dishName + "] with tag [" + dishTypeTag + "]");
     // put tags in dish
     let tags: ITag[] = [];
+    tags.push(dishTypeTag);
 
     this.dishService.addDish(this.dishName, this.dishDescription, this.dishReference, tags)
       .subscribe(r => {
