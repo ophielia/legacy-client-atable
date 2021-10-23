@@ -9,7 +9,7 @@ jobs:
       steps: 
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag listshop-webclient:1.2.4
+        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_HUB_USERNAME }}/listshop-webclient:1.2.4
       - name: ensure fresh docker login by logging out
         run: docker logout
       - name: log back in now
