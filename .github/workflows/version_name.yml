@@ -7,12 +7,7 @@ jobs:
   dump-version: 
       runs-on: ubuntu-latest
       steps: 
-      - name: baby steps
-        run: echo ${GITHUB_REF#refs/*/}
-      - name: more baby steps
-        run: echo ${GITHUB_REF#refs/heads/} 
-      - name: even more
-        run: echo ${GITHUB_REF#refs/tags/}
+      - uses: actions/checkout@v2
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag listshop-webclient:1.2.4
       - name: ensure fresh docker login by logging out
