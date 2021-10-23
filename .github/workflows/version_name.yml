@@ -13,4 +13,11 @@ jobs:
         run: echo ${GITHUB_REF#refs/heads/} 
       - name: even more
         run: echo ${GITHUB_REF#refs/tags/}
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag listshop-webclient:1.2.4
+      - name: ensure fresh docker login by logging out
+        run: docker logout
+      - name: push docker image using maven
+        run: mvn dockerfile:push -Ddockerfile.username=${{ secrets.DOCKER_HUB_USERNAME }} -Ddockerfile.password=${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        
         
