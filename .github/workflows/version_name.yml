@@ -12,7 +12,8 @@ jobs:
         run: docker build . --file Dockerfile --tag listshop-webclient:1.2.4
       - name: ensure fresh docker login by logging out
         run: docker logout
-      - name: push docker image using maven
-        run: docker push --username=${{ secrets.DOCKER_HUB_USERNAME }} --password=${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-        
+      - name: log back in now
+        run: docker login --username=${{ secrets.DOCKER_HUB_USERNAME }} --password=${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: now push
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}:listshop-webclient:1.2.4
         
