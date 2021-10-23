@@ -1,7 +1,10 @@
 name: Branch name
 on:
   workflow_dispatch:
-# Inputs the workflow accepts.
+
+
+jobs:
+  runs-on: ubuntu-latest
   run: |
       echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
       echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/} 
